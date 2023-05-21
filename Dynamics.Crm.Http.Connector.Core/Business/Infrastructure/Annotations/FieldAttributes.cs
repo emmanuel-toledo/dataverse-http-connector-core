@@ -5,7 +5,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Annotations
     /// <summary>
     /// This class works to define entity's field information in a custom class attribute.
     /// </summary>
-    public class FieldAttributes
+    public class FieldAttributes : Attribute
     {
         /// <summary>
         /// Get and set field Schema name.

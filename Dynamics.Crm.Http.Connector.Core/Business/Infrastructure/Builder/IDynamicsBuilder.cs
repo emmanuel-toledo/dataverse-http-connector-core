@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace  Dynamics.Crm.Http.Connector.Core.Builder
+namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Builder
 {
-    internal class DynamicsBuilder : IDynamicsBuilder
+    internal interface IDynamicsBuilder
     {
+
     }
 }
