@@ -3,7 +3,7 @@
     /// <summary>
     /// This class works to define entity information in a custom class.
     /// </summary>
-    public class EntityAttributes
+    public class EntityAttributes : Attribute
     {
         public EntityAttributes(string schemaName, string logicalName)
         {
