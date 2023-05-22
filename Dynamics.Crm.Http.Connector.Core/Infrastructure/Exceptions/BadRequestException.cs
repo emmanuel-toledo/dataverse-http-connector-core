@@ -1,4 +1,4 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Exceptions
+﻿namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions
 {
     /// <summary>
     /// This class is a custom exception for "Bad request" exception.

@@ -1,8 +1,9 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Annotations
+﻿namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations
 {
     /// <summary>
     /// This class works to define entity information in a custom class.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
     public class EntityAttributes : Attribute
     {
         public EntityAttributes(string schemaName, string logicalName)

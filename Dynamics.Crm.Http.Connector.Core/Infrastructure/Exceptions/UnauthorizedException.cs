@@ -1,4 +1,4 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Exceptions
+﻿namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions
 {
     /// <summary>
     /// This is a custom exception class for "Unauthorized" exception.
@@ -12,6 +12,6 @@
 
         public UnauthorizedException(string message, Exception innerException) : base(message, innerException) { }
 
-        public UnauthorizedException(object key) : base($"The connection to '{ key }' is not authorized.") { }
+        public UnauthorizedException(object key) : base($"The connection to '{key}' is not authorized.") { }
     }
 }

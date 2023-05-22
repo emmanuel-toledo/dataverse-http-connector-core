@@ -1,12 +1,20 @@
 ﻿using Dynamics.Crm.Http.Connector.Core.Models.Annotations;
 
-namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Annotations
+namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations
 {
     /// <summary>
     /// This class works to define entity's field information in a custom class attribute.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class FieldAttributes : Attribute
     {
+        public FieldAttributes(string schemaName, string logicalName, FieldTypes fieldType)
+        {
+            SchemaName = schemaName;
+            LogicalName = logicalName;
+            FieldType = fieldType;
+        }
+
         /// <summary>
         /// Get and set field Schema name.
         /// </summary>

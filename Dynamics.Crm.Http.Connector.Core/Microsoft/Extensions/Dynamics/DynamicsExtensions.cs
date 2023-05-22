@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Builder
+namespace Dynamics.Crm.Http.Connector.Core.Microsoft.Extensions.Dynamics
 {
-    internal interface IDynamicsBuilder
+    internal class DynamicsExtensions
     {
-
     }
 }

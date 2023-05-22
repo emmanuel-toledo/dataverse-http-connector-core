@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Provider
+namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Provider
 {
     internal class DynamicsServiceProvider
     {
