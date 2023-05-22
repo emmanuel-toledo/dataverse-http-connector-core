@@ -1,4 +1,6 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Business.Infrastructure.Builder.Options;
+﻿using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
 using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,21 +14,12 @@ namespace Dynamics.Crm.Http.Connector.Core.Microsoft.Extensions.DependencyInject
 {
     public static class ServiceExtensions
     {
-        public static void AddDynamicsContext<TContext>
-            (this IServiceCollection services, Action<DynamicsOptionsBuilder> options) 
-            where TContext : DynamicsContext
+        public static void AddDynamicsContext<TContext> (this IServiceCollection services, Action<DynamicsBuilder> actionBuilder) where TContext : DynamicsContext
         {
-
-        }
-
-        public static void UseApplicationUser(this IServiceCollection services, DynamicsConnection connection)
-        {
-
-        }
-
-        public static void UseApplicationUser(this IServiceCollection services, IConfigurationSection configurationSection)
-        {
-
+            // Configure Dynamics Builder configuration (entites and connection information)
+            services.ConfigureDynamicsBuilder(actionBuilder);
+            // Configure Dynamics Authenticator service.
+            services.ConfigureAuthenticator();
         }
     }
 }
