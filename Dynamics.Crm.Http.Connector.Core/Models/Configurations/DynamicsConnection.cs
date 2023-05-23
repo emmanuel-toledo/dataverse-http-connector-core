@@ -31,6 +31,11 @@
         public string? ClientSecret { get; set; } = string.Empty;
 
         /// <summary>
+        /// Get and set REST API Version.
+        /// </summary>
+        public double Version { get; set; } = 0.0;
+
+        /// <summary>
         /// Get and set Dynamics environment URL.
         /// </summary>
         public string? Resource { get; set; } = string.Empty;

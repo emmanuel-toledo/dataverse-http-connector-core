@@ -1,5 +1,6 @@
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections;
+using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
 using Dynamics.Crm.Http.Connector.Core.UT.Models;
@@ -8,15 +9,18 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Dynamics.Crm.Http.Connector.Core.UT
 {
     [TestClass]
-    public class EntityDbSetContact
+    public class EntitiesDeffinitions
     {
         private IServiceProvider _provider;
 
         private IServiceCollection _services;
 
+        private IDynamicsRequest _request;
+
         private IDynamicsBuilder _builder; // Dynamics Builder configuration (entites and connection information).
 
-        private IDynamicsAuthenticator _authenticator; // Dynamics Authenticator service.
+        //private IDynamicsAuthenticator _authenticator; // Dynamics Authenticator service.
+
 
         [TestInitialize]
         public void Initialize()
@@ -30,22 +34,27 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
             });
             _provider = _services.BuildServiceProvider();
             _builder = _provider.GetService<IDynamicsBuilder>()!;
-            foreach(var entity in _builder.Entities)
-            {
-                Console.WriteLine(entity.EntityType.Name);
-            }
-            _builder.Connection.ClientSecret = "New Secret"; // Transient service, each request of service will set initial setup.
-            _builder = _provider.GetService<IDynamicsBuilder>()!;
-            Console.WriteLine(_builder.Entities.Count);
 
-            _authenticator = _provider.GetService<IDynamicsAuthenticator>()!;
+            //_builder.Connection.Resource = "https://dynamics.contoso.com";
+            //_builder = _provider.GetService<IDynamicsBuilder>()!;
+
+            //_authenticator = _provider.GetService<IDynamicsAuthenticator>()!;
+            _request = _provider.GetService<IDynamicsRequest>()!;
         }
 
         [TestMethod]
         public async Task TestMethod1()
         {
-            var response = await _authenticator.AuthenticateAsync();
-            Assert.IsTrue(true);
+            try
+            {
+                var response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
+                response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
+                Assert.IsTrue(true);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
