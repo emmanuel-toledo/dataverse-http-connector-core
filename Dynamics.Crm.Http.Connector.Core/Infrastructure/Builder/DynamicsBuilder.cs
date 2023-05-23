@@ -1,4 +1,5 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
+﻿using Microsoft.Identity.Client;
+using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
 
 namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
@@ -19,6 +20,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         private bool _throwExceptions { get; set; } = true;
 
         /// <summary>
+        /// Get and set Authentication result.
+        /// </summary>
+        private AuthenticationResult? _authentication = null;
+
+        /// <summary>
         /// Dynamics Builder instance servive.
         /// </summary>
         public DynamicsBuilder() { }
@@ -28,7 +34,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         /// </summary>
         /// <param name="connection">Dynamics connection object.</param>
         public DynamicsBuilder(DynamicsConnection connection)
-            => this._connection = connection;
+            => _connection = connection;
 
         /// <summary>
         /// Dynamics Builder instance servive.
@@ -37,8 +43,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         /// <param name="throwExceptions">Throw exceptions flag.</param>
         public DynamicsBuilder(DynamicsConnection connection, bool throwExceptions)
         {
-            this._connection = connection;
-            this._throwExceptions = throwExceptions;
+            _connection = connection;
+            _throwExceptions = throwExceptions;
         }
 
         /// <summary>
@@ -50,6 +56,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         /// Get Dynamics connection object.
         /// </summary>
         public DynamicsConnection? Connection { get => _connection; }
+
+        /// <summary>
+        /// Cached authentication result.
+        /// </summary>
+        public AuthenticationResult? Authentication { get => _authentication; }
 
         /// <summary>
         /// Set a new Dynamics connection.
@@ -64,5 +75,20 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         /// <param name="throwExceptions">Throw exceptions flag.</param>
         public void SetThrowExceptions(bool throwExceptions)
             => _throwExceptions = throwExceptions;
+
+        /// <summary>
+        /// Set authentication result.
+        /// </summary>
+        /// <param name="authentication">Throw exceptions flag.</param>
+        public void SetAuthenticationResult(AuthenticationResult? authentication)
+            => _authentication = authentication;
+
+        /// <summary>
+        /// Function to validate if exists a previous authentication token for specific Dynamics environment.
+        /// </summary>
+        public bool IsValidAuthentication(string scope)
+            => _authentication is not null && 
+               _authentication.Scopes.Any(x => x.Contains(scope)) && 
+               DateTime.Now < _authentication.ExpiresOn;
     }
 }
