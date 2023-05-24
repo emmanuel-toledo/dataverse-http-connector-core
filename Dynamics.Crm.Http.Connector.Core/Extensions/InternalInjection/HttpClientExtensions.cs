@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using Microsoft.Net.Http.Headers;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 
@@ -16,10 +15,12 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
         /// <param name="client">Dynamics http client.</param>
         /// <param name="authenticator">Dynamics authentication service instance.</param>
         /// <param name="builder">Dynamics builder service instance.</param>
-        internal static HttpClient ConfigureClientEnvironment(this HttpClient client, IDynamicsAuthenticator authenticator, IDynamicsBuilder builder)
+        internal static HttpClient ConfigureDynamicsEnvironmentClient(this IHttpClientFactory clientFactory, IDynamicsAuthenticator authenticator, IDynamicsBuilder builder)
         {
             try
             {
+                // Build "DynamicsClient" http client.
+                var client = clientFactory.CreateClient("DynamicsClient");
                 // Validate if exists a previous authentication token and is valid to use.
                 if (!builder.IsValidAuthentication(builder.Connection!.Resource!))
                 {
@@ -32,6 +33,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
                 }
                 else
                 {
+                    // Set Authorization token using cached Authentication Result.
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(builder.Authentication!.TokenType, builder.Authentication!.AccessToken);
                 }
                 
@@ -54,9 +56,9 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
             // Configure default client configuration.
             client.Timeout = new TimeSpan(0, 2, 0);
             client.DefaultRequestHeaders.ExpectContinue = false;
-            client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=\"*\"");
-            client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+            client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
         }
     }
 }
