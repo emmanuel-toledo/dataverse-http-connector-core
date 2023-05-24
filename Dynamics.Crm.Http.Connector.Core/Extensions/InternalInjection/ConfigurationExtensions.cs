@@ -1,14 +1,7 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Net.Http.Headers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
 {
