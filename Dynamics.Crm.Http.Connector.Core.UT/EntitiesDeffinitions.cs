@@ -28,7 +28,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
             _services = new ServiceCollection();
             _services.AddDynamicsContext<DynamicsContext>(builder =>
             {
-                builder.SetConnection(Dynamics.Connection); // Podemos user Bind desde IConfiguration para no crear nueva instancia directamente.
+                builder.SetDefaultConnection(Dynamics.Connection); // Podemos user Bind desde IConfiguration para no crear nueva instancia directamente.
                 builder.SetThrowExceptions(false);
                 builder.AddEntityDeffinition<Contacts>();
             });

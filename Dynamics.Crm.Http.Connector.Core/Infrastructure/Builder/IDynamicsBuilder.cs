@@ -1,6 +1,6 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
+﻿using Microsoft.Identity.Client;
+using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
-using Microsoft.Identity.Client;
 
 namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
 {
@@ -25,10 +25,24 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         AuthenticationResult? Authentication { get; }
 
         /// <summary>
-        /// Set a new Dynamics connection.
+        /// Dynamics connections collection.
+        /// </summary>
+        ICollection<DynamicsConnection> Connections { get; }
+
+        /// <summary>
+        /// Set connection as principal.
         /// </summary>
         /// <param name="connection">Dynamics connection object.</param>
-        void SetConnection(DynamicsConnection connection);
+        void SetDefaultConnection(DynamicsConnection connection);
+
+        /// <summary>
+        /// Function to add multiples Dynamics connections to the builder.
+        /// <para>
+        /// Set as default connection the first element of the collection.
+        /// </para>
+        /// </summary>
+        /// <param name="connections">Dynamics connection collection.</param>
+        void AddConnections(IEnumerable<DynamicsConnection> connections);
 
         /// <summary>
         /// Set throw exceptions flag.
@@ -45,6 +59,13 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
         /// <summary>
         /// Function to validate if exists a previous authentication token for specific Dynamics environment.
         /// </summary>
+        /// <param name="scope">Environment URL for Dynamics connection.</param>
         bool IsValidAuthentication(string scope);
+
+        /// <summary>
+        /// Function to change the connection as principal to connect in the runtime.
+        /// </summary>
+        /// <param name="connection">Set Dynamics environment connection as principal to connect.</param>
+        void ChangeEnvironmentConnection(DynamicsConnection? connection);
     }
 }

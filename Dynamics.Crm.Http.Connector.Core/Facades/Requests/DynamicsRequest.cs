@@ -14,7 +14,7 @@ namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
         /// </summary>
         /// <param name="request">Http request message configuration.</param>
         /// <returns>Http response message.</returns>
-        Task<HttpResponseMessage?> SendAsync(HttpRequestMessage request);
+        Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, bool isGeneric);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
         /// </summary>
         /// <param name="request">Request message to api execution.</param>
         /// <returns>Response message from api execution.</returns>
-        public async Task<HttpResponseMessage?> SendAsync(HttpRequestMessage request)
+        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, bool isGeneric)
         {
             try
             {
@@ -63,8 +63,8 @@ namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
                 var client = _clientFactory.ConfigureDynamicsEnvironmentClient(_authenticator, _builder);
                 // Execute Dynamics CRM request and validate exception.
                 var response = await client.SendAsync(request);
-                if (!response.IsSuccessStatusCode && _builder.ThrowExceptions)
-                    return null;
+                if (!response.IsSuccessStatusCode && _builder.ThrowExceptions && !isGeneric)
+                    throw new Exception("This is a generic exception");
                 return response;
             }
             catch
