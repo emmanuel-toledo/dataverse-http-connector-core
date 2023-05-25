@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Facades\Generics\" />
+    <Folder Include="Facades\Generics\Commands\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Dynamics.Crm.Http.Connector.Core.Persistence;
 using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
+using Dynamics.Crm.Http.Connector.Core.Facades.Generics.Queries;
+using Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries;
+using Dynamics.Crm.Http.Connector.Core.Business.Generic.Commands;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
 {
@@ -40,14 +44,40 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
         /// <param name="services">Application service collection.</param>
         internal static void ConfigureDynamicsService(this IServiceCollection services)
         {
-            // Configure Dynamics Request Service.
-            services.AddScoped<IDynamicsRequest, DynamicsRequest>();
+            // Configure Generic facade services.
+            services.ConfigureFacadeGenericServices();
             // Configure Dynamics facade queries.
             services.ConfigureFacadeQueriesServices();
             // Configure Dynamics facade commands.
             services.ConfigureFacadeCommandsServices();
+            // Configure Business services.
+            services.ConfigureBusinessService();
             // Configure Dynamics context services.
             services.ConfigureDynamicsContext();
+        }
+
+        /// <summary>
+        /// Function to configure all the main services to be used in each HTTP request to Dynamics CRM.
+        /// </summary>
+        /// <param name="services">Application service collection.</param>
+        internal static void ConfigureBusinessService(this IServiceCollection services)
+        {
+            // Configure generic queries service.
+            services.AddScoped<IGenericQueries, GenericQueries>();
+            // Configure generic commands service.
+            services.AddScoped<IGenericCommands, GenericCommands>();
+        }
+
+        /// <summary>
+        /// Function to configure each service (commands and queries) that comes from a generic request.
+        /// </summary>
+        /// <param name="services">Application service collection.</param>
+        internal static void ConfigureFacadeGenericServices(this IServiceCollection services)
+        {
+            services.AddScoped<IEntitiesDeffinitions, EntitiesDeffinitions>();
+            services.AddScoped<IRetriveById, RetriveById>();
+            services.AddScoped<IRetriveByFetch, RetriveByFetch>();
+            services.AddScoped<IRetriveByOData, RetriveByOData>();
         }
 
         internal static void ConfigureFacadeQueriesServices(this IServiceCollection services)
@@ -60,9 +90,16 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
 
         }
 
+        /// <summary>
+        /// Function to configure main Dynamics request service and Dynamics context service.
+        /// </summary>
+        /// <param name="services">Application service collection.</param>
         internal static void ConfigureDynamicsContext(this IServiceCollection services)
         {
-
+            // Configure Dynamics Request service.
+            services.AddScoped<IDynamicsRequest, DynamicsRequest>();
+            // Configure main Dynamics service.
+            services.AddScoped<IDynamicsContext, DynamicsContext>();
         }
     }
 }
