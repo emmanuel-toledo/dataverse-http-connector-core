@@ -1,7 +1,7 @@
 ﻿using Microsoft.Identity.Client;
-using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
+using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Authentication
 {

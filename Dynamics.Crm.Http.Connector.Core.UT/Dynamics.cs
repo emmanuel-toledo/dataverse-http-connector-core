@@ -1,4 +1,4 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
+﻿using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
 
 namespace Dynamics.Crm.Http.Connector.Core.UT
 {

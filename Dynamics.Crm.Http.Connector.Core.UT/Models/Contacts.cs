@@ -1,5 +1,4 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Annotations;
-using Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations;
+﻿using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 
 namespace Dynamics.Crm.Http.Connector.Core.UT.Models
 {
@@ -14,5 +13,11 @@ namespace Dynamics.Crm.Http.Connector.Core.UT.Models
         /// </summary>
         [FieldAttributes("contactId", "contactid", FieldTypes.UniqueIdentifier)]
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Get and set record full name.
+        /// </summary>
+        [FieldAttributes("fullName", "fullname", FieldTypes.Text)]
+        public string? FullName { get; set; }
     }
 }

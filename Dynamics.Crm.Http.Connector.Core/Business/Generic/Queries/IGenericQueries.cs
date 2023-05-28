@@ -9,7 +9,7 @@
         /// Function to get Dynamics Entities deffinitions.
         /// </summary>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> EntitiesDeffinitions();
+        Task<HttpResponseMessage> EntitiesDeffinitionsAsync();
 
         /// <summary>
         /// Function to get entity record information using a unique identifier.
@@ -17,7 +17,7 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="id">Entity record unique identifier.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveById(string schemaName, Guid id);
+        Task<HttpResponseMessage> RetriveByIdAsync(string schemaName, Guid id);
 
         /// <summary>
         /// Function to get information using a fetchXml query.
@@ -25,7 +25,7 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="fetchXml">FetchXml query string.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveByFetch(string schemaName, string fetchXml);
+        Task<HttpResponseMessage> RetriveByFetchAsync(string schemaName, string fetchXml);
 
         /// <summary>
         /// Function to get information using a OData query.
@@ -33,6 +33,6 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="oData">OData query string.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveByOData(string schemaName, string oData);
+        Task<HttpResponseMessage> RetriveByODataAsync(string schemaName, string oData);
     }
 }
