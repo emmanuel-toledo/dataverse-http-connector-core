@@ -1,9 +1,10 @@
-﻿using  Dynamics.Crm.Http.Connector.Core.Persistence;
-using Dynamics.Crm.Http.Connector.Core.Models.Context;
-using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
+﻿using Dynamics.Crm.Http.Connector.Core.Persistence;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Context;
+using Dynamics.Crm.Http.Connector.Core.Utilities;
 
-namespace  Dynamics.Crm.Http.Connector.Core
+namespace Dynamics.Crm.Http.Connector.Core
 {
     /// <summary>
     /// This class implements the principal functions to work with Dynamics connector core library.
@@ -81,12 +82,12 @@ namespace  Dynamics.Crm.Http.Connector.Core
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
-        public virtual DbEntitySet<TEntity> Set<TEntity>() where TEntity : class
+        public virtual DbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
         {
             var entityBuilder = _builder.Entities.FirstOrDefault(x => x.EntityType == typeof(TEntity));
             return entityBuilder is null
                 ? throw new NotImplementedException($"The entity type '{typeof(TEntity).Name}' was not configured in context.")
-                : (DbEntitySet<TEntity>)Activator.CreateInstance(typeof(DbEntitySet<TEntity>))!;
+                : Instance<TEntity>.DbEntitySetInstance();
         }
     }
 }

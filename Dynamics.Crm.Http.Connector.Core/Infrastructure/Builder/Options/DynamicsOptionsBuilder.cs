@@ -1,5 +1,5 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Builder;
-using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
+﻿using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
+using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
 
 namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options
 {

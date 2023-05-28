@@ -1,4 +1,4 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Models.Dynamics
+﻿namespace Dynamics.Crm.Http.Connector.Core.Domains.Dynamics
 {
     /// <summary>
     /// This class contains each property of the deffinition of an Entity in Dynamics CRM.

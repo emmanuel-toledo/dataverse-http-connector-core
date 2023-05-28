@@ -1,4 +1,4 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations
+﻿namespace Dynamics.Crm.Http.Connector.Core.Domains.Annotations
 {
     /// <summary>
     /// This class works to define entity information in a custom class.

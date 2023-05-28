@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dynamics.Crm.Http.Connector.Core.Utilities
+﻿namespace Dynamics.Crm.Http.Connector.Core.Utilities
 {
     internal static class Check
     {
-        public static T NotNull<T>(T value, string parameterName)
+        public static string NotNullOrEmpty(string? value, string? parameterName)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                NotNull(parameterName, nameof(parameterName));
+                throw new ArgumentNullException(nameof(parameterName));
+            }
+            return value;
+        }
+
+        public static T NotNull<T>(T? value, string? parameterName)
         {
             if(value is null)
             {

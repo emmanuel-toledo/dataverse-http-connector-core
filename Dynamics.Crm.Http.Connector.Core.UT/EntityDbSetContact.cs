@@ -1,5 +1,8 @@
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
+using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Extensions;
+using Dynamics.Crm.Http.Connector.Core.Extensions.Builders;
 using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
@@ -45,7 +48,14 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         [TestMethod]
         public async Task TestMethod1()
         {
-            var response = await _context.Set<Contacts>().FirstOrDefaultAsync(x => (x.Id == Guid.NewGuid() || x.Id == Guid.NewGuid()) && x.Id == Guid.NewGuid());
+            var response = _context.Set<Contacts>().Filter(FilterTypes.And, action =>
+            {
+                action.AddCondition("fullname", ConditionTypes.Equal, Guid.NewGuid());
+                action.AddCondition(x => x.Id, ConditionTypes.Equal, Guid.NewGuid());
+                action.Equal(x => x.Id, Guid.NewGuid());
+                action.NotEqual(x => x.FullName, "Petter Parker");
+                action.Null(x => x.FullName);
+            });
             Assert.IsTrue(true);
         }
     }

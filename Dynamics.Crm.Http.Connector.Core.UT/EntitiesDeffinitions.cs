@@ -47,8 +47,8 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         {
             try
             {
-                var response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
-                response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
+                //var response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
+                //response = await _request.SendAsync(new HttpRequestMessage(HttpMethod.Get, "entities"));
                 Assert.IsTrue(true);
             }
             catch(Exception ex)

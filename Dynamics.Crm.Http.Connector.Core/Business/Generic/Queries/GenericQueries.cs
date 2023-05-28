@@ -12,7 +12,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
         /// Function to get Dynamics Entities deffinitions.
         /// </summary>
         /// <returns>Http response message object.</returns>
-        public Task<HttpResponseMessage> EntitiesDeffinitions()
+        public Task<HttpResponseMessage> EntitiesDeffinitionsAsync()
         {
             throw new NotImplementedException();
         }
@@ -23,7 +23,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="id">Entity record unique identifier.</param>
         /// <returns>Http response message object.</returns>
-        public Task<HttpResponseMessage> RetriveById(string schemaName, Guid id)
+        public Task<HttpResponseMessage> RetriveByIdAsync(string schemaName, Guid id)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +34,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="fetchXml">FetchXml query string.</param>
         /// <returns>Http response message object.</returns>
-        public Task<HttpResponseMessage> RetriveByFetch(string schemaName, string fetchXml)
+        public Task<HttpResponseMessage> RetriveByFetchAsync(string schemaName, string fetchXml)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +45,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="oData">OData query string.</param>
         /// <returns>Http response message object.</returns>
-        public Task<HttpResponseMessage> RetriveByOData(string schemaName, string oData)
+        public Task<HttpResponseMessage> RetriveByODataAsync(string schemaName, string oData)
         {
             throw new NotImplementedException();
         }

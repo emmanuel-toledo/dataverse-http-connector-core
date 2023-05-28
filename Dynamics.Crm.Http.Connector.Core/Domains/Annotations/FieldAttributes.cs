@@ -1,6 +1,6 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Annotations;
+﻿using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 
-namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations
+namespace Dynamics.Crm.Http.Connector.Core.Domains.Annotations
 {
     /// <summary>
     /// This class works to define entity's field information in a custom class attribute.

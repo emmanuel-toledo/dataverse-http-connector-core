@@ -1,8 +1,8 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Models.Context;
-using Dynamics.Crm.Http.Connector.Core.Models.Configurations;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Context;
 
-namespace  Dynamics.Crm.Http.Connector.Core.Persistence
+namespace Dynamics.Crm.Http.Connector.Core.Persistence
 {
     /// <summary>
     /// This interface defines the principal functions to work with Dynamics connector core library.
@@ -56,6 +56,6 @@ namespace  Dynamics.Crm.Http.Connector.Core.Persistence
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
-        DbEntitySet<TEntity> Set<TEntity>() where TEntity : class;
+        DbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
-using Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection;
+using Dynamics.Crm.Http.Connector.Core.Extensions.Configurations;
 
 namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
 {
