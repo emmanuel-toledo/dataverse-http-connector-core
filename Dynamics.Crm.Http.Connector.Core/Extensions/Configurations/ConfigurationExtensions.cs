@@ -7,7 +7,7 @@ using Dynamics.Crm.Http.Connector.Core.Facades.Generics.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Generic.Commands;
 
-namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
+namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
 {
     internal static class ConfigurationExtensions
     {

@@ -2,7 +2,7 @@
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 
-namespace Dynamics.Crm.Http.Connector.Core.Extensions.InternalInjection
+namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
 {
     /// <summary>
     /// Internal extension class to configure HttpClient configurations.
