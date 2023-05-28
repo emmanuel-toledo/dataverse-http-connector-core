@@ -1,4 +1,4 @@
-﻿namespace  Dynamics.Crm.Http.Connector.Core.Models.Configurations
+﻿namespace Dynamics.Crm.Http.Connector.Core.Domains.Configurations
 {
     /// <summary>
     /// This class contains main information for Dynamics Connection using HTTP Client.

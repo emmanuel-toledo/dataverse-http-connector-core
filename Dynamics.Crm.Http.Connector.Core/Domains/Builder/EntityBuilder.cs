@@ -1,6 +1,6 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Infrastructure.Annotations;
+﻿using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 
-namespace Dynamics.Crm.Http.Connector.Core.Models.Builder
+namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
 {
     /// <summary>
     /// This class works to define an Entity model using the instance of a class.
@@ -60,7 +60,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Models.Builder
         /// <returns>Entity attributes instance.</returns>
         /// <exception cref="NullReferenceException">The class does not use "EntityAttributes".</exception>
         private EntityAttributes GetEntityAttributes()
-            => _entityType.GetCustomAttributes(typeof(EntityAttributes), true).FirstOrDefault() as EntityAttributes ?? 
+            => _entityType.GetCustomAttributes(typeof(EntityAttributes), true).FirstOrDefault() as EntityAttributes ??
                throw new NullReferenceException($"The entity attributes definitions in class {_entityType.Name} is null.");
 
         /// <summary>
