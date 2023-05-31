@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Commands
 {
-    internal class GenericCommands : IGenericCommands
+    internal class DynamicsGenericCommands : IDynamicsGenericCommands
     {
         public Task<HttpResponseMessage> CreateAsync(string schemaName, HttpRequestMessage request)
         {

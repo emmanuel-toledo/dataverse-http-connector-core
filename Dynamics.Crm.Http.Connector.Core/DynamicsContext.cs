@@ -1,8 +1,8 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Persistence;
-using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
-using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Dynamics.Crm.Http.Connector.Core.Context;
-using Dynamics.Crm.Http.Connector.Core.Utilities;
+using Dynamics.Crm.Http.Connector.Core.Persistence;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Connection;
 
 namespace Dynamics.Crm.Http.Connector.Core
 {
@@ -17,11 +17,19 @@ namespace Dynamics.Crm.Http.Connector.Core
         private readonly IDynamicsBuilder _builder;
 
         /// <summary>
+        /// Private application service provider instance.
+        /// </summary>
+        private readonly IServiceProvider _provider;
+
+        /// <summary>
         /// Initialize new "DynamicsContext" service.
         /// </summary>
         /// <param name="builder">Dynamics builder service instance.</param>
-        public DynamicsContext(IDynamicsBuilder builder)
-            => _builder = builder;
+        public DynamicsContext(IDynamicsBuilder builder, IServiceProvider provider)
+        {
+            _builder = builder;
+            _provider = provider;
+        }
 
         /// <summary>
         /// This function set the connection to an environment using connection name.
@@ -82,12 +90,12 @@ namespace Dynamics.Crm.Http.Connector.Core
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
-        public virtual DbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
+        public virtual IDbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
         {
             var entityBuilder = _builder.Entities.FirstOrDefault(x => x.EntityType == typeof(TEntity));
             return entityBuilder is null
                 ? throw new NotImplementedException($"The entity type '{typeof(TEntity).Name}' was not configured in context.")
-                : Instance<TEntity>.DbEntitySetInstance();
+                : _provider.GetRequiredService<IDbEntitySet<TEntity>>();
         }
     }
 }

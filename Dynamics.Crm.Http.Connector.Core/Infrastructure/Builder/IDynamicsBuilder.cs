@@ -1,6 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
-using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Connection;
 
 namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
 {

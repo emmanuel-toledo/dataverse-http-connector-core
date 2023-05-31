@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using Dynamics.Crm.Http.Connector.Core.Domains.Configurations;
 using Dynamics.Crm.Http.Connector.Core.Context;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Connection;
 
 namespace Dynamics.Crm.Http.Connector.Core.Persistence
 {
@@ -33,6 +33,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Persistence
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="id">Entity record unique identifier.</param>
         /// <returns>Http response message object.</returns>
+        [Obsolete("This function will be removed for a generic request.")]
         Task<HttpResponseMessage> RetriveById(string schemaName, Guid id);
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Persistence
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="fetchXml">FetchXml query string.</param>
         /// <returns>Http response message object.</returns>
+        [Obsolete("This function will be removed for a generic request.")]
         Task<HttpResponseMessage> RetriveByFetch(string schemaName, string fetchXml);
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Persistence
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="oData">OData query string.</param>
         /// <returns>Http response message object.</returns>
+        [Obsolete("This function will be removed for a generic request.")] 
         Task<HttpResponseMessage> RetriveByOData(string schemaName, string oData);
 
         /// <summary>
@@ -56,6 +59,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Persistence
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
-        DbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new();
+        IDbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new();
     }
 }

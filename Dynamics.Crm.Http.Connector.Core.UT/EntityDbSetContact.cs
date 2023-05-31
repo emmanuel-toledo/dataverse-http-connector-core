@@ -48,15 +48,23 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         [TestMethod]
         public async Task TestMethod1()
         {
-            var response = _context.Set<Contacts>().Filter(FilterTypes.And, action =>
+            try
             {
-                action.AddCondition("fullname", ConditionTypes.Equal, Guid.NewGuid());
-                action.AddCondition(x => x.Id, ConditionTypes.Equal, Guid.NewGuid());
-                action.Equal(x => x.Id, Guid.NewGuid());
-                action.NotEqual(x => x.FullName, "Petter Parker");
-                action.Null(x => x.FullName);
-            });
-            Assert.IsTrue(true);
+                var response = _context.Set<Contacts>()
+                    .FilterAnd(conditions => conditions.NotNull(x => x.FullName))
+                    .FilterOr(conditions =>
+                    {
+                        conditions.Equal(x => x.Id, new Guid("bfd14cf3-e939-ed11-9db1-000d3a990e03"));
+                        conditions.Equal(x => x.Id, new Guid("c4d14cf3-e939-ed11-9db1-000d3a990e03"));
+                    })
+                    .Top(2)
+                    .Distinct(true);
+                Assert.IsTrue(!string.IsNullOrEmpty("Success"));
+            } 
+            catch(Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
         }
     }
 }

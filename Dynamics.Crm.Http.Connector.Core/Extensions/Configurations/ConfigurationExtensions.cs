@@ -6,6 +6,10 @@ using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 using Dynamics.Crm.Http.Connector.Core.Facades.Generics.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Generic.Commands;
+using Dynamics.Crm.Http.Connector.Core.Context;
+using Dynamics.Crm.Http.Connector.Core.Business.Commands;
+using Dynamics.Crm.Http.Connector.Core.Business.Queries;
+using Dynamics.Crm.Http.Connector.Core.Business.Handler;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
 {
@@ -63,9 +67,15 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
         internal static void ConfigureBusinessService(this IServiceCollection services)
         {
             // Configure generic queries service.
-            services.AddScoped<IGenericQueries, GenericQueries>();
+            services.AddScoped<IDynamicsGenericQueries, DynamicsGenericQueries>();
             // Configure generic commands service.
-            services.AddScoped<IGenericCommands, GenericCommands>();
+            services.AddScoped<IDynamicsGenericCommands, DynamicsGenericCommands>();
+            // Configure Dynamics queries service.
+            services.AddScoped<IDynamicsQueries, DynamicsQueries>();
+            // Configure Dynamics commands service.
+            services.AddScoped<IDynamicsCommands, DynamicsCommands>();
+            // Configure Dynamics request handler service.
+            services.AddScoped<IRequestHandler, RequestHandler>();
         }
 
         /// <summary>
@@ -98,6 +108,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
         {
             // Configure Dynamics Request service.
             services.AddScoped<IDynamicsRequest, DynamicsRequest>();
+            // Configure DbEntitySet service for Dynamics as an generic service.
+            services.AddScoped(typeof(IDbEntitySet<>), typeof(DbEntitySet<>));
             // Configure main Dynamics service.
             services.AddScoped<IDynamicsContext, DynamicsContext>();
         }
