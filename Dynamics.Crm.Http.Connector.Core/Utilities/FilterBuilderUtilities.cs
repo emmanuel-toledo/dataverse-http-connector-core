@@ -6,7 +6,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
     /// <summary>
     /// This class utility functions to check if the information of the "FilterBuilder" class is correctly.
     /// </summary>
-    internal static class FilterBuilderCheck
+    internal static class FilterBuilderUtilities
     {
         /// <summary>
         /// Check if the expression is correctly created and configured to get "EntityAttributes" custom attribute.
@@ -17,12 +17,14 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         /// <returns>Entity Attributes object instance.</returns>
         /// <exception cref="NullReferenceException">The property of the expression is null.</exception>
         /// <exception cref="NotSupportedException">The defined LINQ expression is not supported.</exception>
-        public static EntityAttributes CheckExpression<TEntity, P>(Expression<Func<TEntity, P>> action)
+        public static FieldAttributes CheckExpression<TEntity, P>(Expression<Func<TEntity, P>> action)
         {
             try
             {
                 var expression = (MemberExpression)action.Body;
-                var attribute = expression.Member.GetCustomAttributes(typeof(EntityAttributes), true).FirstOrDefault() as EntityAttributes ?? throw new NullReferenceException("The entity attributes definitions in class is null.");
+                var attribute = expression.Member.GetCustomAttributes(typeof(FieldAttributes), true).FirstOrDefault() as FieldAttributes;
+                if(attribute is null)
+                    throw new NullReferenceException("The entity attributes definitions in class is null.");
                 return attribute;
             }
             catch (Exception ex)

@@ -1,15 +1,21 @@
-﻿namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Queries
 {
-    /// <summary>
-    /// Interface to define Generic Queries to consume Dynamics CRM REST API.
-    /// </summary>
-    internal interface IGenericQueries
+    internal class DynamicsGenericQueries : IDynamicsGenericQueries
     {
         /// <summary>
         /// Function to get Dynamics Entities deffinitions.
         /// </summary>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> EntitiesDeffinitionsAsync();
+        public Task<HttpResponseMessage> EntitiesDeffinitionsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Function to get entity record information using a unique identifier.
@@ -17,7 +23,10 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="id">Entity record unique identifier.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveByIdAsync(string schemaName, Guid id);
+        public Task<HttpResponseMessage> RetriveByIdAsync(string schemaName, Guid id)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Function to get information using a fetchXml query.
@@ -25,7 +34,10 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="fetchXml">FetchXml query string.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveByFetchAsync(string schemaName, string fetchXml);
+        public Task<HttpResponseMessage> RetriveByFetchAsync(string schemaName, string fetchXml)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Function to get information using a OData query.
@@ -33,6 +45,9 @@
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="oData">OData query string.</param>
         /// <returns>Http response message object.</returns>
-        Task<HttpResponseMessage> RetriveByODataAsync(string schemaName, string oData);
+        public Task<HttpResponseMessage> RetriveByODataAsync(string schemaName, string oData)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

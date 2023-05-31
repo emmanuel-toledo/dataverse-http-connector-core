@@ -32,14 +32,15 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                     break;
                 case TypeCode.Object:
                     if (typeof(T) == typeof(Guid))
-                        parsedValue = ChangeType<Guid, T>(value, TypeCode.String).ToString() ?? "";
+                        parsedValue = value!.ToString();
+
                     else
                         throw new ArgumentNullException(nameof(value));
                     break;
                 default:
                     throw new ArgumentNullException(nameof(value));
             }
-            return parsedValue;
+            return parsedValue!;
         }
 
         public static string ParseCondition(ConditionTypes conditionType)
@@ -81,6 +82,15 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                     throw new ArgumentNullException(nameof(conditionType));
             }
             return conditionString;
+        }
+
+        public static string ParseFilter(FilterTypes filterType)
+        {
+            return filterType switch
+            {
+                FilterTypes.Or => "or",
+                _ => "and"
+            };
         }
     }
 }

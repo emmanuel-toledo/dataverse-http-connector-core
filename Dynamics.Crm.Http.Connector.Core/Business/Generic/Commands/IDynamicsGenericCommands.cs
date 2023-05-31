@@ -1,6 +1,6 @@
 ﻿namespace Dynamics.Crm.Http.Connector.Core.Business.Generic.Commands
 {
-    internal interface IGenericCommands
+    internal interface IDynamicsGenericCommands
     {
         /// <summary>
         /// Function to create a record of an entity using a custom Http request message.

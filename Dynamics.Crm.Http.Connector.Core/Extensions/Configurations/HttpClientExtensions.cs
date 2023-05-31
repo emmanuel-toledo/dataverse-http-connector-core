@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
 {
@@ -59,6 +61,21 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=\"*\"");
             client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+        }
+
+        /// <summary>
+        /// Extension method to conver "Request" object instance to "HttpRequestMessage".
+        /// </summary>
+        /// <param name="request">Request configuration object.</param>
+        /// <returns>Instance of http request message.</returns>
+        internal static HttpRequestMessage ConvertToHttpRequest(this Request request)
+        {
+            // Generate new instance.
+            HttpRequestMessage httpRequest = new();
+            // Set and return request message properties.
+            httpRequest.Method = request.MethodType;
+            httpRequest.RequestUri = new Uri(QueryHelpers.AddQueryString(request.EndPoint, request.Params));
+            return httpRequest;
         }
     }
 }
