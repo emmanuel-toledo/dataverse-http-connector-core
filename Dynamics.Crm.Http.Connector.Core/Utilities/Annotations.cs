@@ -7,6 +7,9 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         internal static EntityAttributes? GetEntityAttributes(Type type)
             => type.GetCustomAttributes(typeof(EntityAttributes), true).FirstOrDefault() as EntityAttributes;
 
+        internal static FieldAttributes? GetFieldAttribute(this System.Reflection.PropertyInfo property)
+            => (FieldAttributes?)property.GetCustomAttributes(typeof(FieldAttributes), true).FirstOrDefault();
+
         internal static ICollection<FieldAttributes> GetFieldsAttributes(Type type)
         {
             List<FieldAttributes> fields = new();

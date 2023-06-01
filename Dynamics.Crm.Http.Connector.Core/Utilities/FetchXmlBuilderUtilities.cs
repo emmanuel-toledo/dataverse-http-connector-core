@@ -64,6 +64,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
             // Get entity fields annotation attributes.
             var fieldsAttributes = Annotations.GetFieldsAttributes(entity);
             // Create FetchXml query.
+
+
+            // TODO: Create fetchxml query using XDocument class to set alias to each attribute using SchemaNames.
+            //var query = new XDocument();
+            
             string query = @$"<fetch { (fetchXml.Top > 0 ? $"top='{fetchXml.Top}'" : "") } {(fetchXml.Distinct ? $"distinct='{fetchXml.Distinct.ToString().ToLower()}'" : "")}>
             <entity name='{ entityAttributes.SchemaName }'>";
             foreach (var field in fieldsAttributes)

@@ -30,7 +30,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
             _services.AddDynamicsContext<DynamicsContext>(builder =>
             {
                 builder.SetDefaultConnection(Dynamics.Connection); // Podemos user Bind desde IConfiguration para no crear nueva instancia directamente.
-                builder.SetThrowExceptions(false);
+                builder.SetThrowExceptions(true);
                 builder.AddEntityDeffinition<Contacts>();
             });
             _provider = _services.BuildServiceProvider();
@@ -39,7 +39,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
             {
                 Console.WriteLine(entity.EntityType.Name);
             }
-            _builder.Connection.ClientSecret = "New Secret"; // Transient service, each request of service will set initial setup.
+            //_builder.Connection.ClientSecret = "New Secret"; // Transient service, each request of service will set initial setup.
             _builder = _provider.GetService<IDynamicsBuilder>()!;
             _context = _provider.GetService<IDynamicsContext>()!;
             Console.WriteLine(_builder.Entities.Count);
@@ -50,7 +50,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         {
             try
             {
-                var response = _context.Set<Contacts>()
+                var contact = await _context.Set<Contacts>()
                     .FilterAnd(conditions => conditions.NotNull(x => x.FullName))
                     .FilterOr(conditions =>
                     {
@@ -58,8 +58,20 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                         conditions.Equal(x => x.Id, new Guid("c4d14cf3-e939-ed11-9db1-000d3a990e03"));
                     })
                     .Top(2)
-                    .Distinct(true);
-                Assert.IsTrue(!string.IsNullOrEmpty("Success"));
+                    .Distinct(true)
+                    .FirstOrDefaultAsync();
+
+				var contacts = await _context.Set<Contacts>()
+					.FilterAnd(conditions => conditions.NotNull(x => x.FullName))
+					.FilterOr(conditions =>
+					{
+						conditions.Equal(x => x.Id, new Guid("bfd14cf3-e939-ed11-9db1-000d3a990e03"));
+						conditions.Equal(x => x.Id, new Guid("c4d14cf3-e939-ed11-9db1-000d3a990e03"));
+					})
+					.Top(2)
+					.Distinct(true)
+					.ToListAsync();
+				Assert.IsTrue(!string.IsNullOrEmpty("Success"));
             } 
             catch(Exception ex)
             {
