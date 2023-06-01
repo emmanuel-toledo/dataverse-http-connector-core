@@ -10,6 +10,7 @@ using Dynamics.Crm.Http.Connector.Core.Context;
 using Dynamics.Crm.Http.Connector.Core.Business.Commands;
 using Dynamics.Crm.Http.Connector.Core.Business.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Handler;
+using Dynamics.Crm.Http.Connector.Core.Persistence.Provider;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
 {
@@ -108,10 +109,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
         {
             // Configure Dynamics Request service.
             services.AddScoped<IDynamicsRequest, DynamicsRequest>();
-            // Configure DbEntitySet service for Dynamics as an generic service.
-            services.AddScoped(typeof(IDbEntitySet<>), typeof(DbEntitySet<>));
-            // Configure main Dynamics service.
-            services.AddScoped<IDynamicsContext, DynamicsContext>();
+			// Configure DbEntitySet service for Dynamics as an generic service.
+			services.AddTransient(typeof(IDbEntitySet<>), typeof(DbEntitySet<>));
+			// Configure main Dynamics service.
+			services.AddScoped<IDynamicsContext, DynamicsContext>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Dynamics.Crm.Http.Connector.Core.Business.Handler;
 using Dynamics.Crm.Http.Connector.Core.Business.Queries;
 using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
 using Dynamics.Crm.Http.Connector.Core.Utilities;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +26,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         private FetchXmlBuilder<TEntity> _fetchBuilder = new();
 
         public DbEntitySet(IRequestHandler requestHandler)
-            => _requestHandler = requestHandler;
+        {
+            _fetchBuilder = new();
+			_requestHandler = requestHandler;
+		}
 
         /// <summary>
         /// Function to add a new Filter to the FetchXml builder for request query.
@@ -94,17 +99,16 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
         /// <returns>New instance of "TEntity".</returns>
-        public async Task<TEntity> FirstOrDefaultAsync()
+        public async Task<TEntity?> FirstOrDefaultAsync()
         {
             _fetchBuilder.FirstOrDefault();
-            var response = await _requestHandler.SendAsync(request =>
-            {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalName;
-                request.AddParam("fetchXml", BuildFetchXml());
-            });
-            return Instance<TEntity>.TEntityInstance();
-        }
+            return await _requestHandler.FirstOrDefaultAsync<TEntity>(request =>
+			{
+				request.MethodType = HttpMethod.Get;
+				request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalName;
+				request.AddParam("fetchXml", BuildFetchXml());
+			});
+		}
 
         /// <summary>
         /// Function to retrive a collection of "TEntity" records according to defined FetchXml query.
@@ -112,14 +116,28 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         /// <returns>Collection of "TEntity".</returns>
         public async Task<ICollection<TEntity>> ToListAsync()
         {
-            throw new NotImplementedException();
+            return await _requestHandler.ToListAsync<TEntity>(request =>
+            {
+				request.MethodType = HttpMethod.Get;
+				request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalName;
+				request.AddParam("fetchXml", BuildFetchXml());
+			});
         }
 
-        /// <summary>
-        /// Function to add a new "TEntity" record to the database.
-        /// </summary>
-        /// <returns>Instance of "TEntity".</returns>
-        public async Task<TEntity> AddAsync()
+		/// <summary>
+		/// Function to retrive a collection of "TEntity" records with pagination configuration according to defined FetchXml query.
+		/// </summary>
+		/// <returns>Collection of "TEntity".</returns>
+		public async Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage, int pageSize)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Function to add a new "TEntity" record to the database.
+		/// </summary>
+		/// <returns>Instance of "TEntity".</returns>
+		public async Task<TEntity> AddAsync()
         {
             throw new NotImplementedException();
         }

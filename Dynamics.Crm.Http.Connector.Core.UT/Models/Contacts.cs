@@ -19,5 +19,17 @@ namespace Dynamics.Crm.Http.Connector.Core.UT.Models
         /// </summary>
         [FieldAttributes("fullName", "fullname", FieldTypes.Text)]
         public string? FullName { get; set; }
-    }
+
+		/// <summary>
+		/// Get and set created on.
+		/// </summary>
+		[FieldAttributes("createdOn", "createdon", FieldTypes.DateTime)]
+		public DateTime CreatedOn { get; set; }
+
+		/// <summary>
+		/// Get and set owner unique identifier.
+		/// </summary>
+		[FieldAttributes("ownerId", "ownerid", FieldTypes.Lookup)]
+        public Guid OwnerId { get; set; }
+	}
 }

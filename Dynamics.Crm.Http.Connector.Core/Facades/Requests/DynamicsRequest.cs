@@ -67,7 +67,7 @@ namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
                     throw new Exception("This is a generic exception");
                 return response;
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }

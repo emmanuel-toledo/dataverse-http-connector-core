@@ -1,4 +1,5 @@
 ﻿using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 
 namespace Dynamics.Crm.Http.Connector.Core.Context
 {
@@ -48,11 +49,19 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         /// <returns>Collection of "TEntity".</returns>
         Task<ICollection<TEntity>> ToListAsync();
 
-        /// <summary>
-        /// Function to add a new "TEntity" record to the database.
-        /// </summary>
-        /// <returns>Instance of "TEntity".</returns>
-        Task<TEntity> AddAsync();
+		/// <summary>
+		/// Function to retrive a collection of "TEntity" records with pagination configuration according to defined FetchXml query.
+		/// </summary>
+		/// <param name="currentPage">Page to retrive.</param>
+		/// <param name="pageSize">Max records count for each page.</param>
+		/// <returns>Paged response model of type "TEntity".</returns>
+		Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage, int pageSize);
+
+		/// <summary>
+		/// Function to add a new "TEntity" record to the database.
+		/// </summary>
+		/// <returns>Instance of "TEntity".</returns>
+		Task<TEntity> AddAsync();
 
         /// <summary>
         /// Function to update a new "TEntity" record to the database.
