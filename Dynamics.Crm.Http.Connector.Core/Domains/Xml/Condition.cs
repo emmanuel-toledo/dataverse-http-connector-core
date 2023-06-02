@@ -13,7 +13,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Xml
         /// <param name="property">Property of entity to evaluate.</param>
         /// <param name="conditionTypes">Condition type to use.</param>
         /// <param name="value">Value to evaluate.</param>
-        public Condition(string? property, ConditionTypes conditionTypes, string? value)
+        public Condition(string? property, ConditionTypes conditionTypes, object value)
         {
             Property = property;
             ConditionType = conditionTypes;
@@ -33,6 +33,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Xml
         /// <summary>
         /// Get and set value to check in a query in the "condition" tag.
         /// </summary>
-        public string? Value { get; set; } = string.Empty;
+        public object Value { get; set; }
     }
 }

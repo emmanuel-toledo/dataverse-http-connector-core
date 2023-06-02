@@ -54,5 +54,13 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Builders
         public static FilterBuilder<TEntity> NotLike<TEntity, P>(this FilterBuilder<TEntity> filterBuilder,
             Expression<Func<TEntity, P>> action, P value) where TEntity : class, new()
             => filterBuilder.AddCondition(action, ConditionTypes.NotLike, value);
+
+        public static FilterBuilder<TEntity> In<TEntity, P>(this FilterBuilder<TEntity> filterBuilder,
+            Expression<Func<TEntity, P>> action, params P[] value) where TEntity : class, new()
+            => filterBuilder.AddCondition(action, ConditionTypes.In, value);
+
+        public static FilterBuilder<TEntity> NotIn<TEntity, P>(this FilterBuilder<TEntity> filterBuilder,
+            Expression<Func<TEntity, P>> action, params P[] value) where TEntity : class, new()
+            => filterBuilder.AddCondition(action, ConditionTypes.NotIn, value);
     }
 }

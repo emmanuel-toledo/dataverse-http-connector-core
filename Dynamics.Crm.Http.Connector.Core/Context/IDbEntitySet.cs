@@ -41,7 +41,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
         /// <returns>New instance of "TEntity".</returns>
-        Task<TEntity> FirstOrDefaultAsync();
+        Task<TEntity?> FirstOrDefaultAsync();
 
         /// <summary>
         /// Function to retrive a collection of "TEntity" records according to defined FetchXml query.

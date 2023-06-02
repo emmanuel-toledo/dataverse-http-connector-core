@@ -6,19 +6,19 @@
     [AttributeUsage(AttributeTargets.Class)]
     public class EntityAttributes : Attribute
     {
-        public EntityAttributes(string schemaName, string logicalName)
+        public EntityAttributes(string logicalName, string logicalCollectionName)
         {
-            SchemaName = schemaName;
             LogicalName = logicalName;
+            LogicalCollectionName = logicalCollectionName;
         }
 
         /// <summary>
-        /// Get and set schema name of an entity.
+        /// Get and set logical name of an entity.
         /// </summary>
-        public string? SchemaName { get; set; } = string.Empty;
+        public string? LogicalCollectionName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Get and set logical name of an entity.
+        /// Get and set logical collection name of an entity.
         /// </summary>
         public string? LogicalName { get; set; } = string.Empty;
     }
