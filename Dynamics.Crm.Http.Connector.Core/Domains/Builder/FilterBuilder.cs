@@ -40,22 +40,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         /// <param name="action">Expression of custom class.</param>
         /// <param name="type">Condition type.</param>
         /// <returns>Same instance of Filter builder.</returns>
-        public FilterBuilder<TEntity> AddCondition<P>(Expression<Func<TEntity, P>> action, ConditionTypes type)
+        internal FilterBuilder<TEntity> AddCondition<P>(Expression<Func<TEntity, P>> action, ConditionTypes type)
         {
             var attribute = FilterBuilderUtilities.CheckExpression(action);
             _filter.Conditions.Add(new Condition(attribute.LogicalName, type, null));
-            return this;
-        }
-
-        /// <summary>
-        /// Function to add a new condition using the deffinition of an attribute using "string" type.
-        /// </summary>
-        /// <param name="attribute">Attribute to evaluate.</param>
-        /// <param name="type">Condition type.</param>
-        /// <returns>Same instance of Filter builder.</returns>
-        public FilterBuilder<TEntity> AddCondition(string attribute, ConditionTypes type)
-        {
-            _filter.Conditions.Add(new Condition(attribute, type, null));
             return this;
         }
 
@@ -67,12 +55,39 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         /// <param name="type">Condition type.</param>
         /// <param name="value">Value to compare of 'P' type.</param>
         /// <returns>Same instance of Filter builder.</returns>
-        public FilterBuilder<TEntity> AddCondition<P>(Expression<Func<TEntity, P>> action, ConditionTypes type, P value)
+        internal FilterBuilder<TEntity> AddCondition<P>(Expression<Func<TEntity, P>> action, ConditionTypes type, P value)
         {
             var attribute = FilterBuilderUtilities.CheckExpression(action);
             _filter.Conditions.Add(new Condition(attribute.LogicalName, type, Parse.ParseValue(value)));
             return this;
         }
+
+        /// <summary>
+        /// Function to add a new condition using an expression to select the property of a class and add multiples values.
+        /// </summary>
+        /// <typeparam name="P">Property type of a class.</typeparam>
+        /// <param name="action">Expression of custom class.</param>
+        /// <param name="type">Condition type.</param>
+        /// <param name="value">Value to compare of 'P' type.</param>
+        /// <returns>Same instance of Filter builder.</returns>
+        internal FilterBuilder<TEntity> AddCondition<P>(Expression<Func<TEntity, P>> action, ConditionTypes type, P[] value)
+        {
+            var attribute = FilterBuilderUtilities.CheckExpression(action);
+            _filter.Conditions.Add(new Condition(attribute.LogicalName, type, value));
+            return this;
+        }
+
+        /// <summary>
+        /// Function to add a new condition using the deffinition of an attribute using "string" type.
+        /// </summary>
+        /// <param name="attribute">Attribute to evaluate.</param>
+        /// <param name="type">Condition type.</param>
+        /// <returns>Same instance of Filter builder.</returns>
+        //public FilterBuilder<TEntity> AddCondition(string attribute, ConditionTypes type)
+        //{
+        //    _filter.Conditions.Add(new Condition(attribute, type, null));
+        //    return this;
+        //}
 
         /// <summary>
         /// Function to add a new condition using the deffinition of an attribute using "string" type.
@@ -82,10 +97,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         /// <param name="type">Condition type.</param>
         /// <param name="value">Value to compare of 'P' type.</param>
         /// <returns>Same instance of Filter builder.</returns>
-        public FilterBuilder<TEntity> AddCondition<P>(string attribute, ConditionTypes type, P value)
-        {
-            _filter.Conditions.Add(new Condition(attribute, type, Parse.ParseValue(value)));
-            return this;
-        }
+        //public FilterBuilder<TEntity> AddCondition<P>(string attribute, ConditionTypes type, P value)
+        //{
+        //    _filter.Conditions.Add(new Condition(attribute, type, Parse.ParseValue(value)));
+        //    return this;
+        //}
     }
 }

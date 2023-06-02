@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Dynamics.Crm.Http.Connector.Core.UT
 {
     [TestClass]
-    public class EntityDbSetContact
+    public class EntityDbSetIdentityUser
     {
         private IServiceProvider _provider;
 
@@ -32,6 +32,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                 builder.SetDefaultConnection(Dynamics.Connection); // Podemos user Bind desde IConfiguration para no crear nueva instancia directamente.
                 builder.SetThrowExceptions(true);
                 builder.AddEntityDeffinition<Contacts>();
+                builder.AddEntityDeffinition<IdentityUser>();
             });
             _provider = _services.BuildServiceProvider();
             _builder = _provider.GetService<IDynamicsBuilder>()!;
@@ -50,26 +51,27 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         {
             try
             {
-                var contact = await _context.Set<Contacts>()
-                    .FilterAnd(conditions => conditions.NotNull(x => x.FullName))
-                    .FilterOr(conditions =>
-                    {
-                        conditions.In(x => x.Id, new Guid("bfd14cf3-e939-ed11-9db1-000d3a990e03"), new Guid("c4d14cf3-e939-ed11-9db1-000d3a990e03"));
-                    })
-                    .Top(2)
+                var contact = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions => conditions.Equal(x => x.IdentityUserId, new Guid("d818df18-d600-ee11-8f6e-0022482dbd7a")))
                     .Distinct(true)
                     .FirstOrDefaultAsync();
 
-                var contacts = await _context.Set<Contacts>()
-                    .FilterAnd(conditions => conditions.NotNull(x => x.FullName))
-                    .FilterOr(conditions =>
+                var contacts = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions =>
                     {
-                        conditions.Equal(x => x.Id, new Guid("bfd14cf3-e939-ed11-9db1-000d3a990e03"));
-                        conditions.Equal(x => x.Id, new Guid("c4d14cf3-e939-ed11-9db1-000d3a990e03"));
+                        conditions.In(x => x.IdentityUserId, new Guid("07ef9235-de00-ee11-8f6e-0022482db4d8"), new Guid("42ee683c-de00-ee11-8f6e-0022482db4d8"));
                     })
-                    .Top(2)
                     .Distinct(true)
                     .ToListAsync();
+
+                contacts = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions =>
+                    {
+                        conditions.NotIn(x => x.IdentityUserId, new Guid("07ef9235-de00-ee11-8f6e-0022482db4d8"), new Guid("42ee683c-de00-ee11-8f6e-0022482db4d8"));
+                    })
+                    .Distinct(true)
+                    .ToListAsync();
+
                 Assert.IsTrue(!string.IsNullOrEmpty("Success"));
             } 
             catch(Exception ex)

@@ -83,6 +83,18 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                 case ConditionTypes.NotLike:
                     conditionString = "not-like";
                     break;
+                case ConditionTypes.In:
+                    conditionString = "in";
+                    break;
+                case ConditionTypes.NotIn:
+                    conditionString = "not-in";
+                    break;
+                case ConditionTypes.Between:
+                    conditionString = "between";
+                    break;
+                case ConditionTypes.NotBetween:
+                    conditionString = "not-between";
+                    break;
                 default:
                     throw new ArgumentNullException(nameof(conditionType));
             }
@@ -135,8 +147,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
 						case FieldTypes.Text:
 							property.SetValue(entity, Convert.ToString(propertyValue), null);
 							break;
-						case FieldTypes.DateTime:
-							property.SetValue(entity, jsonObject.Value<DateTime>(fieldAttributes.LogicalName!), null);
+                        case FieldTypes.OptionSet:
+                            property.SetValue(entity, Convert.ToInt32(propertyValue), null);
+                            break;
+                        case FieldTypes.DateTime:
+							property.SetValue(entity, jsonObject.Value<DateTime>(fieldAttributes.SchemaName!), null);
 							break;
 					}
 				}

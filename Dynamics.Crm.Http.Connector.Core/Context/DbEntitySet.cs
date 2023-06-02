@@ -91,10 +91,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             return this;
         }
 
-
-        // TODO:
-
-
         /// <summary>
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
@@ -103,12 +99,12 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             _fetchBuilder.FirstOrDefault();
             return await _requestHandler.FirstOrDefaultAsync<TEntity>(request =>
-			{
-				request.MethodType = HttpMethod.Get;
-				request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalName;
-				request.AddParam("fetchXml", BuildFetchXml());
-			});
-		}
+            {
+                request.MethodType = HttpMethod.Get;
+                request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalCollectionName;
+                request.AddParam("fetchXml", BuildFetchXml());
+            });
+        }
 
         /// <summary>
         /// Function to retrive a collection of "TEntity" records according to defined FetchXml query.
@@ -118,17 +114,19 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             return await _requestHandler.ToListAsync<TEntity>(request =>
             {
-				request.MethodType = HttpMethod.Get;
-				request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalName;
-				request.AddParam("fetchXml", BuildFetchXml());
-			});
+                request.MethodType = HttpMethod.Get;
+                request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalCollectionName;
+                request.AddParam("fetchXml", BuildFetchXml());
+            });
         }
 
-		/// <summary>
-		/// Function to retrive a collection of "TEntity" records with pagination configuration according to defined FetchXml query.
-		/// </summary>
-		/// <returns>Collection of "TEntity".</returns>
-		public async Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage, int pageSize)
+        // TODO:
+
+        /// <summary>
+        /// Function to retrive a collection of "TEntity" records with pagination configuration according to defined FetchXml query.
+        /// </summary>
+        /// <returns>Collection of "TEntity".</returns>
+        public async Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage, int pageSize)
 		{
 			throw new NotImplementedException();
 		}
