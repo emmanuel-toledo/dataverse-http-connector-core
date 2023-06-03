@@ -76,31 +76,5 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
             _filter.Conditions.Add(new Condition(attribute.LogicalName, type, value));
             return this;
         }
-
-        /// <summary>
-        /// Function to add a new condition using the deffinition of an attribute using "string" type.
-        /// </summary>
-        /// <param name="attribute">Attribute to evaluate.</param>
-        /// <param name="type">Condition type.</param>
-        /// <returns>Same instance of Filter builder.</returns>
-        //public FilterBuilder<TEntity> AddCondition(string attribute, ConditionTypes type)
-        //{
-        //    _filter.Conditions.Add(new Condition(attribute, type, null));
-        //    return this;
-        //}
-
-        /// <summary>
-        /// Function to add a new condition using the deffinition of an attribute using "string" type.
-        /// </summary>
-        /// <typeparam name="P">Property type of a class.</typeparam>
-        /// <param name="attribute">Attribute to evaluate.</param>
-        /// <param name="type">Condition type.</param>
-        /// <param name="value">Value to compare of 'P' type.</param>
-        /// <returns>Same instance of Filter builder.</returns>
-        //public FilterBuilder<TEntity> AddCondition<P>(string attribute, ConditionTypes type, P value)
-        //{
-        //    _filter.Conditions.Add(new Condition(attribute, type, Parse.ParseValue(value)));
-        //    return this;
-        //}
     }
 }

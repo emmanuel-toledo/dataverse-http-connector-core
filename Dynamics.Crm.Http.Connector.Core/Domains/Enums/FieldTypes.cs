@@ -7,6 +7,7 @@
     {
         Text,
         Number,
+        DecimalNumber,
         Lookup,
         DateTime,
         OptionSet,

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
-using Dynamics.Crm.Http.Connector.Core.Extensions.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections
 {

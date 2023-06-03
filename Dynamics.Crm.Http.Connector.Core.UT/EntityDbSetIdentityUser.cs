@@ -2,8 +2,8 @@ using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Extensions;
-using Dynamics.Crm.Http.Connector.Core.Extensions.Builders;
 using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections;
+using Dynamics.Crm.Http.Connector.Core.Extensions.Utilities;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options;
 using Dynamics.Crm.Http.Connector.Core.Persistence;
@@ -19,8 +19,6 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
 
         private IServiceCollection _services;
 
-        private IDynamicsBuilder _builder; // Dynamics Builder configuration (entites and connection information).
-
         private IDynamicsContext _context;
 
         [TestInitialize]
@@ -35,28 +33,51 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                 builder.AddEntityDeffinition<IdentityUser>();
             });
             _provider = _services.BuildServiceProvider();
-            _builder = _provider.GetService<IDynamicsBuilder>()!;
-            foreach(var entity in _builder.Entities)
-            {
-                Console.WriteLine(entity.EntityType.Name);
-            }
-            //_builder.Connection.ClientSecret = "New Secret"; // Transient service, each request of service will set initial setup.
-            _builder = _provider.GetService<IDynamicsBuilder>()!;
             _context = _provider.GetService<IDynamicsContext>()!;
-            Console.WriteLine(_builder.Entities.Count);
         }
 
         [TestMethod]
-        public async Task TestMethod1()
+        public async Task SuccessFirstOrDefaultAsync()
         {
             try
             {
-                var contact = await _context.Set<IdentityUser>()
+                var user = await _context.Set<IdentityUser>()
                     .FilterAnd(conditions => conditions.Equal(x => x.IdentityUserId, new Guid("d818df18-d600-ee11-8f6e-0022482dbd7a")))
                     .Distinct(true)
                     .FirstOrDefaultAsync();
 
-                var contacts = await _context.Set<IdentityUser>()
+                Assert.IsTrue(user != null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task FailFirstOrDefaultAsync()
+        {
+            try
+            {
+                var user = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions => conditions.Equal(x => x.IdentityUserId, Guid.NewGuid()))
+                    .Distinct(true)
+                    .FirstOrDefaultAsync();
+
+                Assert.IsTrue(user is null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task SuccessToListAsync()
+        {
+            try
+            {
+                var users = await _context.Set<IdentityUser>()
                     .FilterAnd(conditions =>
                     {
                         conditions.In(x => x.IdentityUserId, new Guid("07ef9235-de00-ee11-8f6e-0022482db4d8"), new Guid("42ee683c-de00-ee11-8f6e-0022482db4d8"));
@@ -64,7 +85,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                     .Distinct(true)
                     .ToListAsync();
 
-                contacts = await _context.Set<IdentityUser>()
+                users = await _context.Set<IdentityUser>()
                     .FilterAnd(conditions =>
                     {
                         conditions.NotIn(x => x.IdentityUserId, new Guid("07ef9235-de00-ee11-8f6e-0022482db4d8"), new Guid("42ee683c-de00-ee11-8f6e-0022482db4d8"));
@@ -72,7 +93,23 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                     .Distinct(true)
                     .ToListAsync();
 
-                Assert.IsTrue(!string.IsNullOrEmpty("Success"));
+                users = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions =>
+                    {
+                        conditions.Between(x => x.Age, 20, 80);
+                    })
+                    .Distinct(true)
+                    .ToListAsync();
+
+                users = await _context.Set<IdentityUser>()
+                    .FilterAnd(conditions =>
+                    {
+                        conditions.NotBetween(x => x.Age, 20, 80);
+                    })
+                    .Distinct(true)
+                    .ToListAsync();
+
+                Assert.IsTrue(users.Count > 0);
             } 
             catch(Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
+﻿using Dynamics.Crm.Http.Connector.Core.Business.Handler;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
 using Dynamics.Crm.Http.Connector.Core.Utilities;
 using Newtonsoft.Json.Linq;
@@ -10,15 +11,17 @@ using System.Threading.Tasks;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Queries
 {
-    public class DynamicsQueries : IDynamicsQueries
+    internal class DynamicsQueries : IDynamicsQueries
     {
         private readonly IDynamicsRequest _dynamics;
 
-        public DynamicsQueries(IDynamicsRequest dynamics)
+        private readonly IParseHandler _parseHandler;
+
+        public DynamicsQueries(IDynamicsRequest dynamics, IParseHandler parseHandler)
         {
             _dynamics = dynamics;
+            _parseHandler = parseHandler;
         }
-
 
         public async Task<TEntity?> FirstOrDefaultAsync<TEntity>(HttpRequestMessage requestMessage) where TEntity : class, new()
         {
@@ -33,7 +36,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Queries
             if (content is null || content.Count <= 0)
                 return null;
             // Parse content to model.
-            var entity = Parse.ParseTEntityToModel<TEntity>(content.FirstOrDefault());
+            var entity = _parseHandler.ParseTEntityToModel<TEntity>(content.FirstOrDefault()!);
             return entity;
         }
 
@@ -50,9 +53,9 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Queries
 			var content = contentResponse.Value<JArray>("value");
 			if (content is null || content.Count <= 0)
 				return collection;
-			// Parse content to model.
-			collection = Parse.ParseTEntityToCollection<TEntity>(content).ToList();
-			return collection;
+            // Parse content to model.
+            collection = _parseHandler.ParseTEntityToCollection<TEntity>(content).ToList();
+            return collection;
 		}
 	}
 }

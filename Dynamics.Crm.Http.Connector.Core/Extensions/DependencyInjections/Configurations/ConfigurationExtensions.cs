@@ -12,7 +12,7 @@ using Dynamics.Crm.Http.Connector.Core.Business.Queries;
 using Dynamics.Crm.Http.Connector.Core.Business.Handler;
 using Dynamics.Crm.Http.Connector.Core.Persistence.Provider;
 
-namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
+namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations
 {
     internal static class ConfigurationExtensions
     {
@@ -59,6 +59,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
             services.ConfigureBusinessService();
             // Configure Dynamics context services.
             services.ConfigureDynamicsContext();
+            // Configure local service provider.
+            ConfigureLocalServiceProvider();
         }
 
         /// <summary>
@@ -77,6 +79,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
             services.AddScoped<IDynamicsCommands, DynamicsCommands>();
             // Configure Dynamics request handler service.
             services.AddScoped<IRequestHandler, RequestHandler>();
+            // Configure Parse response handler service.
+            services.AddScoped<IParseHandler, ParseHandler>();
         }
 
         /// <summary>
@@ -109,10 +113,19 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
         {
             // Configure Dynamics Request service.
             services.AddScoped<IDynamicsRequest, DynamicsRequest>();
-			// Configure DbEntitySet service for Dynamics as an generic service.
-			services.AddTransient(typeof(IDbEntitySet<>), typeof(DbEntitySet<>));
-			// Configure main Dynamics service.
-			services.AddScoped<IDynamicsContext, DynamicsContext>();
+            // Configure DbEntitySet service for Dynamics as an generic service.
+            services.AddTransient(typeof(IDbEntitySet<>), typeof(DbEntitySet<>));
+            // Configure main Dynamics service.
+            services.AddScoped<IDynamicsContext, DynamicsContext>();
+        }
+
+        /// <summary>
+        /// Function to configure Local Service Provider.
+        /// </summary>
+        internal static void ConfigureLocalServiceProvider()
+        {
+            // Configure Parse response handler service.
+            DynamicsServiceProvider.Services.AddScoped<IParseHandler, ParseHandler>();
         }
     }
 }

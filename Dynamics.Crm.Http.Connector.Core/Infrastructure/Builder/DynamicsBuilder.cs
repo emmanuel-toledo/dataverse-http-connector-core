@@ -8,7 +8,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder
     /// <summary>
     /// This class implements configuration, methods and properties to connect and transform data from Dynamics.
     /// </summary>
-    public class DynamicsBuilder : DynamicsOptionsBuilder, IDynamicsBuilder, IDynamicsOptionsBuilder
+    public class DynamicsBuilder : DynamicsOptionsBuilder, IDynamicsBuilder
     {
         /// <summary>
         /// Get and set throw exception flag.

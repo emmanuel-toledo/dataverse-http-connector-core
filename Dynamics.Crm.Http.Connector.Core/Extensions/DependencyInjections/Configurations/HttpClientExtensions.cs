@@ -4,7 +4,7 @@ using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
+namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations
 {
     /// <summary>
     /// Internal extension class to configure HttpClient configurations.
@@ -38,11 +38,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Configurations
                     // Set Authorization token using cached Authentication Result.
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(builder.Authentication!.TokenType, builder.Authentication!.AccessToken);
                 }
-                
+
                 // Set authentication token according to DynamicsBuilder information.
                 client.BaseAddress = new Uri($"{builder.Connection!.Resource!}/api/data/v{(builder.Connection!.Version == 0.0 ? "9.2" : builder.Connection!.Version)}/");
                 return client;
-            } 
+            }
             catch (Exception ex)
             {
                 throw new Exception("An error occurred during the configuration of the service client for Dynamics", ex);

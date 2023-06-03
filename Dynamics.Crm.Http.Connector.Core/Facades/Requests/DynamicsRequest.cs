@@ -1,8 +1,8 @@
 ﻿using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
-using Dynamics.Crm.Http.Connector.Core.Extensions.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
 
-namespace  Dynamics.Crm.Http.Connector.Core.Facades.Requests
+namespace Dynamics.Crm.Http.Connector.Core.Facades.Requests
 {
     /// <summary>
     /// This interface defines the method to call each request to Dynamics.

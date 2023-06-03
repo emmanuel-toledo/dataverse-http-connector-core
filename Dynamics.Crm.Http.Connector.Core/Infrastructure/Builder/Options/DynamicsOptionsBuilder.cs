@@ -1,5 +1,6 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
-using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+﻿using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
 
 namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options
 {
@@ -28,6 +29,32 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options
             if (Entities.Any(x => x.EntityType == typeof(TEntity)))
                 throw new ApplicationBuilderException($"The entity type '{ typeof(TEntity) }' is already configured.");
             _entities.Add(new EntityBuilder(typeof(TEntity)));
+        }
+
+        /// <summary>
+        /// Function to retrive an entity attributes from a specific entity in the Dynamics Option Builder entities collection.
+        /// </summary>
+        /// <param name="type">Type of entity to retrive.</param>
+        /// <returns>Entity attribute instance.</returns>
+        /// <exception cref="NotDefinitionEntityException">The entity type was not found in the context.</exception>
+        public EntityAttributes GetEntityAttributesFromType(Type type)
+        {
+            if(!Entities.Any(x => x.EntityType == type))
+                throw new NotDefinitionEntityException(type.Name, type);
+            return Entities.First(x => x.EntityType == type).EntityAttributes!;
+        }
+
+        /// <summary>
+        /// Function to retrive an entity field attributes collection from a specific entity in the Dynamics Option Builder entities collection.
+        /// </summary>
+        /// <param name="type">Type of entity to retrive.</param>
+        /// <returns>Entitiy fields attributes collection.</returns>
+        /// <exception cref="NotDefinitionEntityException">The entity type was not found in the context.</exception>
+        public ICollection<FieldAttributes> GetFieldsAttributesFromType(Type type)
+        {
+            if (!Entities.Any(x => x.EntityType == type))
+                throw new NotDefinitionEntityException(type.Name, type);
+            return Entities.First(x => x.EntityType == type).FieldsAttributes;
         }
     }
 }
