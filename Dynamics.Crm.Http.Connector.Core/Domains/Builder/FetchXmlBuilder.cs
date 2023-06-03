@@ -1,5 +1,6 @@
 ﻿using Dynamics.Crm.Http.Connector.Core.Utilities;
 using Dynamics.Crm.Http.Connector.Core.Domains.Xml;
+using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 
 namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
 {
@@ -66,7 +67,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         /// Function to generate FetchXml query to use in the request.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
-        internal string BuildFetchXml()
-            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch);
+        internal string BuildFetchXml(EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes)
+            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
     }
 }

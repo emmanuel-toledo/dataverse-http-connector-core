@@ -5,6 +5,7 @@ using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,17 +20,33 @@ using System.Threading.Tasks;
 
 namespace Dynamics.Crm.Http.Connector.Core.Context
 {
+    /// <summary>
+    /// This class implements all the functions that can be used with this library.
+    /// </summary>
+    /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
     public class DbEntitySet<TEntity> : IDbEntitySet<TEntity> where TEntity : class, new()
     {
         private readonly IRequestHandler _requestHandler;
 
+        private readonly IDynamicsBuilder _builder;
+
         private FetchXmlBuilder<TEntity> _fetchBuilder = new();
 
-        public DbEntitySet(IRequestHandler requestHandler)
+        public DbEntitySet(IRequestHandler requestHandler, IDynamicsBuilder builder)
         {
             _fetchBuilder = new();
 			_requestHandler = requestHandler;
+            _builder = builder;
 		}
+
+        /// <summary>
+        /// Function to build FetchXml query for Dynamics.
+        /// </summary>
+        /// <returns>FetchXml query string.</returns>
+        private string BuildFetchXml()
+            => _fetchBuilder.BuildFetchXml(
+                _builder.GetEntityAttributesFromType(typeof(TEntity)),
+                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
         /// Function to add a new Filter to the FetchXml builder for request query.
@@ -101,8 +118,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             return await _requestHandler.FirstOrDefaultAsync<TEntity>(request =>
             {
                 request.MethodType = HttpMethod.Get;
-                request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalCollectionName;
-                request.AddParam("fetchXml", BuildFetchXml());
+                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.AddQueryParam(BuildFetchXml());
             });
         }
 
@@ -115,8 +132,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             return await _requestHandler.ToListAsync<TEntity>(request =>
             {
                 request.MethodType = HttpMethod.Get;
-                request.EndPoint = Annotations.GetEntityAttributes(Instance<TEntity>.TEntityInstance().GetType())!.LogicalCollectionName;
-                request.AddParam("fetchXml", BuildFetchXml());
+                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.AddQueryParam(BuildFetchXml());
             });
         }
 
@@ -157,8 +174,5 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             throw new NotImplementedException();
         }
-
-        internal string BuildFetchXml()
-            => _fetchBuilder.BuildFetchXml();
     }
 }

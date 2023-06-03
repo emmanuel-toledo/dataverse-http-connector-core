@@ -28,33 +28,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Persistence
         void SetEnvironment(DynamicsConnection connection);
 
         /// <summary>
-        /// Function to get information using a fetchXml query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="id">Entity record unique identifier.</param>
-        /// <returns>Http response message object.</returns>
-        [Obsolete("This function will be removed for a generic request.")]
-        Task<HttpResponseMessage> RetriveById(string schemaName, Guid id);
-
-        /// <summary>
-        /// Function to get information using a fetchXml query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="fetchXml">FetchXml query string.</param>
-        /// <returns>Http response message object.</returns>
-        [Obsolete("This function will be removed for a generic request.")]
-        Task<HttpResponseMessage> RetriveByFetch(string schemaName, string fetchXml);
-
-        /// <summary>
-        /// Function to get information using a OData query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="oData">OData query string.</param>
-        /// <returns>Http response message object.</returns>
-        [Obsolete("This function will be removed for a generic request.")] 
-        Task<HttpResponseMessage> RetriveByOData(string schemaName, string oData);
-
-        /// <summary>
         /// Function to initialize a new "DbEntitySet" to connect the API and get information.
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>

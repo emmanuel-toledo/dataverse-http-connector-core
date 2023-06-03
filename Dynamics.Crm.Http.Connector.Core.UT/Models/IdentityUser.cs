@@ -11,8 +11,17 @@ namespace Dynamics.Crm.Http.Connector.Core.UT.Models
         [FieldAttributes("crmit_Name", "crmit_name", FieldTypes.Text)]
         public string Name { get; set; }
 
+        [FieldAttributes("crmit_Edad", "crmit_edad", FieldTypes.Number)]
+        public int Age { get; set; }
+
         [FieldAttributes("crmit_Estatus", "crmit_estatus", FieldTypes.OptionSet)]
         public int Status { get; set; }
+
+        [FieldAttributes("statecode", "statecode", FieldTypes.OptionSet)]
+        public int StateCode { get; set; }
+
+        [FieldAttributes("CreatedOn", "createdon", FieldTypes.DateTime)]
+        public DateTime CreatedOn { get; set; }
 
         [FieldAttributes("OwnerId", "ownerid", FieldTypes.Lookup)]
         public Guid OwnerId { get; set; }

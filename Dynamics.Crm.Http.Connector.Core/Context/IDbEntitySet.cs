@@ -4,7 +4,7 @@ using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 namespace Dynamics.Crm.Http.Connector.Core.Context
 {
     /// <summary>
-    /// This interface define all the functions that can be used with this library.
+    /// This interface defines all the functions that can be used with this library.
     /// </summary>
     /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
     public interface IDbEntitySet<TEntity> where TEntity : class, new()

@@ -4,7 +4,7 @@ using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
-using Dynamics.Crm.Http.Connector.Core.Extensions.Configurations;
+using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
 using Dynamics.Crm.Http.Connector.Core.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,67 +14,88 @@ using System.Threading.Tasks;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
 {
+    /// <summary>
+    /// This interface defines the main request operations for Dynamics.
+    /// </summary>
     public interface IRequestHandler
     {
-        Task<TEntity> SendAsync<TEntity>(Action<Request> action) where TEntity : class, new();
-
+        /// <summary>
+        /// Function to retrive a new TEntity class instance.
+        /// <para>
+        /// The return value can be null if the record does not exists.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>New TEntity instance or null value.</returns>
         Task<TEntity?> FirstOrDefaultAsync<TEntity>(Action<Request> action) where TEntity : class, new();
 
+        /// <summary>
+        /// Function to retrive a collection of TEntity class.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>New TEntity collection instance.</returns>
 		Task<ICollection<TEntity>> ToListAsync<TEntity>(Action<Request> action) where TEntity : class, new();
 	}
 
+    /// <summary>
+    /// This class implements the main request operations for Dynamics.
+    /// </summary>
     public class RequestHandler : IRequestHandler
     {
+        /// <summary>
+        /// Private Dynamics queries service.
+        /// </summary>
         private readonly IDynamicsQueries _queries;
 
+        /// <summary>
+        /// Private Dynamics commands service.
+        /// </summary>
         private readonly IDynamicsCommands _commands;
 
+        /// <summary>
+        /// Generates a new instance of Request Handler service.
+        /// </summary>
+        /// <param name="queries">Dynamics queries service.</param>
+        /// <param name="commands">Dynamics commands service.</param>
         public RequestHandler(IDynamicsQueries queries, IDynamicsCommands commands)
         {
             _queries = queries;
             _commands = commands;
         }
 
-        public async Task<TEntity> SendAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-        {
-   //         // Parse action to model.
-   //         action(_request);
-			//var httpRequest = _request.ConvertToHttpRequest();
-			//// Evaluate method type.
-			//switch (_request.Method)
-   //         {
-   //             case BaseMethod.FirstOrDefaultAsync:
-   //                 break;
-			//	case BaseMethod.ToListAsync:
-			//		break;
-			//	case BaseMethod.AddAsync:
-			//		break;
-			//	case BaseMethod.UpdateAzync:
-			//		break;
-			//	case BaseMethod.DeleteAzync:
-			//		break;
-   //             default:
-   //                 throw new NotImplementedException("The selected base method was not implemented for the request.");
-			//}
-            
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Function to generate a new http request message from an "Request" model instance.
+        /// </summary>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>New http request message.</returns>
 		private HttpRequestMessage GenerateRequest(Action<Request> action)
 		{
-			// Parse action to model.
 			Request request = new();
 			action(request);
 			return request.ConvertToHttpRequest();
 		}
 
+        /// <summary>
+        /// Function to retrive a new TEntity class instance.
+        /// <para>
+        /// The return value can be null if the record does not exists.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> FirstOrDefaultAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-		{
-			return await _queries.FirstOrDefaultAsync<TEntity>(GenerateRequest(action));
-		}
+            => await _queries.FirstOrDefaultAsync<TEntity>(GenerateRequest(action));
 
+        /// <summary>
+        /// Function to retrive a collection of TEntity class.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>New TEntity collection instance.</returns>
 		public async Task<ICollection<TEntity>> ToListAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-        {
-			return await _queries.ToListAsync<TEntity>(GenerateRequest(action));
-		}
+            => await _queries.ToListAsync<TEntity>(GenerateRequest(action));
 	}
 }

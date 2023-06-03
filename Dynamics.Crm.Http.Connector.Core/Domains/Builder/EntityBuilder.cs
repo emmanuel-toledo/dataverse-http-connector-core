@@ -77,6 +77,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
             {
                 if (property.GetCustomAttributes(typeof(FieldAttributes), true).FirstOrDefault() is not FieldAttributes fieldAttributes)
                     continue;
+                fieldAttributes.TEntityPropertyName = property.Name;
                 fields.Add(fieldAttributes);
             }
             return fields;

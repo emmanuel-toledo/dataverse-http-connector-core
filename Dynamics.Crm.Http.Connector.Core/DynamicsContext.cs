@@ -53,49 +53,15 @@ namespace Dynamics.Crm.Http.Connector.Core
             => _builder.ChangeEnvironmentConnection(_builder.Connections.FirstOrDefault(connection));
 
         /// <summary>
-        /// Function to get information using a fetchXml query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="id">Entity record unique identifier.</param>
-        /// <returns>Http response message object.</returns>
-        public async Task<HttpResponseMessage> RetriveById(string schemaName, Guid id)
-        {
-            return new HttpResponseMessage();
-        }
-
-        /// <summary>
-        /// Function to get information using a fetchXml query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="fetchXml">FetchXml query string.</param>
-        /// <returns>Http response message object.</returns>
-        public async Task<HttpResponseMessage> RetriveByFetch(string schemaName, string fetchXml)
-        {
-            return new HttpResponseMessage();
-        }
-
-        /// <summary>
-        /// Function to get information using a OData query.
-        /// </summary>
-        /// <param name="schemaName">Entity schema name.</param>
-        /// <param name="oData">OData query string.</param>
-        /// <returns>Http response message object.</returns>
-        public async Task<HttpResponseMessage> RetriveByOData(string schemaName, string oData)
-        {
-            return new HttpResponseMessage();
-        }
-
-        /// <summary>
         /// Function to initialize a new "DbEntitySet" to connect the API and get information.
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
+        /// <exception cref="NotDefinitionEntityException">The TEntity type was not found in the context.</exception>
         public virtual IDbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
         {
-            var entityBuilder = _builder.Entities.FirstOrDefault(x => x.EntityType == typeof(TEntity));
-            return entityBuilder is null
-                ? throw new NotImplementedException($"The entity type '{typeof(TEntity).Name}' was not configured in context.")
-                : _provider.GetRequiredService<IDbEntitySet<TEntity>>();
+            var entityBuilder = _builder.GetEntityAttributesFromType(typeof(TEntity));
+            return _provider.GetRequiredService<IDbEntitySet<TEntity>>();
         }
     }
 }

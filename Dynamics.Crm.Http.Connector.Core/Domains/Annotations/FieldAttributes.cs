@@ -1,6 +1,4 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
-
-namespace Dynamics.Crm.Http.Connector.Core.Domains.Annotations
+﻿namespace Dynamics.Crm.Http.Connector.Core.Domains.Annotations
 {
     /// <summary>
     /// This class works to define entity's field information in a custom class attribute.
@@ -14,6 +12,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Annotations
             LogicalName = logicalName;
             FieldType = fieldType;
         }
+
+        /// <summary>
+        /// Get and set the property name defined inside the TEntity class.
+        /// </summary>
+        internal string TEntityPropertyName { get; set; } = string.Empty;
 
         /// <summary>
         /// Get and set field Schema name.

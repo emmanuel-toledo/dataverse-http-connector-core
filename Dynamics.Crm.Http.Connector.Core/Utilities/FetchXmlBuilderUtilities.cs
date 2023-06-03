@@ -1,7 +1,8 @@
 ﻿using System.Xml.Linq;
+using System.Collections;
 using Dynamics.Crm.Http.Connector.Core.Domains.Xml;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
-using System.Collections;
+using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 
 namespace Dynamics.Crm.Http.Connector.Core.Utilities
 {
@@ -24,14 +25,16 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
             // Create condition element.
             var xCondition = new XElement("condition");
             xCondition.SetAttributeValue("attribute", model.Property);
-            xCondition.SetAttributeValue("operator", Parse.ParseCondition(model.ConditionType));
+            xCondition.SetAttributeValue("operator", ParseCondition(model.ConditionType));
             // Evaluate each kind of condition type.
             switch (model.ConditionType)
             {
                 // TODO: Por cada valor de "value" hacer una etiqueta <value>{ valor }</value> en la condición.
                 case ConditionTypes.In:
                 case ConditionTypes.NotIn:
-                    foreach(var value in (model.Value as IEnumerable)!)
+                case ConditionTypes.Between:
+                case ConditionTypes.NotBetween:
+                    foreach (var value in (model.Value as IEnumerable)!)
                     {
                         var xValue = new XElement("value", value);
                         xCondition.Add(xValue);
@@ -67,7 +70,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         {
             // Create filter element.
             var xFilter = new XElement("filter");
-            xFilter.SetAttributeValue("type", Parse.ParseFilter(model.FilterType));
+            xFilter.SetAttributeValue("type", ParseFilter(model.FilterType));
             // Create each condition for xFilter.
             foreach (var condition in model.Conditions)
             {
@@ -84,14 +87,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         /// <param name="model">FetchXml model instance.</param>
         /// <returns>FetchXml query.</returns>
         /// <exception cref="NullReferenceException">The TEntity model does not use Entity Attributes annotations.</exception>
-        public static string CreateEntityFetchXmlQuery<TEntity>(FetchXml model) where TEntity : class, new()
+        public static string CreateEntityFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes) where TEntity : class, new()
         {
-            // Create a new instance of TEntity object.
-            var entity = Instance<TEntity>.TEntityInstance().GetType();
-            // Get entity annotation attributes.
-            var entityAttributes = Annotations.GetEntityAttributes(entity) ?? throw new NullReferenceException($"The entity attributes definitions in class {entity.Name} is null.");
-            // Get entity fields annotation attributes.
-            var fieldsAttributes = Annotations.GetFieldsAttributes(entity);
             // Create new XML for query document.
             var xDocument = new XDocument();
             // Create main element.
@@ -120,6 +117,79 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
             xFetch.Add(xEntity);
             xDocument.Add(xFetch);
             return xDocument.ToString();
+        }
+
+        /// <summary>
+        /// Function to parse a Condition Type in a FetchXml condition string.
+        /// </summary>
+        /// <param name="conditionType">Enum condition type</param>
+        /// <returns>FetchXml condition string.</returns>
+        /// <exception cref="ArgumentNullException">Condition type was not recognized.</exception>
+        private static string ParseCondition(ConditionTypes conditionType)
+        {
+            string conditionString = string.Empty;
+            switch (conditionType)
+            {
+                case ConditionTypes.Equal:
+                    conditionString = "eq";
+                    break;
+                case ConditionTypes.NotEqual:
+                    conditionString = "ne";
+                    break;
+                case ConditionTypes.Null:
+                    conditionString = "null";
+                    break;
+                case ConditionTypes.NotNull:
+                    conditionString = "not-null";
+                    break;
+                case ConditionTypes.BeginsWith:
+                    conditionString = "begins-with";
+                    break;
+                case ConditionTypes.DoesNotBeginWith:
+                    conditionString = "not-begin-with";
+                    break;
+                case ConditionTypes.EndsWith:
+                    conditionString = "ends-with";
+                    break;
+                case ConditionTypes.DoesNotEndsWith:
+                    conditionString = "not-end-with";
+                    break;
+                case ConditionTypes.Like:
+                    conditionString = "like";
+                    break;
+                case ConditionTypes.NotLike:
+                    conditionString = "not-like";
+                    break;
+                case ConditionTypes.In:
+                    conditionString = "in";
+                    break;
+                case ConditionTypes.NotIn:
+                    conditionString = "not-in";
+                    break;
+                case ConditionTypes.Between:
+                    conditionString = "between";
+                    break;
+                case ConditionTypes.NotBetween:
+                    conditionString = "not-between";
+                    break;
+                default:
+                    throw new ArgumentNullException(nameof(conditionType));
+            }
+            return conditionString;
+        }
+
+        /// <summary>
+        /// Function to parse a Filter Type in a FetchXml filter string.
+        /// </summary>
+        /// <param name="filterType">Enum filter types.</param>
+        /// <returns>FetchXml filter string.</returns>
+        private static string ParseFilter(FilterTypes filterType)
+        {
+            return filterType switch
+            {
+                FilterTypes.Or => "or",
+                _ => "and"
+            };
         }
     }
 }
