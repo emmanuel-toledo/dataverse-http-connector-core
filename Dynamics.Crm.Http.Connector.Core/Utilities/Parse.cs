@@ -17,27 +17,34 @@
             => (T?)Convert.ChangeType(value, code);
 
         /// <summary>
-        /// 
+        /// Function to parse a value in a string to use it to create a condition tag in FetchXml query.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <typeparam name="T">Property type of a class.</typeparam>
+        /// <param name="value">Value of property.</param>
+        /// <returns>Parsed value to string.</returns>
+        /// <exception cref="ArgumentNullException">There is not a valid value.</exception>
         public static string ParseValue<T>(T value)
         {
-            string? parsedValue = string.Empty;
+            string parsedValue = string.Empty;
             switch (Type.GetTypeCode(typeof(T)))
             {
                 case TypeCode.String:
                     parsedValue = ChangeType<string, T>(value, TypeCode.String) ?? "";
                     break;
                 case TypeCode.Int16:
+                    parsedValue = ChangeType<short, T>(value, TypeCode.String).ToString() ?? "";
+                    break;
                 case TypeCode.Int32:
-                case TypeCode.Int64:
                     parsedValue = ChangeType<int, T>(value, TypeCode.String).ToString() ?? "";
+                    break;
+                case TypeCode.Int64:
+                    parsedValue = ChangeType<long, T>(value, TypeCode.String).ToString() ?? "";
                     break;
                 case TypeCode.Double:
                     parsedValue = ChangeType<double, T>(value, TypeCode.String).ToString() ?? "";
+                    break;
+                case TypeCode.Single:
+                    parsedValue = ChangeType<float, T>(value, TypeCode.String).ToString() ?? "";
                     break;
                 case TypeCode.Decimal:
                     parsedValue = ChangeType<decimal, T>(value, TypeCode.String).ToString() ?? "";
@@ -50,14 +57,14 @@
                     break;
                 case TypeCode.Object:
                     if (typeof(T) == typeof(Guid))
-                        parsedValue = value!.ToString();
+                        parsedValue = value!.ToString() ?? Guid.Empty.ToString();
                     else
-                        throw new ArgumentNullException(nameof(value));
+                        parsedValue = ChangeType<string, T>(value, TypeCode.String) ?? "";
                     break;
                 default:
                     throw new ArgumentNullException(nameof(value));
             }
-            return parsedValue!;
+            return parsedValue;
         }
     }
 }

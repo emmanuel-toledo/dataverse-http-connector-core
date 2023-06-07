@@ -54,6 +54,28 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         }
 
         /// <summary>
+        /// Function to add a "page" tag to FetchXml query.
+        /// </summary>
+        /// <param name="page">Page records to retrive.</param>
+        /// <returns>Same instance of FetchXml builder.</returns>
+        public FetchXmlBuilder<TEntity> AddPage(int page)
+        {
+            _fetch.Page = page;
+            return this;
+        }
+
+        /// <summary>
+        /// Function to add a "page size" tag to FetchXml query.
+        /// </summary>
+        /// <param name="pageSize">Page size records to retrive.</param>
+        /// <returns>Same instance of FetchXml builder.</returns>
+        public FetchXmlBuilder<TEntity> AddPageSize(int pageSize)
+        {
+            _fetch.PageSize = pageSize;
+            return this;
+        }
+
+        /// <summary>
         /// Function to configure FetchXml query to retrive only one record.
         /// </summary>
         /// <returns>Same instance of FetchXml builder.</returns>
@@ -69,5 +91,12 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Builder
         /// <returns>FetchXml query string.</returns>
         internal string BuildFetchXml(EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes)
             => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
+
+        /// <summary>
+        /// Function to generate FetchXml query for entity count to use in the request.
+        /// </summary>
+        /// <returns>FetchXml query string.</returns>
+        internal string BuildCountFetchXml(EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes)
+            => FetchXmlBuilderUtilities.CreateCountFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
     }
 }

@@ -3,6 +3,8 @@ using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 using Dynamics.Crm.Http.Connector.Core.Extensions.Utilities;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
+using System.Text.Json.Nodes;
+using Dynamics.Crm.Http.Connector.Core.Utilities;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
 {
@@ -17,7 +19,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// <typeparam name="TEntity">Configured entity class.</typeparam>
         /// <param name="jsonArray">Json object collection.</param>
         /// <returns>Collection of TEntity class.</returns>
-        ICollection<TEntity> ParseTEntityToCollection<TEntity>(JArray jsonArray) where TEntity : class, new();
+        ICollection<TEntity> ParseModelToTEntityCollection<TEntity>(JArray jsonArray) where TEntity : class, new();
 
         /// <summary>
         /// Function to parse a single Json object inside a TEntity object
@@ -25,7 +27,15 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// <typeparam name="TEntity">Configured entity class.</typeparam>
         /// <param name="jsonObject">Json object.</param>
         /// <returns>Instance of TEntity class.</returns>
-        TEntity? ParseTEntityToModel<TEntity>(JToken jsonObject) where TEntity : class, new();
+        TEntity? ParseModelToTEntity<TEntity>(JToken jsonObject) where TEntity : class, new();
+
+        /// <summary>
+        /// Function to parse a TEntity record to an JSON Object.
+        /// </summary>
+        /// <typeparam name="TEntity">Configured entity class.</typeparam>
+        /// <param name="entity">TEntity object instance.</param>
+        /// <returns>JSON Object to request.</returns>
+        JObject? ParseTEntityToModel<TEntity>(TEntity entity) where TEntity : class, new();
     }
 
     /// <summary>
@@ -53,14 +63,14 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// <typeparam name="TEntity">Configured entity class.</typeparam>
         /// <param name="jsonArray">Json object collection.</param>
         /// <returns>Collection of TEntity class.</returns>
-        public ICollection<TEntity> ParseTEntityToCollection<TEntity>(JArray jsonArray) where TEntity : class, new()
+        public ICollection<TEntity> ParseModelToTEntityCollection<TEntity>(JArray jsonArray) where TEntity : class, new()
         {
             try
             {
                 // Validate if entity exists inside the Builder configuration.
                 var entityType = new TEntity().GetType();
                 if (!_builder.Entities.Any(x => x.EntityType == entityType))
-                    throw new NotDefinitionEntityException(entityType.Name, entityType);
+                    throw new EntityDefinitionException(entityType.Name, entityType);
                 // Loop inside the response array.
                 var collection = new List<TEntity>();
                 foreach (var jsonObject in jsonArray)
@@ -68,7 +78,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
                     if (jsonObject is null)
                         continue;
                     // Parse each record to entity model.
-                    var entity = ParseTEntityToModel<TEntity>(jsonObject);
+                    var entity = ParseModelToTEntity<TEntity>(jsonObject);
                     if (entity != null)
                         collection.Add(entity);
                 }
@@ -86,7 +96,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// <typeparam name="TEntity">Configured entity class.</typeparam>
         /// <param name="jsonObject">Json object.</param>
         /// <returns>Instance of TEntity class.</returns>
-        public TEntity? ParseTEntityToModel<TEntity>(JToken jsonObject) where TEntity : class, new()
+        public TEntity? ParseModelToTEntity<TEntity>(JToken jsonObject) where TEntity : class, new()
         {
             try
             {
@@ -97,7 +107,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
                 var entityType = entity.GetType();
                 // Validate if entity exists inside the Builder configuration.
                 if (!_builder.Entities.Any(x => x.EntityType == entityType))
-                    throw new NotDefinitionEntityException(entityType.Name, entityType);
+                    throw new EntityDefinitionException(entityType.Name, entityType);
                 var entityDeffinition = _builder.Entities.First(x => x.EntityType == entityType);
                 // Loop of all fields attributes of the entity.
                 foreach (var property in entityType.GetProperties())
@@ -145,6 +155,72 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
             catch (Exception ex)
             {
                 throw new NotSupportedException("An error has ocurred during the convertion to the custom class.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Function to parse a TEntity record to an JSON Object.
+        /// </summary>
+        /// <typeparam name="TEntity">Configured entity class.</typeparam>
+        /// <param name="entity">TEntity object instance.</param>
+        /// <returns>JSON Object to request.</returns>
+        public JObject? ParseTEntityToModel<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            try
+            {
+                // Validate if entity is null.
+                if (entity is null)
+                    return null;
+                // Validate if entity exists inside the Builder configuration.
+                if (!_builder.Entities.Any(x => x.EntityType == entity.GetType()))
+                    throw new EntityDefinitionException(entity.GetType().Name, entity.GetType());
+                var entityDeffinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
+                // Generate JSON object.
+                var model = new JObject();
+                // Loop of all fields attributes of the entity.
+                foreach (var property in entity.GetType().GetProperties())
+                {
+                    try
+                    {
+                        // Validate if class property exists inside the entity deffinition properties.
+                        if (!entityDeffinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
+                            continue;
+                        var fieldAttribute = entityDeffinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
+                        // Validate if field attribute is entity's unique identifier.
+                        if (fieldAttribute.FieldType == FieldTypes.UniqueIdentifier)
+                            continue;
+                        // Check field type to parse information.
+                        switch (fieldAttribute.FieldType)
+                        {
+                            case FieldTypes.Text:
+                            case FieldTypes.Number:
+                            case FieldTypes.DecimalNumber:
+                            case FieldTypes.OptionSet:
+                            case FieldTypes.BoolOptionSet:
+                                model.Add(fieldAttribute.LogicalName!, property.GetTEntityPropertyValue(entity));
+                                break;
+                            case FieldTypes.Lookup:
+                                model.Add($"{fieldAttribute.SchemaName}@odata.bind", $"/{fieldAttribute.LinkedEntityLogicalCollectionName}({property.GetTEntityPropertyValue(entity)})");
+                                break;
+                            case FieldTypes.DateTime:
+                                var value = property.GetTEntityPropertyValue(entity);
+                                var datetime = DateTime.Parse(value!);
+                                model.Add(fieldAttribute.LogicalName!, datetime.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new NotSupportedException($"An error has ocurred during the data conversion of property '{property.Name}' of type '{property.PropertyType.Name}' for class '{entity.GetType().Name}'. It does has the correct property type?", ex);
+                    }
+                }
+                return model;
+            } 
+            catch(Exception ex)
+            {
+                throw new NotSupportedException("An error has ocurred during the convertion the custom class to JSON Object.", ex);
             }
         }
     }

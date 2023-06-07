@@ -13,6 +13,14 @@
             FieldType = fieldType;
         }
 
+        public FieldAttributes(string schemaName, string logicalName, FieldTypes fieldType, string linkedEntityLogicalCollectionName)
+        {
+            SchemaName = schemaName;
+            LogicalName = logicalName;
+            FieldType = fieldType;
+            LinkedEntityLogicalCollectionName = linkedEntityLogicalCollectionName;
+        }
+
         /// <summary>
         /// Get and set the property name defined inside the TEntity class.
         /// </summary>
@@ -32,5 +40,10 @@
         /// Get and set field type.
         /// </summary>
         public FieldTypes FieldType { get; set; } = FieldTypes.Text;
+
+        /// <summary>
+        /// Get an set linked entity logical collection name.
+        /// </summary>
+        public string? LinkedEntityLogicalCollectionName { get; set; } = string.Empty;
     }
 }
