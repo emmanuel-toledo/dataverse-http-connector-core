@@ -34,6 +34,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context
         public string? EndPoint { get; set; } = string.Empty;
 
         /// <summary>
+        /// Get and set request entity record.
+        /// </summary>
+        public object? Entity { get; set; } = null;
+
+        /// <summary>
         /// Get and set base method to check which call must be requested.
         /// </summary>
         public BaseMethod Method { get; set; } = BaseMethod.None;

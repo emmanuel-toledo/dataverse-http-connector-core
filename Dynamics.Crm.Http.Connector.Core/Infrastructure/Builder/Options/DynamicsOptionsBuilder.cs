@@ -36,11 +36,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options
         /// </summary>
         /// <param name="type">Type of entity to retrive.</param>
         /// <returns>Entity attribute instance.</returns>
-        /// <exception cref="NotDefinitionEntityException">The entity type was not found in the context.</exception>
+        /// <exception cref="EntityDefinitionException">The entity type was not found in the context.</exception>
         public EntityAttributes GetEntityAttributesFromType(Type type)
         {
             if(!Entities.Any(x => x.EntityType == type))
-                throw new NotDefinitionEntityException(type.Name, type);
+                throw new EntityDefinitionException(type.Name, type);
             return Entities.First(x => x.EntityType == type).EntityAttributes!;
         }
 
@@ -49,11 +49,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder.Options
         /// </summary>
         /// <param name="type">Type of entity to retrive.</param>
         /// <returns>Entitiy fields attributes collection.</returns>
-        /// <exception cref="NotDefinitionEntityException">The entity type was not found in the context.</exception>
+        /// <exception cref="EntityDefinitionException">The entity type was not found in the context.</exception>
         public ICollection<FieldAttributes> GetFieldsAttributesFromType(Type type)
         {
             if (!Entities.Any(x => x.EntityType == type))
-                throw new NotDefinitionEntityException(type.Name, type);
+                throw new EntityDefinitionException(type.Name, type);
             return Entities.First(x => x.EntityType == type).FieldsAttributes;
         }
     }

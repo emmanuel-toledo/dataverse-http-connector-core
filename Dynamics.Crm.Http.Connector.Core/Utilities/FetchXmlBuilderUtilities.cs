@@ -3,6 +3,7 @@ using System.Collections;
 using Dynamics.Crm.Http.Connector.Core.Domains.Xml;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
 
 namespace Dynamics.Crm.Http.Connector.Core.Utilities
 {
@@ -25,11 +26,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
             // Create condition element.
             var xCondition = new XElement("condition");
             xCondition.SetAttributeValue("attribute", model.Property);
-            xCondition.SetAttributeValue("operator", ParseCondition(model.ConditionType));
+            xCondition.SetAttributeValue("operator", Conditions.Parse(model.ConditionType));
             // Evaluate each kind of condition type.
             switch (model.ConditionType)
             {
-                // TODO: Por cada valor de "value" hacer una etiqueta <value>{ valor }</value> en la condición.
                 case ConditionTypes.In:
                 case ConditionTypes.NotIn:
                 case ConditionTypes.Between:
@@ -42,8 +42,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                     break;
                 case ConditionTypes.Equal:
                 case ConditionTypes.NotEqual:
-                case ConditionTypes.Null:
-                case ConditionTypes.NotNull:
                 case ConditionTypes.BeginsWith:
                 case ConditionTypes.DoesNotBeginWith:
                 case ConditionTypes.EndsWith:
@@ -53,7 +51,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                     xCondition.SetAttributeValue("value", model.Value);
                     break;
                 default:
-                    throw new ArgumentNullException($"The condition type with name '{nameof(model)}' can not be defined.");
+                    break;
             }
             return xCondition;
         }
@@ -70,7 +68,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         {
             // Create filter element.
             var xFilter = new XElement("filter");
-            xFilter.SetAttributeValue("type", ParseFilter(model.FilterType));
+            xFilter.SetAttributeValue("type", Filters.Parse(model.FilterType));
             // Create each condition for xFilter.
             foreach (var condition in model.Conditions)
             {
@@ -86,7 +84,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         /// <typeparam name="TEntity">Model to cast query.</typeparam>
         /// <param name="model">FetchXml model instance.</param>
         /// <returns>FetchXml query.</returns>
-        /// <exception cref="NullReferenceException">The TEntity model does not use Entity Attributes annotations.</exception>
         public static string CreateEntityFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes) where TEntity : class, new()
         {
             // Create new XML for query document.
@@ -95,6 +92,10 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
             var xFetch = new XElement("fetch");
             if (model.Top > 0)
                 xFetch.SetAttributeValue("top", model.Top);
+            if (model.PageSize > 0)
+                xFetch.SetAttributeValue("count", model.PageSize);
+            if (model.Page > 0)
+                xFetch.SetAttributeValue("page", model.Page);
             if (model.Distinct)
                 xFetch.SetAttributeValue("distinct", model.Distinct.ToString().ToLower());
             // Add entity element.
@@ -108,6 +109,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
                 xAttribute.SetAttributeValue("alias", field.SchemaName);
                 xEntity.Add(xAttribute);
             }
+            // Add filters and conditions.
             foreach (var filter in model.Filters)
             {
                 var xFilter = CreateXmlFilter(filter);
@@ -120,76 +122,42 @@ namespace Dynamics.Crm.Http.Connector.Core.Utilities
         }
 
         /// <summary>
-        /// Function to parse a Condition Type in a FetchXml condition string.
+        /// Function to generate the FetchXml query to count records in Dynamics.
         /// </summary>
-        /// <param name="conditionType">Enum condition type</param>
-        /// <returns>FetchXml condition string.</returns>
-        /// <exception cref="ArgumentNullException">Condition type was not recognized.</exception>
-        private static string ParseCondition(ConditionTypes conditionType)
+        /// <typeparam name="TEntity">Model to cast query.</typeparam>
+        /// <param name="model">FetchXml model instance.</param>
+        /// <returns>FetchXml query.</returns>
+        public static string CreateCountFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes) where TEntity : class, new()
         {
-            string conditionString = string.Empty;
-            switch (conditionType)
+            // Create new XML for query document.
+            var xDocument = new XDocument();
+            // Create main element.
+            var xFetch = new XElement("fetch");
+            xFetch.SetAttributeValue("distinct", model.Distinct.ToString().ToLower());
+            xFetch.SetAttributeValue("aggregate", true);
+            // Add entity element.
+            var xEntity = new XElement("entity");
+            xEntity.SetAttributeValue("name", entityAttributes.LogicalName);
+            // Validate if the class contains a unique identifier property.
+            if (!fieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
+                throw new EntityDefinitionException(entityAttributes.LogicalName!, FieldTypes.UniqueIdentifier);
+            // Add attribute to FetchXml.
+            var field = fieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
+            var xAttribute = new XElement("attribute");
+            xAttribute.SetAttributeValue("name", field.LogicalName);
+            xAttribute.SetAttributeValue("alias", "CountRecords");
+            xAttribute.SetAttributeValue("aggregate", Aggregates.Parse(AggregateTypes.COUNT));
+            xEntity.Add(xAttribute);
+            // Add filters and conditions.
+            foreach (var filter in model.Filters)
             {
-                case ConditionTypes.Equal:
-                    conditionString = "eq";
-                    break;
-                case ConditionTypes.NotEqual:
-                    conditionString = "ne";
-                    break;
-                case ConditionTypes.Null:
-                    conditionString = "null";
-                    break;
-                case ConditionTypes.NotNull:
-                    conditionString = "not-null";
-                    break;
-                case ConditionTypes.BeginsWith:
-                    conditionString = "begins-with";
-                    break;
-                case ConditionTypes.DoesNotBeginWith:
-                    conditionString = "not-begin-with";
-                    break;
-                case ConditionTypes.EndsWith:
-                    conditionString = "ends-with";
-                    break;
-                case ConditionTypes.DoesNotEndsWith:
-                    conditionString = "not-end-with";
-                    break;
-                case ConditionTypes.Like:
-                    conditionString = "like";
-                    break;
-                case ConditionTypes.NotLike:
-                    conditionString = "not-like";
-                    break;
-                case ConditionTypes.In:
-                    conditionString = "in";
-                    break;
-                case ConditionTypes.NotIn:
-                    conditionString = "not-in";
-                    break;
-                case ConditionTypes.Between:
-                    conditionString = "between";
-                    break;
-                case ConditionTypes.NotBetween:
-                    conditionString = "not-between";
-                    break;
-                default:
-                    throw new ArgumentNullException(nameof(conditionType));
+                var xFilter = CreateXmlFilter(filter);
+                xEntity.Add(xFilter);
             }
-            return conditionString;
-        }
-
-        /// <summary>
-        /// Function to parse a Filter Type in a FetchXml filter string.
-        /// </summary>
-        /// <param name="filterType">Enum filter types.</param>
-        /// <returns>FetchXml filter string.</returns>
-        private static string ParseFilter(FilterTypes filterType)
-        {
-            return filterType switch
-            {
-                FilterTypes.Or => "or",
-                _ => "and"
-            };
+            // Set elements to XML document query.
+            xFetch.Add(xEntity);
+            xDocument.Add(xFetch);
+            return xDocument.ToString();
         }
     }
 }

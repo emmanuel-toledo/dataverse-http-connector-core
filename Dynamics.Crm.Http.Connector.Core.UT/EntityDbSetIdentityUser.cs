@@ -116,5 +116,63 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
                 Assert.IsTrue(false);
             }
         }
+
+        [TestMethod]
+        public async Task SuccessCountAsync()
+        {
+            try
+            {
+                var count = await _context.Set<IdentityUser>()
+                    .Distinct(true)
+                    .CountAsync();
+
+                Assert.IsTrue(count > 0);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task SuccessToPagedListAsync()
+        {
+            try
+            {
+                var response = await _context.Set<IdentityUser>()
+                    .Distinct(true)
+                    .ToPagedListAsync(1, 1);
+
+                Assert.IsTrue(response != null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task SuccessAddAsync()
+        {
+            try
+            {
+                var identityUser = new IdentityUser() 
+                {
+                    Name = "Test",
+                    Age = 20,
+                    CreatedOn = DateTime.Now,
+                    StateCode = 1,
+                    Status = 1,
+                    OwnerId = Guid.NewGuid()
+                };
+                await _context.Set<IdentityUser>().AddAsync(identityUser);
+
+                Assert.IsTrue(identityUser != null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
     }
 }

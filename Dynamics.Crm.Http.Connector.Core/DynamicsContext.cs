@@ -59,9 +59,6 @@ namespace Dynamics.Crm.Http.Connector.Core
         /// <returns>DbEntitySet with type of entity class.</returns>
         /// <exception cref="NotDefinitionEntityException">The TEntity type was not found in the context.</exception>
         public virtual IDbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
-        {
-            var entityBuilder = _builder.GetEntityAttributesFromType(typeof(TEntity));
-            return _provider.GetRequiredService<IDbEntitySet<TEntity>>();
-        }
+            => _provider.GetRequiredService<IDbEntitySet<TEntity>>();
     }
 }

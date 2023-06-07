@@ -49,6 +49,15 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
                 _builder.GetFieldsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
+        /// Function to build count FetchXml query for Dynamics.
+        /// </summary>
+        /// <returns>FetchXml query string.</returns>
+        private string BuildCountFetchXml()
+            => _fetchBuilder.BuildCountFetchXml(
+                _builder.GetEntityAttributesFromType(typeof(TEntity)),
+                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+
+        /// <summary>
         /// Function to add a new Filter to the FetchXml builder for request query.
         /// </summary>
         /// <param name="type">Filter type</param>
@@ -109,6 +118,28 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         }
 
         /// <summary>
+        /// Function to add a "page" tag to FetchXml query.
+        /// </summary>
+        /// <param name="page">Page records to retrive.</param>
+        /// <returns>Instance of "DbEntitySet" class.</returns>
+        public DbEntitySet<TEntity> Page(int page)
+        {
+            _fetchBuilder.AddPage(page);
+            return this;
+        }
+
+        /// <summary>
+        /// Function to add a "page size" tag to FetchXml query.
+        /// </summary>
+        /// <param name="pageSize">Page size records to retrive.</param>
+        /// <returns>Instance of "DbEntitySet" class.</returns>
+        public DbEntitySet<TEntity> PageSize(int pageSize)
+        {
+            _fetchBuilder.AddPageSize(pageSize);
+            return this;
+        }
+
+        /// <summary>
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
         /// <returns>New instance of "TEntity".</returns>
@@ -137,25 +168,52 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             });
         }
 
-        // TODO:
+        /// <summary>
+        /// Function to retrive the count records of an entity according to defined FetchXml query.
+        /// </summary>
+        /// <returns>Records count.</returns>
+        public async Task<int> CountAsync()
+        {
+            return await _requestHandler.CountAsync(request =>
+            {
+                request.MethodType = HttpMethod.Get;
+                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.AddQueryParam(BuildCountFetchXml());
+            });
+        }
 
         /// <summary>
         /// Function to retrive a collection of "TEntity" records with pagination configuration according to defined FetchXml query.
         /// </summary>
         /// <returns>Collection of "TEntity".</returns>
-        public async Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage, int pageSize)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Function to add a new "TEntity" record to the database.
-		/// </summary>
-		/// <returns>Instance of "TEntity".</returns>
-		public async Task<TEntity> AddAsync()
+        public async Task<PagedResponse<TEntity>> ToPagedListAsync(int currentPage = 1, int pageSize = 15)
         {
-            throw new NotImplementedException();
+            Page(currentPage);
+            PageSize(pageSize);
+            return await _requestHandler.ToPagesAsync<TEntity>(request =>
+            {
+                request.MethodType = HttpMethod.Get;
+                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.AddQueryParam(BuildFetchXml());
+            }, currentPage, pageSize, await CountAsync());
         }
+
+        /// <summary>
+        /// Function to add a new "TEntity" record to the database.
+        /// </summary>
+        /// <param name="entity">Entity record.</param>
+        /// <returns>Instance of "TEntity".</returns>
+        public async Task<TEntity?> AddAsync(TEntity entity)
+        {
+            return await _requestHandler.AddAsync(request =>
+            {
+                request.MethodType = HttpMethod.Get;
+                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+            }, entity);
+        }
+
+
+        // TODO:
 
         /// <summary>
         /// Function to update a new "TEntity" record to the database.

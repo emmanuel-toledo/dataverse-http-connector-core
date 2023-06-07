@@ -25,5 +25,11 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Utilities
             var converter = TypeDescriptor.GetConverter(propType);
             property.SetValue(entity, converter.ConvertFrom(jsonObject.Value<string>(fieldAttributes.SchemaName!)!), null);
         }
+
+        public static string? GetTEntityPropertyValue<TEntity>(this PropertyInfo property, TEntity entity) where TEntity : class, new()
+        {
+            var value = property.GetValue(entity);
+            return value is null ? "" : value.ToString();
+        }
     }
 }

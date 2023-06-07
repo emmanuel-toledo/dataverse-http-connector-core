@@ -69,6 +69,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Confi
         /// <param name="request">Request configuration object.</param>
         /// <returns>Instance of http request message.</returns>
         internal static HttpRequestMessage ConvertToHttpRequest(this Request request)
-            => new HttpRequestMessage(request.MethodType, QueryHelpers.AddQueryString(request.EndPoint, request.Params));
+            => new(request.MethodType, QueryHelpers.AddQueryString(request.EndPoint, request.Params));
     }
 }
