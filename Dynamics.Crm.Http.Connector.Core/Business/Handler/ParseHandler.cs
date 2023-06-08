@@ -3,8 +3,6 @@ using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 using Dynamics.Crm.Http.Connector.Core.Extensions.Utilities;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
-using System.Text.Json.Nodes;
-using Dynamics.Crm.Http.Connector.Core.Utilities;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
 {
@@ -200,7 +198,7 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
                                 model.Add(fieldAttribute.LogicalName!, property.GetTEntityPropertyValue(entity));
                                 break;
                             case FieldTypes.Lookup:
-                                model.Add($"{fieldAttribute.SchemaName}@odata.bind", $"/{fieldAttribute.LinkedEntityLogicalCollectionName}({property.GetTEntityPropertyValue(entity)})");
+                                model.Add($"{fieldAttribute.LogicalName!}@odata.bind", $"/{fieldAttribute.LinkedEntityLogicalCollectionName}({property.GetTEntityPropertyValue(entity)})");
                                 break;
                             case FieldTypes.DateTime:
                                 var value = property.GetTEntityPropertyValue(entity);

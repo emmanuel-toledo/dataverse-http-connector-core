@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="aggregateType">Selected aggregate type.</param>
         /// <returns>Aggregate type in string format</returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <exception cref="NullReferenceException">Any aggregate was not selected.</exception>
         internal static string Parse(AggregateTypes aggregateType)
         {
             return aggregateType switch

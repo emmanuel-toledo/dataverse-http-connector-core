@@ -6,6 +6,11 @@
     [AttributeUsage(AttributeTargets.Class)]
     public class EntityAttributes : Attribute
     {
+        /// <summary>
+        /// Creates a new instance of Entity Attributes with properties used to configure Dynamics requests.
+        /// </summary>
+        /// <param name="logicalName">Entity logical name.</param>
+        /// <param name="logicalCollectionName">Entity logical collection name.</param>
         public EntityAttributes(string logicalName, string logicalCollectionName)
         {
             LogicalName = logicalName;

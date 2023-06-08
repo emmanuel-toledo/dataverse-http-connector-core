@@ -1,16 +1,7 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Business.Commands;
-using Dynamics.Crm.Http.Connector.Core.Business.Queries;
-using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
-using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics;
+﻿using Dynamics.Crm.Http.Connector.Core.Business.Queries;
+using Dynamics.Crm.Http.Connector.Core.Business.Commands;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
-using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
-using Dynamics.Crm.Http.Connector.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
 {
@@ -61,8 +52,27 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// </summary>
         /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
+        /// <param name="entity">TEntity instance record.</param>
         /// <returns>New TEntity instance or null value.</returns>
         Task<TEntity?> AddAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new();
+
+        /// <summary>
+        /// Function to update an entity record in Dynamics.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <param name="entity">TEntity instance record.</param>
+        /// <returns>TEntity instance or null value.</returns>
+        Task<TEntity?> UpdateAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new();
+
+        /// <summary>
+        /// Function to delete an entity record in Dynamics.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <param name="entity">TEntity instance record.</param>
+        /// <returns>TEntity instance or null value.</returns>
+        Task<TEntity?> DeleteAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new();
     }
 
     /// <summary>
@@ -161,5 +171,24 @@ namespace Dynamics.Crm.Http.Connector.Core.Business.Handler
         /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> AddAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
             => await _commands.AddAsync(GenerateRequest(action), entity);
+
+        /// <summary>
+        /// Function to update an entity record in Dynamics.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>TEntity instance or null value.</returns>
+        public async Task<TEntity?> UpdateAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
+            => await _commands.UpdateAsync(GenerateRequest(action), entity);
+
+        /// <summary>
+        /// Function to delete an entity record in Dynamics.
+        /// </summary>
+        /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <param name="entity">TEntity instance record.</param>
+        /// <returns>TEntity instance or null value.</returns>
+        public async Task<TEntity?> DeleteAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
+            => await _commands.DeleteAsync(GenerateRequest(action), entity);
     }
 }

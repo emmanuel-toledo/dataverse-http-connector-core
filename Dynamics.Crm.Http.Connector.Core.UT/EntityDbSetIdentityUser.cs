@@ -156,16 +156,67 @@ namespace Dynamics.Crm.Http.Connector.Core.UT
         {
             try
             {
-                var identityUser = new IdentityUser() 
+                var identityUser = new IdentityUser()
                 {
+                    IdentityUserId = Guid.Empty,
                     Name = "Test",
                     Age = 20,
                     CreatedOn = DateTime.Now,
                     StateCode = 1,
-                    Status = 1,
-                    OwnerId = Guid.NewGuid()
+                    Status = 224050000,
+                    OwnerId = new Guid("ef4269c5-a4f2-ec11-bb3d-00224820d6d5")
                 };
                 await _context.Set<IdentityUser>().AddAsync(identityUser);
+
+                Assert.IsTrue(identityUser != null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task SuccessUpdateAsync()
+        {
+            try
+            {
+                var identityUser = new IdentityUser()
+                {
+                    IdentityUserId = new("48218898-5d05-ee11-8f6e-0022482db4d8"),
+                    Name = "Test #2",
+                    Age = 40,
+                    CreatedOn = DateTime.Now,
+                    StateCode = 1,
+                    Status = 224050001,
+                    OwnerId = new Guid("ef4269c5-a4f2-ec11-bb3d-00224820d6d5")
+                };
+                await _context.Set<IdentityUser>().UpdateAsync(identityUser);
+
+                Assert.IsTrue(identityUser != null);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [TestMethod]
+        public async Task SuccessDeleteAsync()
+        {
+            try
+            {
+                var identityUser = new IdentityUser()
+                {
+                    IdentityUserId = new("48218898-5d05-ee11-8f6e-0022482db4d8"),
+                    Name = "Test #2",
+                    Age = 40,
+                    CreatedOn = DateTime.Now,
+                    StateCode = 1,
+                    Status = 224050001,
+                    OwnerId = new Guid("ef4269c5-a4f2-ec11-bb3d-00224820d6d5")
+                };
+                await _context.Set<IdentityUser>().DeleteAsync(identityUser);
 
                 Assert.IsTrue(identityUser != null);
             }

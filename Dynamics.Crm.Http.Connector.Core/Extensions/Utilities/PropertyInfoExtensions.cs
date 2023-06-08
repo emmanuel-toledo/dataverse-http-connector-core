@@ -26,6 +26,13 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.Utilities
             property.SetValue(entity, converter.ConvertFrom(jsonObject.Value<string>(fieldAttributes.SchemaName!)!), null);
         }
 
+        /// <summary>
+        /// Function to get a specific property value from a TEntity.
+        /// </summary>
+        /// <typeparam name="TEntity">TEntity class.</typeparam>
+        /// <param name="property">Property infor of TEntity class.</param>
+        /// <param name="entity">TEntity instance to be used to get value.</param>
+        /// <returns>Property value in string format.</returns>
         public static string? GetTEntityPropertyValue<TEntity>(this PropertyInfo property, TEntity entity) where TEntity : class, new()
         {
             var value = property.GetValue(entity);

@@ -70,24 +70,18 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         /// <returns>Instance of "TEntity".</returns>
         Task<TEntity?> AddAsync(TEntity entity);
 
-
-
-
-
-
-
-
-
         /// <summary>
         /// Function to update a new "TEntity" record to the database.
         /// </summary>
+        /// <param name="entity">Entity record.</param>
         /// <returns>Instance of "TEntity".</returns>
-        Task<TEntity> UpdateAsync();
+        Task<TEntity?> UpdateAsync(TEntity entity);
 
         /// <summary>
         /// Function to delete a new "TEntity" record to the database.
         /// </summary>
+        /// <param name="entity">Entity record.</param>
         /// <returns>Instance of "TEntity".</returns>
-        Task<TEntity> DeleteAsync();
+        Task<TEntity?> DeleteAsync(TEntity entity);
     }
 }
