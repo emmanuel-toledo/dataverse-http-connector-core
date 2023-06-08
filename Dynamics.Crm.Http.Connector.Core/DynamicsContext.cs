@@ -2,6 +2,7 @@
 using Dynamics.Crm.Http.Connector.Core.Context;
 using Dynamics.Crm.Http.Connector.Core.Persistence;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Connection;
 
 namespace Dynamics.Crm.Http.Connector.Core
@@ -57,8 +58,12 @@ namespace Dynamics.Crm.Http.Connector.Core
         /// </summary>
         /// <typeparam name="TEntity">Entity type class.</typeparam>
         /// <returns>DbEntitySet with type of entity class.</returns>
-        /// <exception cref="NotDefinitionEntityException">The TEntity type was not found in the context.</exception>
+        /// <exception cref="EntityDefinitionException">The TEntity type was not found in the context.</exception>
         public virtual IDbEntitySet<TEntity> Set<TEntity>() where TEntity : class, new()
-            => _provider.GetRequiredService<IDbEntitySet<TEntity>>();
+        {
+            if (!_builder.Entities.Any(x => x.EntityType == typeof(TEntity)))
+                throw new EntityDefinitionException(typeof(TEntity).Name, typeof(TEntity));
+            return _provider.GetRequiredService<IDbEntitySet<TEntity>>();
+        }
     }
 }

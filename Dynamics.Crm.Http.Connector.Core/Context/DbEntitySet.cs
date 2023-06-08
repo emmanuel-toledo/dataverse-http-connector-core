@@ -1,22 +1,11 @@
-﻿using Dynamics.Crm.Http.Connector.Core.Business.Commands;
-using Dynamics.Crm.Http.Connector.Core.Business.Handler;
-using Dynamics.Crm.Http.Connector.Core.Business.Queries;
-using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
-using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
+﻿using Dynamics.Crm.Http.Connector.Core.Utilities;
 using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
-using Dynamics.Crm.Http.Connector.Core.Facades.Requests;
+using Dynamics.Crm.Http.Connector.Core.Domains.Builder;
+using Dynamics.Crm.Http.Connector.Core.Business.Handler;
+using Dynamics.Crm.Http.Connector.Core.Domains.Annotations;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
-using Dynamics.Crm.Http.Connector.Core.Utilities;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
+using Dynamics.Crm.Http.Connector.Core.Infrastructure.Exceptions;
 
 namespace Dynamics.Crm.Http.Connector.Core.Context
 {
@@ -56,6 +45,31 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             => _fetchBuilder.BuildCountFetchXml(
                 _builder.GetEntityAttributesFromType(typeof(TEntity)),
                 _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+
+        /// <summary>
+        /// Function to generate the endpont to call a request.
+        /// </summary>
+        /// <param name="useIdentifier">Add unique identifier in endpoint string.</param>
+        /// <returns>Endpont string.</returns>
+        private string BuildEndpoint()
+        {
+            var entity = _builder.Entities.First(x => x.EntityType == typeof(TEntity));
+            return $"{entity.EntityAttributes!.LogicalCollectionName}";
+        }
+
+        /// <summary>
+        /// Function to generate the endpont to call a request setting a TEntity unique identifier.
+        /// </summary>
+        /// <param name="useIdentifier">Add unique identifier in endpoint string.</param>
+        /// <returns>Endpont string.</returns>
+        private string BuildEndpoint(TEntity entity)
+        {
+            var entityDeffinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
+            if (!entityDeffinition.FieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
+                throw new EntityFieldDeffinitionException($"Entity with name '{ entity.GetType().Name }' does not contains defined a unique identifier attribute");
+            var primaryKey = entityDeffinition.FieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
+            return $"{entityDeffinition.EntityAttributes!.LogicalCollectionName}({entity.GetType().GetProperty(primaryKey.TEntityPropertyName)!.GetValue(entity)})";
+        }
 
         /// <summary>
         /// Function to add a new Filter to the FetchXml builder for request query.
@@ -148,8 +162,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             _fetchBuilder.FirstOrDefault();
             return await _requestHandler.FirstOrDefaultAsync<TEntity>(request =>
             {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.Method = BaseMethodTypes.FirstOrDefaultAsync;
+                request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
             });
         }
@@ -162,8 +176,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             return await _requestHandler.ToListAsync<TEntity>(request =>
             {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.Method = BaseMethodTypes.ToListAsync;
+                request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
             });
         }
@@ -176,8 +190,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             return await _requestHandler.CountAsync(request =>
             {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.Method = BaseMethodTypes.CountAsync;
+                request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildCountFetchXml());
             });
         }
@@ -192,8 +206,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
             PageSize(pageSize);
             return await _requestHandler.ToPagesAsync<TEntity>(request =>
             {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.Method = BaseMethodTypes.ToPagedListAsync;
+                request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
             }, currentPage, pageSize, await CountAsync());
         }
@@ -207,30 +221,36 @@ namespace Dynamics.Crm.Http.Connector.Core.Context
         {
             return await _requestHandler.AddAsync(request =>
             {
-                request.MethodType = HttpMethod.Get;
-                request.EndPoint = _builder.GetEntityAttributesFromType(typeof(TEntity)).LogicalCollectionName;
+                request.Method = BaseMethodTypes.AddAsync;
+                request.EndPoint = BuildEndpoint(entity);
             }, entity);
         }
-
-
-        // TODO:
 
         /// <summary>
         /// Function to update a new "TEntity" record to the database.
         /// </summary>
+        /// <param name="entity">Entity record.</param>
         /// <returns>Instance of "TEntity".</returns>
-        public async Task<TEntity> UpdateAsync()
+        public async Task<TEntity?> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return await _requestHandler.UpdateAsync(request =>
+            {
+                request.Method = BaseMethodTypes.UpdateAsync;
+                request.EndPoint = BuildEndpoint(entity);
+            }, entity);
         }
 
         /// <summary>
         /// Function to delete a new "TEntity" record to the database.
         /// </summary>
         /// <returns>Instance of "TEntity".</returns>
-        public async Task<TEntity> DeleteAsync()
+        public async Task<TEntity?> DeleteAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return await _requestHandler.DeleteAsync(request =>
+            {
+                request.Method = BaseMethodTypes.DeleteAsync;
+                request.EndPoint = BuildEndpoint(entity);
+            }, entity);
         }
     }
 }

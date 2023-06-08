@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.WebUtilities;
+using Dynamics.Crm.Http.Connector.Core.Domains.Enums;
 using Dynamics.Crm.Http.Connector.Core.Infrastructure.Builder;
 using Dynamics.Crm.Http.Connector.Core.Business.Authentication;
 using Dynamics.Crm.Http.Connector.Core.Domains.Dynamics.Context;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Configurations
 {
@@ -60,6 +61,8 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Confi
             client.DefaultRequestHeaders.ExpectContinue = false;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=\"*\"");
+            client.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            client.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
             client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
         }
 
@@ -69,6 +72,6 @@ namespace Dynamics.Crm.Http.Connector.Core.Extensions.DependencyInjections.Confi
         /// <param name="request">Request configuration object.</param>
         /// <returns>Instance of http request message.</returns>
         internal static HttpRequestMessage ConvertToHttpRequest(this Request request)
-            => new(request.MethodType, QueryHelpers.AddQueryString(request.EndPoint, request.Params));
+            => new(BaseMethods.ParseToHttpMethod(request.Method), QueryHelpers.AddQueryString(request.EndPoint, request.Params));
     }
 }

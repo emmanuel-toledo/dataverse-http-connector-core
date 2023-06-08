@@ -2,7 +2,7 @@
 
 namespace Dynamics.Crm.Http.Connector.Core.UT.Models
 {
-    [EntityAttributes("crmit_identityusersss", "crmit_identityusersss")]
+    [EntityAttributes("crmit_identityuser", "crmit_identityusers")]
     internal class IdentityUser
     {
         [FieldAttributes("crmit_IdentityUserId", "crmit_identityuserid", FieldTypes.UniqueIdentifier)]
@@ -23,7 +23,7 @@ namespace Dynamics.Crm.Http.Connector.Core.UT.Models
         [FieldAttributes("CreatedOn", "createdon", FieldTypes.DateTime)]
         public DateTime CreatedOn { get; set; }
 
-        [FieldAttributes("OwnerId", "ownerid", FieldTypes.Lookup, "owners")]
+        [FieldAttributes("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
         public Guid OwnerId { get; set; }
     }
 }

@@ -6,6 +6,12 @@
     [AttributeUsage(AttributeTargets.Property)]
     public class FieldAttributes : Attribute
     {
+        /// <summary>
+        /// Creates a new instance of Field Attributes with properties used to configure Dynamics requests.
+        /// </summary>
+        /// <param name="schemaName">Property schema name.</param>
+        /// <param name="logicalName">Property logical name.</param>
+        /// <param name="fieldType">Property field type.</param>
         public FieldAttributes(string schemaName, string logicalName, FieldTypes fieldType)
         {
             SchemaName = schemaName;
@@ -13,6 +19,13 @@
             FieldType = fieldType;
         }
 
+        /// <summary>
+        /// Creates a new instance of Field Attributes with properties used to configure Dynamics requests.
+        /// </summary>
+        /// <param name="schemaName">Property schema name.</param>
+        /// <param name="logicalName">Property logical name.</param>
+        /// <param name="fieldType">Property field type.</param>
+        /// <param name="linkedEntityLogicalCollectionName">Related entity logical collection name.</param>
         public FieldAttributes(string schemaName, string logicalName, FieldTypes fieldType, string linkedEntityLogicalCollectionName)
         {
             SchemaName = schemaName;
