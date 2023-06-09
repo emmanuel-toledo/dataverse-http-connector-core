@@ -52,7 +52,7 @@ You also will need to create your custom classes that will be used to connect to
 public class Employees
 {
     [FieldAttributes("ms_EmployeeId", "ms_employeeid", FieldTypes.UniqueIdentifier)]
-    public Guid Id { get; set; }
+    public Guid EmployeeId { get; set; }
 
     [FieldAttributes("ms_Name", "ms_name", FieldTypes.Text)]
     public string Name { get; set; }
@@ -105,56 +105,87 @@ The last you need to do is use this library.
 In your controller you need to use ```IDataverseContext``` service.
 
 ```
-public class EmployeesController : ControllerBase
+using Microsoft.AspNetCore.Mvc;
+using Dataverse.Web.Api.Models;
+using Dataverse.Http.Connector.Core.Persistence;
+using Dataverse.Http.Connector.Core.Extensions.Utilities;
+
+namespace Dataverse.Web.Api.Controllers
 {
-    private readonly IDataverseContext _dataverse;
-
-    public ContactsController(IDataverseContext dataverse)
-        => _dataverse = dataverse;
-
-    public async Task<IActionResult> GetEmployees()
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeesController : ControllerBase
     {
-        var employees = await _context.Set<Employees>().ToListAsync();
-        return Ok(employees);
-    }
+        private readonly IDataverseContext _dataverse;
 
-    public async Task<IActionResult> GetEmployee(Guid id)
-    {
-        var employee = await _context.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
-        return Ok(employee);
-    }
+        public EmployeesController(IDataverseContext dataverse)
+            => _dataverse = dataverse;
 
-    public async Task<IActionResult> CreateEmployee(Employee model)
-    {
-        await _context.Set<Employees>().AddAsync(model);
-        if(model.Id != Guid.Empty)
-            return BadRequest();
-        return Ok(model);
-    }
-    
-    public async Task<IActionResult> UpdateEmployee(Guid id, Employee model)
-    {
-        var employee = await _context.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
-        if(employee is null)
-            return NotFound();
-        
-        model.Id = id;
+        [HttpGet]
+        public async Task<IActionResult> GetEmployee()
+        {
+            var employees = await _dataverse.Set<Employees>().ToListAsync();
+            return Ok(employees);
+        }
 
-        await _context.Set<Employees>().UpdateAsync(model);
-        return Ok(model);
-    }
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedEmployee([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var pagedEmployees = await _dataverse.Set<Employees>().ToPagedListAsync(page, pageSize);
+            return Ok(pagedEmployees);
+        }
 
-    public async Task<IActionResult> DeleteEmployee(Guid id)
-    {
-        var employee = await _context.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
-        if(employee is null)
-            return NotFound();
-        await _context.Set<Employees>().DeleteAsync(employee);
-        return Ok();
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
+        {
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+            if(employee is null)
+                return NotFound();
+            return Ok(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployee([FromBody] Employees model)
+        {
+            await _dataverse.Set<Employees>().AddAsync(model);
+            if (model.EmployeeId == Guid.Empty)
+                return BadRequest();
+            return Ok(model);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEmployee([FromRoute] Guid id, [FromBody] Employees model)
+        {
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+            if (employee is null)
+                return NotFound();
+
+            model.EmployeeId = id;
+
+            await _dataverse.Set<Employees>().UpdateAsync(model);
+            return Ok(model);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmployee([FromRoute] Guid id)
+        {
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+            if (employee is null)
+                return NotFound();
+            await _dataverse.Set<Employees>().DeleteAsync(Employee);
+            return Ok();
+        }
     }
 }
-
 ```
+
+To add different conditions when you use a filter for a query,  it's needed to add the package ```using Dataverse.Http.Connector.Core.Extensions.Utilities``` to have access to different conditions like:
+
+- Equal
+- NotEqual
+- Between
+- NotBetween
+- And much more...
 
 This is a simple example about the implementation of this library. If any error during the request execution ocurred, automatically will throw an exception. 
 
@@ -176,11 +207,11 @@ If you configured many connection, you can change between those using a code as 
 ```
 public async Task<IActionResult> GetEmployee(Guid id)
 {
-    var employee = await _context.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+    var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
     if(employee is null) 
     {
-        _context.SetEnvironment($"Name, unique identifier or dataverse connection instance");
-        employee = await _context.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+        _dataverse.SetEnvironment($"Name, unique identifier or dataverse connection instance");
+        employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
     }
     return Ok(employee);
 }
@@ -188,7 +219,11 @@ public async Task<IActionResult> GetEmployee(Guid id)
 
 Now you have all what you need to start to use ```Dataverse HTTP Connector Core```.
 
-Remember that this library is an Open-Source project, and you can support it if you want.
+## Considerations
+
+This library currently does not support the ```link-entity``` join for a query request, but in future versions will be added this functionality. 
+
+If you like this library, don't forget that you can support it if you want. This is an ```open source project```, and you are free if you want to help to improve it.
 
 ## Repository
 

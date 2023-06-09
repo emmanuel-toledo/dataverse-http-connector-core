@@ -1,9 +1,9 @@
-﻿using Dataverse.Http.Connector.Core.Business.Queries;
+﻿using Microsoft.Extensions.Logging;
+using Dataverse.Http.Connector.Core.Persistence;
+using Dataverse.Http.Connector.Core.Business.Queries;
 using Dataverse.Http.Connector.Core.Business.Commands;
 using Dataverse.Http.Connector.Core.Domains.Dataverse.Context;
 using Dataverse.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
-using Microsoft.Extensions.Logging;
-using Dataverse.Http.Connector.Core.Persistence;
 
 namespace Dataverse.Http.Connector.Core.Business.Handler
 {
