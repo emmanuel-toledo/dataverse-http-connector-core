@@ -2,6 +2,8 @@
 using Dataverse.Http.Connector.Core.Business.Commands;
 using Dataverse.Http.Connector.Core.Domains.Dataverse.Context;
 using Dataverse.Http.Connector.Core.Extensions.DependencyInjections.Configurations;
+using Microsoft.Extensions.Logging;
+using Dataverse.Http.Connector.Core.Persistence;
 
 namespace Dataverse.Http.Connector.Core.Business.Handler
 {
@@ -102,14 +104,20 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         private readonly IDataverseCommands _commands;
 
         /// <summary>
+        /// Private logger service.
+        /// </summary>
+        private readonly ILogger<IDataverseContext> _logger;
+
+        /// <summary>
         /// Generates a new instance of Request Handler service.
         /// </summary>
         /// <param name="queries">Dataverse queries service.</param>
         /// <param name="commands">Dataverse commands service.</param>
-        public RequestHandler(IDataverseQueries queries, IDataverseCommands commands)
+        public RequestHandler(IDataverseQueries queries, IDataverseCommands commands, ILogger<IDataverseContext> logger)
         {
             _queries = queries;
             _commands = commands;
+            _logger = logger;
         }
 
         /// <summary>
@@ -117,12 +125,24 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// </summary>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New http request message.</returns>
-		private HttpRequestMessage GenerateRequest(Action<Request> action)
+		private static HttpRequestMessage GenerateHttpRequest(Action<Request> action)
 		{
 			Request request = new();
 			action(request);
 			return request.ConvertToHttpRequest();
 		}
+
+        /// <summary>
+        /// Function to generate a new "Request" model instance.
+        /// </summary>
+        /// <param name="action">Action of type "Request" model.</param>
+        /// <returns>Dataverse request object.</returns>
+		private static Request GenerateRequest(Action<Request> action)
+        {
+            Request request = new();
+            action(request);
+            return request;
+        }
 
         /// <summary>
         /// Function to retrive a new TEntity class instance.
@@ -134,7 +154,11 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance.</returns>
         public async Task<TEntity> FirstAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-            => await _queries.FirstAsync<TEntity>(GenerateRequest(action));
+        {
+            var request = GenerateRequest(action);
+            _logger.LogInformation(request.FetchXml);
+            return await _queries.FirstAsync<TEntity>(GenerateHttpRequest(action));
+        }
 
         /// <summary>
         /// Function to retrive a new TEntity class instance.
@@ -146,7 +170,11 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> FirstOrDefaultAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-            => await _queries.FirstOrDefaultAsync<TEntity>(GenerateRequest(action));
+        {
+            var request = GenerateRequest(action);
+            _logger.LogInformation(request.FetchXml);
+            return await _queries.FirstOrDefaultAsync<TEntity>(GenerateHttpRequest(action));
+        }
 
         /// <summary>
         /// Function to retrive a collection of TEntity class.
@@ -155,7 +183,11 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity collection instance.</returns>
 		public async Task<ICollection<TEntity>> ToListAsync<TEntity>(Action<Request> action) where TEntity : class, new()
-            => await _queries.ToListAsync<TEntity>(GenerateRequest(action));
+        {
+            var request = GenerateRequest(action);
+            _logger.LogInformation(request.FetchXml);
+            return await _queries.ToListAsync<TEntity>(GenerateHttpRequest(action));
+        }
 
         /// <summary>
         /// Function to retrive a collection of TEntity class in a paged format.
@@ -186,7 +218,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>Records count.</returns>
         public async Task<int> CountAsync(Action<Request> action)
-            => await _queries.CountAsync(GenerateRequest(action));
+            => await _queries.CountAsync(GenerateHttpRequest(action));
 
         /// <summary>
         /// Function to create a new entity record in Dataverse.
@@ -195,7 +227,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> AddAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
-            => await _commands.AddAsync(GenerateRequest(action), entity);
+            => await _commands.AddAsync(GenerateHttpRequest(action), entity);
 
         /// <summary>
         /// Function to update an entity record in Dataverse.
@@ -204,7 +236,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>TEntity instance or null value.</returns>
         public async Task<TEntity?> UpdateAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
-            => await _commands.UpdateAsync(GenerateRequest(action), entity);
+            => await _commands.UpdateAsync(GenerateHttpRequest(action), entity);
 
         /// <summary>
         /// Function to delete an entity record in Dataverse.
@@ -214,6 +246,6 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <param name="entity">TEntity instance record.</param>
         /// <returns>TEntity instance or null value.</returns>
         public async Task<TEntity?> DeleteAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
-            => await _commands.DeleteAsync(GenerateRequest(action), entity);
+            => await _commands.DeleteAsync(GenerateHttpRequest(action), entity);
     }
 }

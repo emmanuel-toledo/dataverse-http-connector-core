@@ -13,6 +13,11 @@ namespace Dataverse.Http.Connector.Core.Domains.Dataverse.Context
         public Request() {}
 
         /// <summary>
+        /// Get and set FetchXml string for logger.
+        /// </summary>
+        public string? FetchXml { get; set; } = string.Empty;
+
+        /// <summary>
         /// Get and set request endpoint url.
         /// </summary>
         public string? EndPoint { get; set; } = string.Empty;

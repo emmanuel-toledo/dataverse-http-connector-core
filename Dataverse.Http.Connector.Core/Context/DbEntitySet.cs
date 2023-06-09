@@ -29,7 +29,7 @@ namespace Dataverse.Http.Connector.Core.Context
 		}
 
         /// <summary>
-        /// Function to build FetchXml query for Dynamics.
+        /// Function to build FetchXml query for Dataverse.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
         private string BuildFetchXml()
@@ -38,7 +38,16 @@ namespace Dataverse.Http.Connector.Core.Context
                 _builder.GetFieldsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
-        /// Function to build count FetchXml query for Dynamics.
+        /// Function to generate FetchXml query to show in Logger.
+        /// </summary>
+        /// <returns>FetchXml query string.</returns>
+        private string BuildLoggerFetchXml()
+            => _fetchBuilder.BuildLoggerFetchXml(
+                _builder.GetEntityAttributesFromType(typeof(TEntity)),
+                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+
+        /// <summary>
+        /// Function to build count FetchXml query for Dataverse.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
         private string BuildCountFetchXml()
@@ -164,6 +173,7 @@ namespace Dataverse.Http.Connector.Core.Context
                 request.Method = BaseMethodTypes.FirstAsync;
                 request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
+                request.FetchXml = BuildLoggerFetchXml();
             });
         }
 
@@ -179,6 +189,7 @@ namespace Dataverse.Http.Connector.Core.Context
                 request.Method = BaseMethodTypes.FirstOrDefaultAsync;
                 request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
+                request.FetchXml = BuildLoggerFetchXml();
             });
         }
 
@@ -193,6 +204,7 @@ namespace Dataverse.Http.Connector.Core.Context
                 request.Method = BaseMethodTypes.ToListAsync;
                 request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
+                request.FetchXml = BuildLoggerFetchXml();
             });
         }
 
@@ -223,6 +235,7 @@ namespace Dataverse.Http.Connector.Core.Context
                 request.Method = BaseMethodTypes.ToPagedListAsync;
                 request.EndPoint = BuildEndpoint();
                 request.AddQueryParam(BuildFetchXml());
+                request.FetchXml = BuildLoggerFetchXml();
             }, currentPage, pageSize, await CountAsync());
         }
 
