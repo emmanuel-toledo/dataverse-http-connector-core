@@ -1,6 +1,8 @@
 # Dataverse HTTP Connector Core
 
-This library was created to help to the developers to create useful application connected to a Dataverse (or usually called Dynamics) environment in less time.
+<img align="left" width="96" height="96" src="./Dataverse.png">
+
+```Dataverse HTTP Connector Core``` library was created to help to the developers to create useful application connected to a Dataverse (or usually called Dynamics) environment in less time.
 
 The package currently works using an ```Application User``` connection because this one has more request capacity. You only need to create a new ```App Registration``` resource in ```Microsoft Azure```, grant it permissions to connect to Dynamics and then register the ```Application User``` in ```Admin Power Platform``` portal.
 
