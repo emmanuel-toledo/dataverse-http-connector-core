@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<Title>Dataverse HTTP Connector Core</Title>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Authors>Emmanuel Toledo Castro</Authors>
 	<Description>Manage in a better way the connection from your Application and Dataverse (Dynamics 365 CRM) in an easy way making use of the Dependency Injection.</Description>
