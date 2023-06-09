@@ -90,7 +90,7 @@ Once that you have ready your configuration inside ```.json``` file and are crea
 ```
 builder.Services.AddDataverseContext<DataverseContext>(builder =>
 {
-    builder.AddConnections(builder.Configuration.GetSection("Dataverses").Get<List<DataverseConnection>>()); // The default connection will be de first one.
+    builder.AddConnections(builder.Configuration.GetSection("Dataverses").Get<List<DataverseConnection>>()); // The default connection will be the first one.
     builder.SetDefaultConnection(
         builder.Configuration.GetSection("Dataverse").Get<DataverseConnection>()
     ); // You can set a default connection. If the connection does not exist, will add it.
