@@ -96,7 +96,7 @@ builder.Services.AddDataverseContext<DataverseContext>(builder =>
     builder.SetDefaultConnection(
         builder.Configuration.GetSection("Dataverse").Get<DataverseConnection>()
     ); // You can set a default connection. If the connection does not exist, will add it.
-    builder.AddEntityDeffinition<Employees>(); // You can add multiples entity deffinitions.
+    builder.AddEntityDefinition<Employees>(); // You can add multiples entity definitions.
 });
 ```
 

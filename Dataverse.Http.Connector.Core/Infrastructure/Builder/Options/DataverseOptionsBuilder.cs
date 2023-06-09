@@ -20,11 +20,11 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Builder.Options
         public ICollection<EntityBuilder> Entities { get => _entities; }
 
         /// <summary>
-        /// Add a new entity builder reference deffinition.
+        /// Add a new entity builder reference definition.
         /// </summary>
         /// <typeparam name="TEntity">Entity class reference.</typeparam>
         /// <exception cref="ApplicationBuilderException">Application builder exception.</exception>
-        public void AddEntityDeffinition<TEntity>() where TEntity : class, new()
+        public void AddEntityDefinition<TEntity>() where TEntity : class, new()
         {
             if (Entities.Any(x => x.EntityType == typeof(TEntity)))
                 throw new ApplicationBuilderException($"The entity type '{ typeof(TEntity) }' is already configured.");

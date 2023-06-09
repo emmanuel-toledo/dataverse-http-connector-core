@@ -1,7 +1,7 @@
 ﻿namespace Dataverse.Http.Connector.Core.Domains.Dataverse
 {
     /// <summary>
-    /// This class contains each property of the deffinition of an Entity in Dataverse.
+    /// This class contains each property of the definition of an Entity in Dataverse.
     /// </summary>
     public class Entity
     {
