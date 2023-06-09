@@ -113,7 +113,9 @@ namespace Dataverse.Http.Connector.Core.UT
         {
             try
             {
-                var users = await _context.Set<IdentityUser>()
+                var users = await _context.Set<IdentityUser>().ToListAsync();
+
+                users = await _context.Set<IdentityUser>()
                     .FilterAnd(conditions =>
                     {
                         conditions.In(x => x.IdentityUserId, new Guid("07ef9235-de00-ee11-8f6e-0022482db4d8"), new Guid("42ee683c-de00-ee11-8f6e-0022482db4d8"));

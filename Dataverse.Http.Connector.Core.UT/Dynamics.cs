@@ -12,9 +12,9 @@ namespace Dataverse.Http.Connector.Core.UT
                 {
                     TenantId = Guid.Empty,
                     ClientId = Guid.Empty,
-                    ClientSecret = "Secret",
-                    Resource = "Dynamics URL",
-                    ConnectionName = "Custom connection name",
+                    ClientSecret = "secret",
+                    Resource = "https://contoso.crm.dynamics.com",
+                    ConnectionName = "CONTOSO-DEVELOP",
                 };
             }
         }

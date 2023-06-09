@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using Dataverse.Http.Connector.Core.Utilities;
 
 namespace Dataverse.Http.Connector.Core.Extensions.Utilities
 {
@@ -15,15 +16,15 @@ namespace Dataverse.Http.Connector.Core.Extensions.Utilities
         /// <typeparam name="TEntity">TEntity class.</typeparam>
         /// <param name="property">Property infor of TEntity class.</param>
         /// <param name="entity">TEntity instance to set value.</param>
-        /// <param name="fieldAttributes">Entity field attribute configurations.</param>
+        /// <param name="fieldAttribute">Entity field attribute configurations.</param>
         /// <param name="jsonObject">Json object instance.</param>
         public static void SetTEntityPropertyValue<TEntity>
-            (this PropertyInfo property, TEntity entity, Domains.Annotations.FieldAttributes fieldAttributes, JToken jsonObject)
+            (this PropertyInfo property, TEntity entity, Domains.Annotations.FieldAttributes fieldAttribute, JToken jsonObject)
             where TEntity : class, new()
         {
             var propType = property.PropertyType;
             var converter = TypeDescriptor.GetConverter(propType);
-            property.SetValue(entity, converter.ConvertFrom(jsonObject.Value<string>(fieldAttributes.SchemaName!)!), null);
+            property.SetValue(entity, converter.ConvertFrom(jsonObject.Value<string>(Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper())!), null);
         }
 
         /// <summary>
