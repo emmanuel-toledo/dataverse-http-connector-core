@@ -16,9 +16,10 @@ namespace Dataverse.Http.Connector.Core.Utilities
         /// This function creates a new "condition" tag for a FetchXml query to be used to consume Dataverse service.
         /// </summary>
         /// <param name="model">Condition model instance.</param>
+        /// <param name="isLogger">Create fetchXml with no values.</param>
         /// <returns>Condition tag in string format.</returns>
         /// <exception cref="ArgumentNullException">Condition model does not contains a valid Condition Type value.</exception>
-        public static XElement CreateXmlCondition(Condition model)
+        public static XElement CreateXmlCondition(Condition model, bool isLogger = false)
         {
             // Check if the condition does not have null value in required properties.
             Check.NotNullOrEmpty(model.Property, nameof(model.Property));
@@ -36,7 +37,7 @@ namespace Dataverse.Http.Connector.Core.Utilities
                 case ConditionTypes.NotBetween:
                     foreach (var value in (model.Value as IEnumerable)!)
                     {
-                        var xValue = new XElement("value", value);
+                        var xValue = new XElement("value", isLogger ? $"@{model.Property!.ToUpper()}" : value);
                         xCondition.Add(xValue);
                     }
                     break;
@@ -48,7 +49,7 @@ namespace Dataverse.Http.Connector.Core.Utilities
                 case ConditionTypes.DoesNotEndsWith:
                 case ConditionTypes.Like:
                 case ConditionTypes.NotLike:
-                    xCondition.SetAttributeValue("value", model.Value);
+                    xCondition.SetAttributeValue("value", isLogger ? $"@{model.Property!.ToUpper()}" : model.Value);
                     break;
                 default:
                     break;
@@ -63,8 +64,9 @@ namespace Dataverse.Http.Connector.Core.Utilities
         /// </para>
         /// </summary>
         /// <param name="model">Filter model instance.</param>
+        /// <param name="isLogger">Create fetchXml with no values.</param>
         /// <returns>Filter tag in string format.</returns>
-        public static XElement CreateXmlFilter(Filter model)
+        public static XElement CreateXmlFilter(Filter model, bool isLogger = false)
         {
             // Create filter element.
             var xFilter = new XElement("filter");
@@ -72,7 +74,7 @@ namespace Dataverse.Http.Connector.Core.Utilities
             // Create each condition for xFilter.
             foreach (var condition in model.Conditions)
             {
-                var xCondition = CreateXmlCondition(condition);
+                var xCondition = CreateXmlCondition(condition, isLogger);
                 xFilter.Add(xCondition);
             }
             return xFilter;
@@ -83,8 +85,11 @@ namespace Dataverse.Http.Connector.Core.Utilities
         /// </summary>
         /// <typeparam name="TEntity">Model to cast query.</typeparam>
         /// <param name="model">FetchXml model instance.</param>
+        /// <param name="entityAttributes">Entity attributes of TEntity class.</param>
+        /// <param name="fieldsAttributes">Field attributes collection of TEntity class.</param>
+        /// <param name="isLogger">Create fetchXml with no values.</param>
         /// <returns>FetchXml query.</returns>
-        public static string CreateEntityFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes) where TEntity : class, new()
+        public static string CreateEntityFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes, bool isLogger = false) where TEntity : class, new()
         {
             // Create new XML for query document.
             var xDocument = new XDocument();
@@ -112,7 +117,7 @@ namespace Dataverse.Http.Connector.Core.Utilities
             // Add filters and conditions.
             foreach (var filter in model.Filters)
             {
-                var xFilter = CreateXmlFilter(filter);
+                var xFilter = CreateXmlFilter(filter, isLogger);
                 xEntity.Add(xFilter);
             }
             // Set elements to XML document query.
@@ -126,6 +131,8 @@ namespace Dataverse.Http.Connector.Core.Utilities
         /// </summary>
         /// <typeparam name="TEntity">Model to cast query.</typeparam>
         /// <param name="model">FetchXml model instance.</param>
+        /// <param name="entityAttributes">Entity attributes of TEntity class.</param>
+        /// <param name="fieldsAttributes">Field attributes collection of TEntity class.</param>
         /// <returns>FetchXml query.</returns>
         public static string CreateCountFetchXmlQuery<TEntity>(FetchXml model, EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes) where TEntity : class, new()
         {

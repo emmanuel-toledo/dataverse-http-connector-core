@@ -5,7 +5,7 @@ using Dataverse.Http.Connector.Core.Domains.Annotations;
 namespace Dataverse.Http.Connector.Core.Domains.Builder
 {
     /// <summary>
-    /// Function to configure the FetchXml query for a Dynamics request.
+    /// Function to configure the FetchXml query for a Dataverse request.
     /// </summary>
     /// <typeparam name="TEntity">Custom class with "EntityAttributes" and "FieldAttributes" defined.</typeparam>
     public class FetchXmlBuilder<TEntity> where TEntity : class, new()
@@ -91,6 +91,13 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
         /// <returns>FetchXml query string.</returns>
         internal string BuildFetchXml(EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes)
             => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
+
+        /// <summary>
+        /// Function to generate FetchXml query to show in Logger.
+        /// </summary>
+        /// <returns>FetchXml query string.</returns>
+        internal string BuildLoggerFetchXml(EntityAttributes entityAttributes, ICollection<FieldAttributes> fieldsAttributes)
+            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes, true);
 
         /// <summary>
         /// Function to generate FetchXml query for entity count to use in the request.
