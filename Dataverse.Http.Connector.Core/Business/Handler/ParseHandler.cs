@@ -3,6 +3,7 @@ using Dataverse.Http.Connector.Core.Domains.Annotations;
 using Dataverse.Http.Connector.Core.Extensions.Utilities;
 using Dataverse.Http.Connector.Core.Infrastructure.Builder;
 using Dataverse.Http.Connector.Core.Infrastructure.Exceptions;
+using Dataverse.Http.Connector.Core.Utilities;
 
 namespace Dataverse.Http.Connector.Core.Business.Handler
 {
@@ -117,7 +118,9 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                             continue;
                         var fieldAttribute = entityDeffinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
                         // Set default value if property of JSON does not exists.
-                        var propertyValue = jsonObject.Value<string>(fieldAttribute.SchemaName!);
+                        var propertyValue = jsonObject.Value<string>(
+                            Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper()
+                        );
                         if (string.IsNullOrEmpty(propertyValue))
                         {
                             property.SetValue(entity, default, null);
@@ -136,7 +139,11 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                                 property.SetTEntityPropertyValue(entity, fieldAttribute, jsonObject);
                                 break;
                             case FieldTypes.DateTime:
-                                property.SetValue(entity, jsonObject.Value<DateTime>(fieldAttribute.SchemaName!), null);
+                                property.SetValue(
+                                    entity, 
+                                    jsonObject.Value<DateTime>(Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper()), 
+                                    null
+                                );
                                 break;
                             default:
                                 property.SetValue(entity, default, null);

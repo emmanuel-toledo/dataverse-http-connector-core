@@ -111,7 +111,8 @@ namespace Dataverse.Http.Connector.Core.Utilities
             {
                 var xAttribute = new XElement("attribute");
                 xAttribute.SetAttributeValue("name", field.LogicalName);
-                xAttribute.SetAttributeValue("alias", field.SchemaName);
+                if(!isLogger)
+                    xAttribute.SetAttributeValue("alias", Parse.RemoveSpecialCharacters(field.TEntityPropertyName).ToUpper());
                 xEntity.Add(xAttribute);
             }
             // Add filters and conditions.

@@ -1,4 +1,6 @@
-﻿namespace Dataverse.Http.Connector.Core.Utilities
+﻿using System.Text;
+
+namespace Dataverse.Http.Connector.Core.Utilities
 {
     /// <summary>
     /// Utility class to parse the type of a value.
@@ -65,6 +67,24 @@
                     throw new ArgumentNullException(nameof(value));
             }
             return parsedValue;
+        }
+
+        /// <summary>
+        /// Function to remove the special characters from an string.
+        /// </summary>
+        /// <param name="value">String value to remove characters.</param>
+        /// <returns>Parsed string</returns>
+        public static string RemoveSpecialCharacters(string value)
+        {
+            StringBuilder sb = new();
+            foreach (char c in value)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
         }
     }
 }
