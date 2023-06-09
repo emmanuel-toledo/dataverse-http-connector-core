@@ -229,7 +229,8 @@ If you like this library, don't forget that you can support it if you want. This
 
 ## Repository
 
-- [Dataverse.Http.Connector.Core](https://github.com/emmanuel-toledo/dataverse-http-connector-core)
+- [Git repository](https://github.com/emmanuel-toledo/dataverse-http-connector-core)
+- [NuGet package](https://www.nuget.org/packages/Dataverse.Http.Connector.Core)
 
 ## Authors
 
