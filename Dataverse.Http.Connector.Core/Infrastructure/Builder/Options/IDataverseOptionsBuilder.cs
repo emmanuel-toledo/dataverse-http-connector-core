@@ -15,10 +15,10 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Builder.Options
         ICollection<EntityBuilder> Entities { get; }
 
         /// <summary>
-        /// Add a new entity builder reference deffinition.
+        /// Add a new entity builder reference definition.
         /// </summary>
         /// <typeparam name="TEntity">Entity class reference.</typeparam>
-        void AddEntityDeffinition<TEntity>() where TEntity : class, new();
+        void AddEntityDefinition<TEntity>() where TEntity : class, new();
 
         /// <summary>
         /// Function to retrive an entity attributes from a specific entity in the Dataverse Option Builder entities collection.
