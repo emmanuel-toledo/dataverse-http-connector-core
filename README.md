@@ -96,7 +96,7 @@ builder.Services.AddDataverseContext<DataverseContext>(builder =>
     builder.SetDefaultConnection(
         builder.Configuration.GetSection("Dataverse").Get<DataverseConnection>()
     ); // You can set a default connection. If the connection does not exist, will add it.
-    builder.AddEntityDeffinition<Employees>(); // You can add multiples entity deffinitions.
+    builder.AddEntityDefinition<Employees>(); // You can add multiples entity definitions.
 });
 ```
 
@@ -229,7 +229,8 @@ If you like this library, don't forget that you can support it if you want. This
 
 ## Repository
 
-- [Dataverse.Http.Connector.Core](https://github.com/emmanuel-toledo/dataverse-http-connector-core)
+- [Git repository](https://github.com/emmanuel-toledo/dataverse-http-connector-core)
+- [NuGet package](https://www.nuget.org/packages/Dataverse.Http.Connector.Core)
 
 ## Authors
 

@@ -9,32 +9,32 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Exceptions
     public class EntityDefinitionException : Exception
     {
         /// <summary>
-        /// Create a new entity deffinition exception.
+        /// Create a new entity definition exception.
         /// </summary>
         public EntityDefinitionException() : base() { }
 
         /// <summary>
-        /// Create a new entity deffinition exception with custom message.
+        /// Create a new entity definition exception with custom message.
         /// </summary>
         /// <param name="message">Error custom message.</param>
         public EntityDefinitionException(string message) : base(message) { }
 
         /// <summary>
-        /// Create a new entity deffinition exception with custom message and inner exception.
+        /// Create a new entity definition exception with custom message and inner exception.
         /// </summary>
         /// <param name="message">Error custom message.</param>
         /// <param name="innerException">Details exception instance.</param>
         public EntityDefinitionException(string message, Exception innerException) : base(message, innerException) { }
 
         /// <summary>
-        /// Create a new entity deffinition exception with default message.
+        /// Create a new entity definition exception with default message.
         /// </summary>
         /// <param name="name">Configured entity name.</param>
         /// <param name="key">Configured entity type.</param>
         public EntityDefinitionException(string name, object key) : base($"Entity with name '{name}' and type { key } was not configured in the scheme.") { }
 
         /// <summary>
-        /// Create a new entity deffinition exception with default message.
+        /// Create a new entity definition exception with default message.
         /// </summary>
         /// <param name="name">Configured entity name.</param>
         /// <param name="fieldType">Missed field type configured.</param>

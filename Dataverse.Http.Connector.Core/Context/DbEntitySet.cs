@@ -72,11 +72,11 @@ namespace Dataverse.Http.Connector.Core.Context
         /// <returns>Endpont string.</returns>
         private string BuildEndpoint(TEntity entity)
         {
-            var entityDeffinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
-            if (!entityDeffinition.FieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
-                throw new EntityFieldDeffinitionException($"Entity with name '{ entity.GetType().Name }' does not contains defined a unique identifier attribute");
-            var primaryKey = entityDeffinition.FieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
-            return $"{entityDeffinition.EntityAttributes!.LogicalCollectionName}({entity.GetType().GetProperty(primaryKey.TEntityPropertyName)!.GetValue(entity)})";
+            var entityDefinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
+            if (!entityDefinition.FieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
+                throw new EntityFieldDefinitionException($"Entity with name '{ entity.GetType().Name }' does not contains defined a unique identifier attribute");
+            var primaryKey = entityDefinition.FieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
+            return $"{entityDefinition.EntityAttributes!.LogicalCollectionName}({entity.GetType().GetProperty(primaryKey.TEntityPropertyName)!.GetValue(entity)})";
         }
 
         /// <summary>

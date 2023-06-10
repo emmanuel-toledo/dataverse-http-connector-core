@@ -107,16 +107,16 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                 // Validate if entity exists inside the Builder configuration.
                 if (!_builder.Entities.Any(x => x.EntityType == entityType))
                     throw new EntityDefinitionException(entityType.Name, entityType);
-                var entityDeffinition = _builder.Entities.First(x => x.EntityType == entityType);
+                var entityDefinition = _builder.Entities.First(x => x.EntityType == entityType);
                 // Loop of all fields attributes of the entity.
                 foreach (var property in entityType.GetProperties())
                 {
                     try
                     {
-                        // Validate if class property exists inside the entity deffinition properties.
-                        if (!entityDeffinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
+                        // Validate if class property exists inside the entity definition properties.
+                        if (!entityDefinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
                             continue;
-                        var fieldAttribute = entityDeffinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
+                        var fieldAttribute = entityDefinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
                         // Set default value if property of JSON does not exists.
                         var propertyValue = jsonObject.Value<string>(
                             Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper()
@@ -179,7 +179,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                 // Validate if entity exists inside the Builder configuration.
                 if (!_builder.Entities.Any(x => x.EntityType == entity.GetType()))
                     throw new EntityDefinitionException(entity.GetType().Name, entity.GetType());
-                var entityDeffinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
+                var entityDefinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
                 // Generate JSON object.
                 var model = new JObject();
                 // Loop of all fields attributes of the entity.
@@ -187,10 +187,10 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                 {
                     try
                     {
-                        // Validate if class property exists inside the entity deffinition properties.
-                        if (!entityDeffinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
+                        // Validate if class property exists inside the entity definition properties.
+                        if (!entityDefinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
                             continue;
-                        var fieldAttribute = entityDeffinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
+                        var fieldAttribute = entityDefinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
                         // Validate if field attribute is entity's unique identifier.
                         if (fieldAttribute.FieldType == FieldTypes.UniqueIdentifier)
                             continue;
