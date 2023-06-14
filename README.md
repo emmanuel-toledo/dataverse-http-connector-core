@@ -50,35 +50,43 @@ Each one of these values must be unique because you can configure multiple envir
 You also will need to create your custom classes that will be used to connect to ```Dataverse``` and use require context.
 
 ```
-[EntityAttributes("ms_employee", "ms_employees")]
+using Dataverse.Http.Connector.Core.Domains.Annotations;
+
+[Entity("crmit_employee", "crmit_employees")]
 public class Employees
 {
-    [FieldAttributes("ms_EmployeeId", "ms_employeeid", FieldTypes.UniqueIdentifier)]
-    public Guid EmployeeId { get; set; }
+    [Field("crmit_EmployeeId", "crmit_employeeid", FieldTypes.UniqueIdentifier)]
+    public Guid Id { get; set; }
 
-    [FieldAttributes("ms_Name", "ms_name", FieldTypes.Text)]
-    public string Name { get; set; }
+    [Field("crmit_Name", "crmit_name", FieldTypes.Text)]
+    public string? Name { get; set; }
 
-    [FieldAttributes("ms_Edad", "ms_edad", FieldTypes.Number)]
-    public int Age { get; set; }
+    [Field("crmit_EmployeeNumber", "crmit_employeenumber", FieldTypes.Text)]
+    public string? EmployeeNumber { get; set; }
 
-    [FieldAttributes("ms_Estatus", "ms_estatus", FieldTypes.OptionSet)]
-    public int Status { get; set; }
-
-    [FieldAttributes("statecode", "statecode", FieldTypes.OptionSet)]
-    public int StateCode { get; set; }
-
-    [FieldAttributes("CreatedOn", "createdon", FieldTypes.DateTime)]
+    [Field("CreatedOn", "createdon", FieldTypes.DateTime)]
     public DateTime CreatedOn { get; set; }
 
-    [FieldAttributes("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
+    [Field("ModifiedOn", "modifiedon", FieldTypes.DateTime)]
+    public DateTime ModifiedOn { get; set; }
+
+    [Field("statuscode", "statuscode", FieldTypes.OptionSet)]
+    public int StatusCode { get; set; }
+
+    [Field("statecode", "statecode", FieldTypes.OptionSet)]
+    public int StateCode { get; set; }
+
+    [Field("crmit_IsDeleted", "crmit_isdeleted", FieldTypes.BoolOptionSet)]
+    public bool IsDeleted { get; set; }
+
+    [Field("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
     public Guid OwnerId { get; set; }
 }
 ```
 
-As you can see in the previous example, you define your class and use ```EntityAttributes``` class to set ```Entity logical name``` and ```Entity collection logical name```.
+As you can see in the previous example, you define your class and use ```Entity``` class to set ```Entity logical name``` and ```Entity collection logical name``` attributes.
 
-To configure each property is pretty simple, you only need to use the class ```FieldAttributes``` and set three or four values depending the field type in ```Dataverse```. The values for this attribute are:
+To configure each property is pretty simple, you only need to use the class ```Field``` and set three or four values depending the field type in ```Dataverse```. The values for this attribute are:
 
 - Property schema name.
 - Property logical name.
@@ -96,9 +104,11 @@ builder.Services.AddDataverseContext<DataverseContext>(builder =>
     builder.SetDefaultConnection(
         builder.Configuration.GetSection("Dataverse").Get<DataverseConnection>()
     ); // You can set a default connection. If the connection does not exist, will add it.
-    builder.AddEntityDefinition<Employees>(); // You can add multiples entity definitions.
+    builder.AddEntitiesFromAssembly(typeof(Employees).Assembly); // You can add multiples entities definitions using assembly reference.
 });
 ```
+
+As you can see, with the new update you can use ```AddEntitiesFromAssembly``` method instead ```AddEntityDefinition<TEntity>()``` function.
 
 The last you need to do is use this library.
 
