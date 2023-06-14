@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<Title>Dataverse HTTP Connector Core</Title>
+	<version>1.0.2</version>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Authors>Emmanuel Toledo Castro</Authors>
+	<Description>Manage in a better way the connection from your Application and Dataverse (Dynamics 365 CRM) in an easy way making use of the Dependency Injection.</Description>
+	<PackageIcon>Dataverse.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/emmanuel-toledo/dataverse-http-connector-core</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>ASP.NET Core</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\Builders\**" />
+    <EmbeddedResource Remove="Extensions\Builders\**" />
+    <None Remove="Extensions\Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Dataverse.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.54.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

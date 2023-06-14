@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dataverse.Http.Connector.Core", "Dataverse.Http.Connector.Core\Dataverse.Http.Connector.Core.csproj", "{718A7650-7B26-439F-9211-644E1881BC89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dataverse.Http.Connector.Core", "src\Dataverse.Http.Connector.Core\Dataverse.Http.Connector.Core.csproj", "{718A7650-7B26-439F-9211-644E1881BC89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A90285F0-1D97-466F-9C19-B67BA448488F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BB0AA835-99B9-4163-BAEA-7726C6E35C2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataverse.Domain.Test", "test\Dataverse.Domain.Test\Dataverse.Domain.Test.csproj", "{04AFDC79-A2E7-46C9-8376-342FDD266CD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataverse.Http.Connector.Core.Test", "test\Dataverse.Http.Connector.Core.Test\Dataverse.Http.Connector.Core.Test.csproj", "{810CAA28-3C9E-4E99-A1E5-291DC31DA713}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +23,22 @@ Global
 		{718A7650-7B26-439F-9211-644E1881BC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{718A7650-7B26-439F-9211-644E1881BC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{718A7650-7B26-439F-9211-644E1881BC89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04AFDC79-A2E7-46C9-8376-342FDD266CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04AFDC79-A2E7-46C9-8376-342FDD266CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04AFDC79-A2E7-46C9-8376-342FDD266CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04AFDC79-A2E7-46C9-8376-342FDD266CD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{718A7650-7B26-439F-9211-644E1881BC89} = {A90285F0-1D97-466F-9C19-B67BA448488F}
+		{04AFDC79-A2E7-46C9-8376-342FDD266CD2} = {BB0AA835-99B9-4163-BAEA-7726C6E35C2A}
+		{810CAA28-3C9E-4E99-A1E5-291DC31DA713} = {BB0AA835-99B9-4163-BAEA-7726C6E35C2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51BF4A11-7196-4948-8974-3B813A22FBFB}
