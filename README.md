@@ -52,35 +52,38 @@ You also will need to create your custom classes that will be used to connect to
 ```
 using Dataverse.Http.Connector.Core.Domains.Annotations;
 
-[Entity("crmit_employee", "crmit_employees")]
-public class Employees
+namespace Dataverse.Web.Api.Models
 {
-    [Field("crmit_EmployeeId", "crmit_employeeid", FieldTypes.UniqueIdentifier)]
-    public Guid Id { get; set; }
+    [Entity("crmit_employee", "crmit_employees")]
+    public class Employees
+    {
+        [Field("crmit_EmployeeId", "crmit_employeeid", FieldTypes.UniqueIdentifier)]
+        public Guid Id { get; set; }
 
-    [Field("crmit_Name", "crmit_name", FieldTypes.Text)]
-    public string? Name { get; set; }
+        [Field("crmit_Name", "crmit_name", FieldTypes.Text)]
+        public string? Name { get; set; }
 
-    [Field("crmit_EmployeeNumber", "crmit_employeenumber", FieldTypes.Text)]
-    public string? EmployeeNumber { get; set; }
+        [Field("crmit_EmployeeNumber", "crmit_employeenumber", FieldTypes.Text)]
+        public string? EmployeeNumber { get; set; }
 
-    [Field("CreatedOn", "createdon", FieldTypes.DateTime)]
-    public DateTime CreatedOn { get; set; }
+        [Field("CreatedOn", "createdon", FieldTypes.DateTime)]
+        public DateTime CreatedOn { get; set; }
 
-    [Field("ModifiedOn", "modifiedon", FieldTypes.DateTime)]
-    public DateTime ModifiedOn { get; set; }
+        [Field("ModifiedOn", "modifiedon", FieldTypes.DateTime)]
+        public DateTime ModifiedOn { get; set; }
 
-    [Field("statuscode", "statuscode", FieldTypes.OptionSet)]
-    public int StatusCode { get; set; }
+        [Field("statuscode", "statuscode", FieldTypes.OptionSet)]
+        public int StatusCode { get; set; }
 
-    [Field("statecode", "statecode", FieldTypes.OptionSet)]
-    public int StateCode { get; set; }
+        [Field("statecode", "statecode", FieldTypes.OptionSet)]
+        public int StateCode { get; set; }
 
-    [Field("crmit_IsDeleted", "crmit_isdeleted", FieldTypes.BoolOptionSet)]
-    public bool IsDeleted { get; set; }
+        [Field("crmit_IsDeleted", "crmit_isdeleted", FieldTypes.BoolOptionSet)]
+        public bool IsDeleted { get; set; }
 
-    [Field("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
-    public Guid OwnerId { get; set; }
+        [Field("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
+        public Guid OwnerId { get; set; }
+    }
 }
 ```
 
@@ -98,13 +101,13 @@ To configure each property is pretty simple, you only need to use the class ```F
 Once that you have ready your configuration inside ```.json``` file and are created the ```entity classes``` you will need to call an extension method as you can see in the following code.
 
 ```
-builder.Services.AddDataverseContext<DataverseContext>(builder =>
+builder.Services.AddDataverseContext<DataverseContext>(config =>
 {
-    builder.AddConnections(builder.Configuration.GetSection("Dataverses").Get<List<DataverseConnection>>()); // The default connection will be the first one.
-    builder.SetDefaultConnection(
+    config.AddConnections(builder.Configuration.GetSection("Dataverses").Get<List<DataverseConnection>>()); // The default connection will be the first one.
+    config.SetDefaultConnection(
         builder.Configuration.GetSection("Dataverse").Get<DataverseConnection>()
     ); // You can set a default connection. If the connection does not exist, will add it.
-    builder.AddEntitiesFromAssembly(typeof(Employees).Assembly); // You can add multiples entities definitions using assembly reference.
+    config.AddEntitiesFromAssembly(typeof(Employees).Assembly); // You can add multiples entities definitions using assembly reference.
 });
 ```
 
@@ -150,8 +153,8 @@ namespace Dataverse.Web.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
         {
-            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
-            if(employee is null)
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+            if (employee is null)
                 return NotFound();
             return Ok(employee);
         }
@@ -160,7 +163,7 @@ namespace Dataverse.Web.Api.Controllers
         public async Task<IActionResult> CreateEmployee([FromBody] Employees model)
         {
             await _dataverse.Set<Employees>().AddAsync(model);
-            if (model.EmployeeId == Guid.Empty)
+            if (model.Id == Guid.Empty)
                 return BadRequest();
             return Ok(model);
         }
@@ -168,11 +171,11 @@ namespace Dataverse.Web.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee([FromRoute] Guid id, [FromBody] Employees model)
         {
-            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
             if (employee is null)
                 return NotFound();
 
-            model.EmployeeId = id;
+            model.Id = id;
 
             await _dataverse.Set<Employees>().UpdateAsync(model);
             return Ok(model);
@@ -181,10 +184,10 @@ namespace Dataverse.Web.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee([FromRoute] Guid id)
         {
-            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
             if (employee is null)
                 return NotFound();
-            await _dataverse.Set<Employees>().DeleteAsync(Employee);
+            await _dataverse.Set<Employees>().DeleteAsync(employee);
             return Ok();
         }
     }
@@ -219,11 +222,11 @@ If you configured many connection, you can change between those using a code as 
 ```
 public async Task<IActionResult> GetEmployee(Guid id)
 {
-    var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+    var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
     if(employee is null) 
     {
         _dataverse.SetEnvironment($"Name, unique identifier or dataverse connection instance");
-        employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.EmployeeId, id)).FirstOrDefaultAsync();
+        employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
     }
     return Ok(employee);
 }
