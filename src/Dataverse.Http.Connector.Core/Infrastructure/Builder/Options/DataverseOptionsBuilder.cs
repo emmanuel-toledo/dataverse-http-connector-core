@@ -36,6 +36,13 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Builder.Options
         }
 
         /// <summary>
+        /// Function to add multiple entity definitions from an assembly.
+        /// </summary>
+        /// <param name="type">Class type to get assembly reference instance.</param>
+        public void AddEntitiesFromAssembly(Type type)
+            => AddEntitiesFromAssembly(type.Assembly);
+
+        /// <summary>
         /// Add a new entity builder reference definition.
         /// </summary>
         /// <typeparam name="TEntity">Entity class reference.</typeparam>
@@ -61,16 +68,16 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Builder.Options
         }
 
         /// <summary>
-        /// Function to retrive an entity field attributes collection from a specific entity in the Dataverse Option Builder entities collection.
+        /// Function to retrive an entity column attributes collection from a specific entity in the Dataverse Option Builder entities collection.
         /// </summary>
         /// <param name="type">Type of entity to retrive.</param>
-        /// <returns>Entitiy fields attributes collection.</returns>
+        /// <returns>Entitiy columns attributes collection.</returns>
         /// <exception cref="EntityDefinitionException">The entity type was not found in the context.</exception>
-        public ICollection<Field> GetFieldsAttributesFromType(Type type)
+        public ICollection<Column> GetColumnsAttributesFromType(Type type)
         {
             if (!Entities.Any(x => x.EntityType == type))
                 throw new EntityDefinitionException(type.Name, type);
-            return Entities.First(x => x.EntityType == type).FieldsAttributes;
+            return Entities.First(x => x.EntityType == type).ColumnsAttributes;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// The return value can be null if the record does not exists.
         /// </para>
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance.</returns>
         Task<TEntity> FirstAsync<TEntity>(Action<Request> action) where TEntity : class, new();
@@ -29,7 +29,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// The return value can be null if the record does not exists.
         /// </para>
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance or null value.</returns>
         Task<TEntity?> FirstOrDefaultAsync<TEntity>(Action<Request> action) where TEntity : class, new();
@@ -37,7 +37,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to retrive a collection of TEntity class.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity collection instance.</returns>
 		Task<ICollection<TEntity>> ToListAsync<TEntity>(Action<Request> action) where TEntity : class, new();
@@ -45,7 +45,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to retrive a collection of TEntity class in a paged format.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="currentPage">Current page to retrive.</param>
         /// <param name="pageSize">Max records count per page.</param>
@@ -63,7 +63,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to create a new entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="entity">TEntity instance record.</param>
         /// <returns>New TEntity instance or null value.</returns>
@@ -72,7 +72,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to update an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="entity">TEntity instance record.</param>
         /// <returns>TEntity instance or null value.</returns>
@@ -81,7 +81,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to delete an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="entity">TEntity instance record.</param>
         /// <returns>TEntity instance or null value.</returns>
@@ -150,7 +150,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// The return value can be null if the record does not exists.
         /// </para>
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance.</returns>
         public async Task<TEntity> FirstAsync<TEntity>(Action<Request> action) where TEntity : class, new()
@@ -166,7 +166,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// The return value can be null if the record does not exists.
         /// </para>
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> FirstOrDefaultAsync<TEntity>(Action<Request> action) where TEntity : class, new()
@@ -179,7 +179,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to retrive a collection of TEntity class.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity collection instance.</returns>
 		public async Task<ICollection<TEntity>> ToListAsync<TEntity>(Action<Request> action) where TEntity : class, new()
@@ -192,7 +192,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to retrive a collection of TEntity class in a paged format.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="currentPage">Current page to retrive.</param>
         /// <param name="pageSize">Max records count per page.</param>
@@ -223,7 +223,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to create a new entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>New TEntity instance or null value.</returns>
         public async Task<TEntity?> AddAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
@@ -232,7 +232,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to update an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <returns>TEntity instance or null value.</returns>
         public async Task<TEntity?> UpdateAsync<TEntity>(Action<Request> action, TEntity entity) where TEntity : class, new()
@@ -241,7 +241,7 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
         /// <summary>
         /// Function to delete an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="action">Action of type "Request" model.</param>
         /// <param name="entity">TEntity instance record.</param>
         /// <returns>TEntity instance or null value.</returns>

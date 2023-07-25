@@ -8,7 +8,7 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
     /// <summary>
     /// Function to configure the a filter query for a Dataverse request.
     /// </summary>
-    /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+    /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
     public class FilterBuilder<TEntity> where TEntity : class, new()
     {
         /// <summary>

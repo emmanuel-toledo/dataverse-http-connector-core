@@ -5,25 +5,25 @@ namespace Dataverse.Domain.Test.Models
     [Entity("contact", "contacts")]
     public class Contacts
     {
-        [Field("ContactId", "contactid", FieldTypes.UniqueIdentifier)]
+        [Column("ContactId", "contactid", ColumnTypes.UniqueIdentifier)]
         public Guid Id { get; set; }
 
-        [Field("FirstName", "firstname", FieldTypes.Text)]
+        [Column("FirstName", "firstname", ColumnTypes.Text)]
         public string? FirstName { get; set; }
 
-        [Field("CreatedOn", "createdon", FieldTypes.DateTime)]
+        [Column("CreatedOn", "createdon", ColumnTypes.DateTime)]
         public DateTime CreatedOn { get; set; }
 
-        [Field("ModifiedOn", "modifiedon", FieldTypes.DateTime)]
+        [Column("ModifiedOn", "modifiedon", ColumnTypes.DateTime)]
         public DateTime ModifiedOn { get; set; }
 
-        [Field("statuscode", "statuscode", FieldTypes.OptionSet)]
+        [Column("statuscode", "statuscode", ColumnTypes.OptionSet)]
         public int StatusCode { get; set; }
 
-        [Field("statecode", "statecode", FieldTypes.OptionSet)]
+        [Column("statecode", "statecode", ColumnTypes.OptionSet)]
         public int StateCode { get; set; }
 
-        [Field("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
+        [Column("OwnerId", "ownerid", ColumnTypes.Lookup, "systemusers")]
         public Guid OwnerId { get; set; }
     }
 }

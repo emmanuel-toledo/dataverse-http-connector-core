@@ -108,40 +108,40 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                 if (!_builder.Entities.Any(x => x.EntityType == entityType))
                     throw new EntityDefinitionException(entityType.Name, entityType);
                 var entityDefinition = _builder.Entities.First(x => x.EntityType == entityType);
-                // Loop of all fields attributes of the entity.
+                // Loop of all columns attributes of the entity.
                 foreach (var property in entityType.GetProperties())
                 {
                     try
                     {
                         // Validate if class property exists inside the entity definition properties.
-                        if (!entityDefinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
+                        if (!entityDefinition.ColumnsAttributes.Any(x => x.TEntityPropertyName == property.Name))
                             continue;
-                        var fieldAttribute = entityDefinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
+                        var columnAttribute = entityDefinition.ColumnsAttributes.First(x => x.TEntityPropertyName == property.Name);
                         // Set default value if property of JSON does not exists.
                         var propertyValue = jsonObject.Value<string>(
-                            Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper()
+                            Parse.RemoveSpecialCharacters(columnAttribute.TEntityPropertyName).ToUpper()
                         );
                         if (string.IsNullOrEmpty(propertyValue))
                         {
                             property.SetValue(entity, default, null);
                             continue;
                         }
-                        // Check field type to parse information.
-                        switch (fieldAttribute.FieldType)
+                        // Check column type to parse information.
+                        switch (columnAttribute.ColumnType)
                         {
-                            case FieldTypes.Text:
-                            case FieldTypes.Number:
-                            case FieldTypes.DecimalNumber:
-                            case FieldTypes.Lookup:
-                            case FieldTypes.OptionSet:
-                            case FieldTypes.BoolOptionSet:
-                            case FieldTypes.UniqueIdentifier:
-                                property.SetTEntityPropertyValue(entity, fieldAttribute, jsonObject);
+                            case ColumnTypes.Text:
+                            case ColumnTypes.Number:
+                            case ColumnTypes.DecimalNumber:
+                            case ColumnTypes.Lookup:
+                            case ColumnTypes.OptionSet:
+                            case ColumnTypes.BoolOptionSet:
+                            case ColumnTypes.UniqueIdentifier:
+                                property.SetTEntityPropertyValue(entity, columnAttribute, jsonObject);
                                 break;
-                            case FieldTypes.DateTime:
+                            case ColumnTypes.DateTime:
                                 property.SetValue(
                                     entity, 
-                                    jsonObject.Value<DateTime>(Parse.RemoveSpecialCharacters(fieldAttribute.TEntityPropertyName).ToUpper()), 
+                                    jsonObject.Value<DateTime>(Parse.RemoveSpecialCharacters(columnAttribute.TEntityPropertyName).ToUpper()), 
                                     null
                                 );
                                 break;
@@ -182,35 +182,35 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                 var entityDefinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
                 // Generate JSON object.
                 var model = new JObject();
-                // Loop of all fields attributes of the entity.
+                // Loop of all columns attributes of the entity.
                 foreach (var property in entity.GetType().GetProperties())
                 {
                     try
                     {
                         // Validate if class property exists inside the entity definition properties.
-                        if (!entityDefinition.FieldsAttributes.Any(x => x.TEntityPropertyName == property.Name))
+                        if (!entityDefinition.ColumnsAttributes.Any(x => x.TEntityPropertyName == property.Name))
                             continue;
-                        var fieldAttribute = entityDefinition.FieldsAttributes.First(x => x.TEntityPropertyName == property.Name);
-                        // Validate if field attribute is entity's unique identifier.
-                        if (fieldAttribute.FieldType == FieldTypes.UniqueIdentifier)
+                        var columnAttribute = entityDefinition.ColumnsAttributes.First(x => x.TEntityPropertyName == property.Name);
+                        // Validate if column attribute is entity's unique identifier.
+                        if (columnAttribute.ColumnType == ColumnTypes.UniqueIdentifier)
                             continue;
-                        // Check field type to parse information.
-                        switch (fieldAttribute.FieldType)
+                        // Check column type to parse information.
+                        switch (columnAttribute.ColumnType)
                         {
-                            case FieldTypes.Text:
-                            case FieldTypes.Number:
-                            case FieldTypes.DecimalNumber:
-                            case FieldTypes.OptionSet:
-                            case FieldTypes.BoolOptionSet:
-                                model.Add(fieldAttribute.LogicalName!, property.GetTEntityPropertyValue(entity));
+                            case ColumnTypes.Text:
+                            case ColumnTypes.Number:
+                            case ColumnTypes.DecimalNumber:
+                            case ColumnTypes.OptionSet:
+                            case ColumnTypes.BoolOptionSet:
+                                model.Add(columnAttribute.LogicalName!, property.GetTEntityPropertyValue(entity));
                                 break;
-                            case FieldTypes.Lookup:
-                                model.Add($"{fieldAttribute.LogicalName!}@odata.bind", $"/{fieldAttribute.LinkedEntityLogicalCollectionName}({property.GetTEntityPropertyValue(entity)})");
+                            case ColumnTypes.Lookup:
+                                model.Add($"{columnAttribute.LogicalName!}@odata.bind", $"/{columnAttribute.LinkedEntityLogicalCollectionName}({property.GetTEntityPropertyValue(entity)})");
                                 break;
-                            case FieldTypes.DateTime:
+                            case ColumnTypes.DateTime:
                                 var value = property.GetTEntityPropertyValue(entity);
                                 var datetime = DateTime.Parse(value!);
-                                model.Add(fieldAttribute.LogicalName!, datetime.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                                model.Add(columnAttribute.LogicalName!, datetime.ToString("yyyy-MM-ddTHH:mm:ssZ"));
                                 break;
                             default:
                                 break;
