@@ -8,7 +8,7 @@
         /// <summary>
         /// Function to create a new entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>New TEntity instance or null value.</returns>
@@ -17,7 +17,7 @@
         /// <summary>
         /// Function to updated an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>TEntity instance or null value.</returns>
@@ -26,7 +26,7 @@
         /// <summary>
         /// Function to delete an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>TEntity instance or null value.</returns>

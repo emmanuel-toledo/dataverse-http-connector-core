@@ -12,7 +12,7 @@ namespace Dataverse.Http.Connector.Core.Context
     /// <summary>
     /// This class implements all the functions that can be used with this library.
     /// </summary>
-    /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+    /// <typeparam name="TEntity">Custom class with "Entity" and "Columns" attributes defined.</typeparam>
     public class DbEntitySet<TEntity> : IDbEntitySet<TEntity> where TEntity : class, new()
     {
         private readonly IRequestHandler _requestHandler;
@@ -35,7 +35,7 @@ namespace Dataverse.Http.Connector.Core.Context
         private string BuildFetchXml()
             => _fetchBuilder.BuildFetchXml(
                 _builder.GetEntityAttributesFromType(typeof(TEntity)),
-                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+                _builder.GetColumnsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
         /// Function to generate FetchXml query to show in Logger.
@@ -44,7 +44,7 @@ namespace Dataverse.Http.Connector.Core.Context
         private string BuildLoggerFetchXml()
             => _fetchBuilder.BuildLoggerFetchXml(
                 _builder.GetEntityAttributesFromType(typeof(TEntity)),
-                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+                _builder.GetColumnsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
         /// Function to build count FetchXml query for Dataverse.
@@ -53,7 +53,7 @@ namespace Dataverse.Http.Connector.Core.Context
         private string BuildCountFetchXml()
             => _fetchBuilder.BuildCountFetchXml(
                 _builder.GetEntityAttributesFromType(typeof(TEntity)),
-                _builder.GetFieldsAttributesFromType(typeof(TEntity)));
+                _builder.GetColumnsAttributesFromType(typeof(TEntity)));
 
         /// <summary>
         /// Function to generate the endpont to call a request.
@@ -73,9 +73,9 @@ namespace Dataverse.Http.Connector.Core.Context
         private string BuildEndpoint(TEntity entity)
         {
             var entityDefinition = _builder.Entities.First(x => x.EntityType == entity.GetType());
-            if (!entityDefinition.FieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
-                throw new EntityFieldDefinitionException($"Entity with name '{ entity.GetType().Name }' does not contains defined a unique identifier attribute");
-            var primaryKey = entityDefinition.FieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
+            if (!entityDefinition.ColumnsAttributes.Any(x => x.ColumnType == ColumnTypes.UniqueIdentifier))
+                throw new EntityColumnDefinitionException($"Entity with name '{ entity.GetType().Name }' does not contains defined a unique identifier attribute");
+            var primaryKey = entityDefinition.ColumnsAttributes.First(x => x.ColumnType == ColumnTypes.UniqueIdentifier);
             return $"{entityDefinition.EntityAttributes!.LogicalCollectionName}({entity.GetType().GetProperty(primaryKey.TEntityPropertyName)!.GetValue(entity)})";
         }
 

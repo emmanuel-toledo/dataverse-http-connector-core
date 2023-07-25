@@ -18,9 +18,9 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
         private readonly Entity? _entityAttributes;
 
         /// <summary>
-        /// List of entity fields attributes definitions from class.
+        /// List of entity columns attributes definitions from class.
         /// </summary>
-        private readonly ICollection<Field> _fieldsAttributes;
+        private readonly ICollection<Column> _columnsAttributes;
 
         /// <summary>
         /// Initialize a new Entity Builder object.
@@ -35,8 +35,8 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
             _entityType = entityType;
             // Get entity annotation attributes.
             _entityAttributes = GetEntityAttributes();
-            // Get entity fields annotation attributes.
-            _fieldsAttributes = GetFieldsAttributes();
+            // Get entity columns annotation attributes.
+            _columnsAttributes = GetColumnsAttributes();
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
         public Entity? EntityAttributes { get => _entityAttributes; }
 
         /// <summary>
-        /// Get Fields Attributes collection.
+        /// Get Columns Attributes collection.
         /// </summary>
-        public ICollection<Field> FieldsAttributes { get => _fieldsAttributes ?? new HashSet<Field>(); }
+        public ICollection<Column> ColumnsAttributes { get => _columnsAttributes ?? new HashSet<Column>(); }
 
         /// <summary>
         /// Function to extract in a model the Entity Attributes from a class.
@@ -64,23 +64,23 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
                throw new NullReferenceException($"The entity attributes definitions in class {_entityType.Name} is null.");
 
         /// <summary>
-        /// Function to extract in a collection the fields attributes of an entity from a class.
+        /// Function to extract in a collection the columns attributes of an entity from a class.
         /// </summary>
-        /// <returns>Field attributes collection.</returns>
-        private ICollection<Field> GetFieldsAttributes()
+        /// <returns>Column attributes collection.</returns>
+        private ICollection<Column> GetColumnsAttributes()
         {
-            List<Field> fields = new();
+            List<Column> columns = new();
             var properties = _entityType.GetProperties();
             if (properties is null || properties.Length <= 0)
-                return fields;
+                return columns;
             foreach (var property in properties)
             {
-                if (property.GetCustomAttributes(typeof(Field), true).FirstOrDefault() is not Field fieldAttributes)
+                if (property.GetCustomAttributes(typeof(Column), true).FirstOrDefault() is not Column columnAttributes)
                     continue;
-                fieldAttributes.TEntityPropertyName = property.Name;
-                fields.Add(fieldAttributes);
+                columnAttributes.TEntityPropertyName = property.Name;
+                columns.Add(columnAttributes);
             }
-            return fields;
+            return columns;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace Dataverse.Http.Connector.Core.Domains.Annotations
 {
     /// <summary>
-    /// This enum works to define the Field Type of an Entity attribute in Dataverse (Dynamics CRM).
+    /// This enum works to define the Column Type of an Entity attribute in Dataverse (Dynamics CRM).
     /// </summary>
-    public enum FieldTypes
+    public enum ColumnTypes
     {
         Text,
         Number,

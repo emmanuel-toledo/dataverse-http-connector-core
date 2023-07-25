@@ -6,7 +6,7 @@ namespace Dataverse.Http.Connector.Core.Context
     /// <summary>
     /// This interface defines all the functions that can be used with this library.
     /// </summary>
-    /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+    /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
     public interface IDbEntitySet<TEntity> where TEntity : class, new()
     {
         /// <summary>
