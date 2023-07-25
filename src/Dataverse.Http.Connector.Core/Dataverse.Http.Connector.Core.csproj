@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -17,6 +17,10 @@
 	<GenerateDocumentationFile>False</GenerateDocumentationFile>
 	<PackageReleaseNotes>
 		Renamed field for columns to configure an Entity for Dataverse connection.
+
+		Created New annotations for centity columns's configurations.
+
+		Added new configuration in Column attribute to define if a column is read only (create and update operations will be skipped for this column).
 	</PackageReleaseNotes>
   </PropertyGroup>
 
