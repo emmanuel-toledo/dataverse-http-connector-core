@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
+using Dataverse.Http.Connector.Core.Utilities;
 using Dataverse.Http.Connector.Core.Domains.Annotations;
 using Dataverse.Http.Connector.Core.Extensions.Utilities;
 using Dataverse.Http.Connector.Core.Infrastructure.Builder;
 using Dataverse.Http.Connector.Core.Infrastructure.Exceptions;
-using Dataverse.Http.Connector.Core.Utilities;
 
 namespace Dataverse.Http.Connector.Core.Business.Handler
 {
@@ -191,8 +191,11 @@ namespace Dataverse.Http.Connector.Core.Business.Handler
                         if (!entityDefinition.ColumnsAttributes.Any(x => x.TEntityPropertyName == property.Name))
                             continue;
                         var columnAttribute = entityDefinition.ColumnsAttributes.First(x => x.TEntityPropertyName == property.Name);
-                        // Validate if column attribute is entity's unique identifier.
+                        // Validate if column attribute is entity's unique identifier to skip in request momdel.
                         if (columnAttribute.ColumnType == ColumnTypes.UniqueIdentifier)
+                            continue;
+                        // Validate if column attribute is read only to skip in request momdel.
+                        if (columnAttribute.ReadOnly)
                             continue;
                         // Check column type to parse information.
                         switch (columnAttribute.ColumnType)

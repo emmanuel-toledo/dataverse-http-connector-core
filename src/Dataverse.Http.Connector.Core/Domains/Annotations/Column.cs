@@ -12,7 +12,8 @@
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
         /// <param name="columnType">Property column type.</param>
-        public Column(string schemaName, string logicalName, ColumnTypes columnType)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public Column(string schemaName, string logicalName, ColumnTypes columnType, bool readOnly = false)
         {
             SchemaName = schemaName;
             LogicalName = logicalName;
@@ -26,7 +27,8 @@
         /// <param name="logicalName">Property logical name.</param>
         /// <param name="columnType">Property column type.</param>
         /// <param name="linkedEntityLogicalCollectionName">Related entity logical collection name.</param>
-        public Column(string schemaName, string logicalName, ColumnTypes columnType, string linkedEntityLogicalCollectionName)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public Column(string schemaName, string logicalName, ColumnTypes columnType, string linkedEntityLogicalCollectionName, bool readOnly = false)
         {
             SchemaName = schemaName;
             LogicalName = logicalName;
@@ -58,5 +60,10 @@
         /// Get an set linked entity logical collection name.
         /// </summary>
         public string? LinkedEntityLogicalCollectionName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Get and set readonly entity column.
+        /// </summary>
+        public bool ReadOnly { get; set; } = false;
     }
 }

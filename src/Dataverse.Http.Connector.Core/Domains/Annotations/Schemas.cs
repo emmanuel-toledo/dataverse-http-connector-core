@@ -10,7 +10,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public Text(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.Text)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public Text(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.Text, readOnly)
         { }
     }
 
@@ -24,7 +25,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public Number(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.Number)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public Number(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.Number, readOnly)
         { }
     }
 
@@ -38,7 +40,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public DecimalNumber(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.DecimalNumber)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public DecimalNumber(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.DecimalNumber, readOnly)
         { }
     }
 
@@ -53,7 +56,8 @@
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
         /// <param name="linkedEntityLogicalCollectionName">Related entity logical collection name.</param>
-        public Lookup(string schemaName, string logicalName, string linkedEntityLogicalCollectionName) : base(schemaName, logicalName, ColumnTypes.Lookup, linkedEntityLogicalCollectionName)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public Lookup(string schemaName, string logicalName, string linkedEntityLogicalCollectionName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.Lookup, linkedEntityLogicalCollectionName, readOnly)
         { }
     }
 
@@ -67,7 +71,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public DateTimeOf(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.DateTime)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public DateTimeOf(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.DateTime, readOnly)
         { }
     }
 
@@ -81,7 +86,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public OptionSet(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.OptionSet)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public OptionSet(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.OptionSet, readOnly)
         { }
     }
 
@@ -95,7 +101,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public BoolOptionSet(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.BoolOptionSet)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public BoolOptionSet(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.BoolOptionSet, readOnly)
         { }
     }
 
@@ -109,7 +116,8 @@
         /// </summary>
         /// <param name="schemaName">Property schema name.</param>
         /// <param name="logicalName">Property logical name.</param>
-        public UniqueIdentifier(string schemaName, string logicalName) : base(schemaName, logicalName, ColumnTypes.UniqueIdentifier)
+        /// <param name="readOnly">Flag to identify if this column must be used for queries only and not for create or update operations.</param>
+        public UniqueIdentifier(string schemaName, string logicalName, bool readOnly = false) : base(schemaName, logicalName, ColumnTypes.UniqueIdentifier, readOnly)
         { }
     }
 }
