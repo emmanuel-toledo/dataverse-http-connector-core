@@ -9,9 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A90285F0-1D9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BB0AA835-99B9-4163-BAEA-7726C6E35C2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataverse.Domain.Test", "test\Dataverse.Domain.Test\Dataverse.Domain.Test.csproj", "{04AFDC79-A2E7-46C9-8376-342FDD266CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dataverse.Domain.Test", "test\Dataverse.Domain.Test\Dataverse.Domain.Test.csproj", "{04AFDC79-A2E7-46C9-8376-342FDD266CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataverse.Http.Connector.Core.Test", "test\Dataverse.Http.Connector.Core.Test\Dataverse.Http.Connector.Core.Test.csproj", "{810CAA28-3C9E-4E99-A1E5-291DC31DA713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dataverse.Http.Connector.Core.Test", "test\Dataverse.Http.Connector.Core.Test\Dataverse.Http.Connector.Core.Test.csproj", "{810CAA28-3C9E-4E99-A1E5-291DC31DA713}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{5FBE0A9C-4247-4B65-AA4A-2074F98A3C2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataverse.Web.API", "demo\Dataverse.Web.API\Dataverse.Web.API.csproj", "{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,10 @@ Global
 		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{810CAA28-3C9E-4E99-A1E5-291DC31DA713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +47,7 @@ Global
 		{718A7650-7B26-439F-9211-644E1881BC89} = {A90285F0-1D97-466F-9C19-B67BA448488F}
 		{04AFDC79-A2E7-46C9-8376-342FDD266CD2} = {BB0AA835-99B9-4163-BAEA-7726C6E35C2A}
 		{810CAA28-3C9E-4E99-A1E5-291DC31DA713} = {BB0AA835-99B9-4163-BAEA-7726C6E35C2A}
+		{B6ABDBE0-4BB6-45E3-95CC-942BF2F9B4FC} = {5FBE0A9C-4247-4B65-AA4A-2074F98A3C2D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51BF4A11-7196-4948-8974-3B813A22FBFB}
