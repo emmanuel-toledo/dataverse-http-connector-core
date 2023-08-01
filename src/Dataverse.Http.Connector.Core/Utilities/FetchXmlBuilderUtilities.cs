@@ -49,6 +49,10 @@ namespace Dataverse.Http.Connector.Core.Utilities
                 case ConditionTypes.DoesNotEndsWith:
                 case ConditionTypes.Like:
                 case ConditionTypes.NotLike:
+                case ConditionTypes.GreaterThan:
+                case ConditionTypes.GreaterEqual:
+                case ConditionTypes.LessThan:
+                case ConditionTypes.LessEqual:
                     xCondition.SetAttributeValue("value", isLogger ? $"@{model.Property!.ToUpper()}" : model.Value);
                     break;
                 default:

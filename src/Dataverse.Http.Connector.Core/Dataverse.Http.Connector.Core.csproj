@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<Title>Dataverse HTTP Connector Core</Title>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Authors>Emmanuel Toledo Castro</Authors>
 	<Description>Manage in a better way the connection from your Application and Dataverse (Dynamics 365 CRM) in an easy way making use of the Dependency Injection.</Description>
@@ -21,6 +21,8 @@
 		Created New annotations for centity columns's configurations.
 
 		Added new configuration in Column attribute to define if a column is read only (create and update operations will be skipped for this column).
+
+		Fixed build for FetchXml for Greater Than, Greater Equal, Less Than, Less Equal condition types.
 	</PackageReleaseNotes>
   </PropertyGroup>
 

@@ -24,11 +24,11 @@
         }
 
         [TestMethod]
-        public async Task Delete_Existing_Employee_Record_In_Dataverse()
+        public async Task Delete_Existing_Custom_Entity_Record_In_Dataverse()
         {
             try
             {
-                Guid recordId = new("448888da-700a-ee11-8f6e-0022482dbd7a");
+                Guid recordId = new("9d491127-8630-ee11-bdf3-0022482dbd7a");
 
                 var employee = await _dataverse.Set<Employees>()
                     .FilterAnd(conditions => conditions.Equal(x => x.Id, recordId))

@@ -18,6 +18,7 @@
             SchemaName = schemaName;
             LogicalName = logicalName;
             ColumnType = columnType;
+            ReadOnly = readOnly;
         }
 
         /// <summary>
@@ -34,6 +35,7 @@
             LogicalName = logicalName;
             ColumnType = columnType;
             LinkedEntityLogicalCollectionName = linkedEntityLogicalCollectionName;
+            ReadOnly = readOnly;
         }
 
         /// <summary>
