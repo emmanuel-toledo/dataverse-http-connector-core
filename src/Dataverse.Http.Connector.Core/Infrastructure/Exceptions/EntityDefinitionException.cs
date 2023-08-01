@@ -37,7 +37,7 @@ namespace Dataverse.Http.Connector.Core.Infrastructure.Exceptions
         /// Create a new entity definition exception with default message.
         /// </summary>
         /// <param name="name">Configured entity name.</param>
-        /// <param name="fieldType">Missed field type configured.</param>
-        public EntityDefinitionException(string name, FieldTypes fieldType) : base($"Entity with name '{ name }' does not contains a Field Attribute of type '{ fieldType }' in any property.") { }
+        /// <param name="columnType">Missed column type configured.</param>
+        public EntityDefinitionException(string name, ColumnTypes columnType) : base($"Entity with name '{ name }' does not contains a Column Attribute of type '{ columnType }' in any property.") { }
     }
 }

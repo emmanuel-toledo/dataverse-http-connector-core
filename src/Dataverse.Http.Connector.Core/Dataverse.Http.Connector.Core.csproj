@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<Title>Dataverse HTTP Connector Core</Title>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Authors>Emmanuel Toledo Castro</Authors>
 	<Description>Manage in a better way the connection from your Application and Dataverse (Dynamics 365 CRM) in an easy way making use of the Dependency Injection.</Description>
@@ -15,7 +15,15 @@
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>.NET ASP.NET Core</PackageTags>
 	<GenerateDocumentationFile>False</GenerateDocumentationFile>
-	<PackageReleaseNotes>New update to support add entities from assembly, new name for Entities and Fields attributes classes and README file updated.</PackageReleaseNotes>
+	<PackageReleaseNotes>
+		Renamed field for columns to configure an Entity for Dataverse connection.
+
+		Created New annotations for centity columns's configurations.
+
+		Added new configuration in Column attribute to define if a column is read only (create and update operations will be skipped for this column).
+
+		Fixed build for FetchXml for Greater Than, Greater Equal, Less Than, Less Equal condition types.
+	</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -17,12 +17,12 @@ namespace Dataverse.Http.Connector.Core.Utilities
         /// <returns>Entity Attributes object instance.</returns>
         /// <exception cref="NullReferenceException">The property of the expression is null.</exception>
         /// <exception cref="NotSupportedException">The defined LINQ expression is not supported.</exception>
-        public static Field CheckExpression<TEntity, P>(Expression<Func<TEntity, P>> action)
+        public static Column CheckExpression<TEntity, P>(Expression<Func<TEntity, P>> action)
         {
             try
             {
                 var expression = (MemberExpression)action.Body;
-                var attribute = expression.Member.GetCustomAttributes(typeof(Field), true).FirstOrDefault() as Field;
+                var attribute = expression.Member.GetCustomAttributes(typeof(Column), true).FirstOrDefault() as Column;
                 if(attribute is null)
                     throw new NullReferenceException("The entity attributes definitions in class is null.");
                 return attribute;

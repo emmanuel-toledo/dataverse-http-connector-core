@@ -43,7 +43,7 @@ namespace Dataverse.Http.Connector.Core.Business.Commands
         /// <summary>
         /// Function to create a new entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>New TEntity instance or null value.</returns>
@@ -66,10 +66,10 @@ namespace Dataverse.Http.Connector.Core.Business.Commands
             if(_builder.Entities.Any(x => x.EntityType == entity.GetType()))
             {
                 var entityAttribute = _builder.Entities.First(x => x.EntityType == entity.GetType());
-                if(entityAttribute.FieldsAttributes.Any(x => x.FieldType == FieldTypes.UniqueIdentifier))
+                if(entityAttribute.ColumnsAttributes.Any(x => x.ColumnType == ColumnTypes.UniqueIdentifier))
                 {
-                    var fieldAttribute = entityAttribute.FieldsAttributes.First(x => x.FieldType == FieldTypes.UniqueIdentifier);
-                    entity.GetType().GetProperty(fieldAttribute.TEntityPropertyName)!.SetValue(entity, new Guid(values.First().Substring(values.First().Length - 37, 36)));
+                    var columnAttribute = entityAttribute.ColumnsAttributes.First(x => x.ColumnType == ColumnTypes.UniqueIdentifier);
+                    entity.GetType().GetProperty(columnAttribute.TEntityPropertyName)!.SetValue(entity, new Guid(values.First().Substring(values.First().Length - 37, 36)));
                 }
             }
             return entity;
@@ -78,7 +78,7 @@ namespace Dataverse.Http.Connector.Core.Business.Commands
         /// <summary>
         /// Function to updated an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>TEntity instance or null value.</returns>
@@ -100,7 +100,7 @@ namespace Dataverse.Http.Connector.Core.Business.Commands
         /// <summary>
         /// Function to delete an entity record in Dataverse.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <param name="entity">TEntity object to HTTP request.</param>
         /// <returns>TEntity instance or null value.</returns>

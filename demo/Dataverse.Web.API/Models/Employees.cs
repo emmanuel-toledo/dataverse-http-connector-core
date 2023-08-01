@@ -1,18 +1,18 @@
 ﻿using Dataverse.Http.Connector.Core.Domains.Annotations;
 
-namespace Dataverse.Domain.Test.Models
+namespace Dataverse.Web.API.Models
 {
-    [Entity("contact", "contacts")]
-    public class Contacts
+    [Entity("crmit_employee", "crmit_employees")]
+    public class Employees
     {
-        [UniqueIdentifier("ContactId", "contactid")]
+        [UniqueIdentifier("crmit_EmployeeId", "crmit_employeeid")]
         public Guid Id { get; set; }
 
-        [Text("FullName", "fullname", true)] // Read only column.
-        public string? FullName { get; set; }
+        [Text("crmit_Name", "crmit_name")]
+        public string? Name { get; set; }
 
-        [Text("FirstName", "firstname")]
-        public string? FirstName { get; set; }
+        [Text("crmit_EmployeeNumber", "crmit_employeenumber")]
+        public string? EmployeeNumber { get; set; }
 
         [DateTimeOf("CreatedOn", "createdon")]
         public DateTime CreatedOn { get; set; }
@@ -25,6 +25,9 @@ namespace Dataverse.Domain.Test.Models
 
         [OptionSet("statecode", "statecode")]
         public int StateCode { get; set; }
+
+        [BoolOptionSet("crmit_IsDeleted", "crmit_isdeleted")]
+        public bool IsDeleted { get; set; }
 
         [Lookup("OwnerId", "ownerid", "systemusers")]
         public Guid OwnerId { get; set; }

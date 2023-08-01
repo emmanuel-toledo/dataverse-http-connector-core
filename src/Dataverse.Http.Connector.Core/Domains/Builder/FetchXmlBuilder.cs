@@ -1,13 +1,14 @@
 ﻿using Dataverse.Http.Connector.Core.Utilities;
 using Dataverse.Http.Connector.Core.Domains.Xml;
 using Dataverse.Http.Connector.Core.Domains.Annotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dataverse.Http.Connector.Core.Domains.Builder
 {
     /// <summary>
     /// Function to configure the FetchXml query for a Dataverse request.
     /// </summary>
-    /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+    /// <typeparam name="TEntity">Custom class with "Entity" and "Column" attributes defined.</typeparam>
     public class FetchXmlBuilder<TEntity> where TEntity : class, new()
     {
         /// <summary>
@@ -100,21 +101,21 @@ namespace Dataverse.Http.Connector.Core.Domains.Builder
         /// Function to generate FetchXml query to use in the request.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
-        internal string BuildFetchXml(Entity entityAttributes, ICollection<Field> fieldsAttributes)
-            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
+        internal string BuildFetchXml(Entity entityAttributes, ICollection<Column> columnsAttributes)
+            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, columnsAttributes);
 
         /// <summary>
         /// Function to generate FetchXml query to show in Logger.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
-        internal string BuildLoggerFetchXml(Entity entityAttributes, ICollection<Field> fieldsAttributes)
-            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes, true);
+        internal string BuildLoggerFetchXml(Entity entityAttributes, ICollection<Column> columnsAttributes)
+            => FetchXmlBuilderUtilities.CreateEntityFetchXmlQuery<TEntity>(_fetch, entityAttributes, columnsAttributes, true);
 
         /// <summary>
         /// Function to generate FetchXml query for entity count to use in the request.
         /// </summary>
         /// <returns>FetchXml query string.</returns>
-        internal string BuildCountFetchXml(Entity entityAttributes, ICollection<Field> fieldsAttributes)
-            => FetchXmlBuilderUtilities.CreateCountFetchXmlQuery<TEntity>(_fetch, entityAttributes, fieldsAttributes);
+        internal string BuildCountFetchXml(Entity entityAttributes, ICollection<Column> columnsAttributes)
+            => FetchXmlBuilderUtilities.CreateCountFetchXmlQuery<TEntity>(_fetch, entityAttributes, columnsAttributes);
     }
 }

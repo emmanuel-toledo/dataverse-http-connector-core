@@ -42,37 +42,37 @@ namespace Dataverse.Http.Connector.Core.Extensions.Utilities
             switch (status)
             {
                 case (int)ExceptionsTypes.NotModified:
-                    exception = new NotModifiedException($"The entity record could not be modified. Error code {(int)ExceptionsTypes.NotModified}.");
+                    exception = new NotModifiedException($"The entity record could not be modified.\nError code {(int)ExceptionsTypes.NotModified}.");
                     break;
                 case (int)ExceptionsTypes.Forbidden:
-                    exception = new ForbiddenException($"Cannot access to Dataverse environment with current credentials. Error code {(int)ExceptionsTypes.Forbidden}.");
+                    exception = new ForbiddenException($"Cannot access to Dataverse environment with current credentials.\nError code {(int)ExceptionsTypes.Forbidden}.");
                     break;
                 case (int)ExceptionsTypes.Unauthorized:
-                    exception = new UnauthorizedException($"The current credentials has no access to this resource of Dataverse. Error code {(int)ExceptionsTypes.Unauthorized}.");
+                    exception = new UnauthorizedException($"The current credentials has no access to this resource of Dataverse.\nError code {(int)ExceptionsTypes.Unauthorized}.");
                     break;
                 case (int)ExceptionsTypes.PayloadTooLarge:
-                    exception = new PayloadTooLargeException($"The request contains a payload that is over the limit available. Error code {(int)ExceptionsTypes.PayloadTooLarge}.");
+                    exception = new PayloadTooLargeException($"The request contains a payload that is over the limit available.\nError code {(int)ExceptionsTypes.PayloadTooLarge}.");
                     break;
                 case (int)ExceptionsTypes.BadRequest:
-                    exception = new BadRequestException($"The request does not contains the correct format. Error code {(int)ExceptionsTypes.BadRequest}.");
+                    exception = new BadRequestException($"The request does not contains the correct format.\nError code {(int)ExceptionsTypes.BadRequest}.");
                     break;
                 case (int)ExceptionsTypes.NotFound:
-                    exception = new NotFoundException($"The required resource could not be found it. Error code {(int)ExceptionsTypes.NotFound}.");
+                    exception = new NotFoundException($"The required resource could not be found it.\nError code {(int)ExceptionsTypes.NotFound}.");
                     break;
                 case (int)ExceptionsTypes.MethodNotAllowed:
-                    exception = new MethodNotAllowedException($"The request method is not supported for this operation. Error code {(int)ExceptionsTypes.MethodNotAllowed}.");
+                    exception = new MethodNotAllowedException($"The request method is not supported for this operation.\nError code {(int)ExceptionsTypes.MethodNotAllowed}.");
                     break;
                 case (int)ExceptionsTypes.PreconditionFailed:
-                    exception = new PreconditionFailedException($"The request does not match with concurrency version or is duplicating a record. Error code {(int)ExceptionsTypes.PreconditionFailed}.");
+                    exception = new PreconditionFailedException($"The request does not match with concurrency version or is duplicating a record.\nError code {(int)ExceptionsTypes.PreconditionFailed}.");
                     break;
                 case (int)ExceptionsTypes.TooManyRequests:
-                    exception = new TooManyRequestsException($"Too many requests have been executed in Dataverse. Error code {(int)ExceptionsTypes.TooManyRequests}.");
+                    exception = new TooManyRequestsException($"Too many requests have been executed in Dataverse.\nError code {(int)ExceptionsTypes.TooManyRequests}.");
                     break;
                 case (int)ExceptionsTypes.NotImplemented:
-                    exception = new NotImplementedException($"The request try to execute a not implemented method. Error code {(int)ExceptionsTypes.NotImplemented}.");
+                    exception = new NotImplementedException($"The request try to execute a not implemented method.\nError code {(int)ExceptionsTypes.NotImplemented}.");
                     break;
                 case (int)ExceptionsTypes.ServiceUnavailable:
-                    exception = new ServiceUnavailableException($"The service is not available. Error code {(int)ExceptionsTypes.ServiceUnavailable}.");
+                    exception = new ServiceUnavailableException($"The service is not available.\nError code {(int)ExceptionsTypes.ServiceUnavailable}.");
                     break;
                 default:
                     break;

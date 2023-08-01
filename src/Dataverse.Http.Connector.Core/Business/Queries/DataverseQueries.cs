@@ -35,7 +35,7 @@ namespace Dataverse.Http.Connector.Core.Business.Queries
         /// <summary>
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Columns" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <returns>TEntity record instance.</returns>
         /// <exception cref="NotFoundException">The requested resource was not found.</exception>
@@ -62,7 +62,7 @@ namespace Dataverse.Http.Connector.Core.Business.Queries
         /// <summary>
         /// Function to retrive first or default "TEntity" record according to defined FetchXml query.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Columns" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <returns>TEntity record instance.</returns>
         public async Task<TEntity?> FirstOrDefaultAsync<TEntity>(HttpRequestMessage requestMessage) where TEntity : class, new()
@@ -85,7 +85,7 @@ namespace Dataverse.Http.Connector.Core.Business.Queries
         /// <summary>
         /// Function to retrive a collection of "TEntity" records according to defined FetchXml query.
         /// </summary>
-        /// <typeparam name="TEntity">Custom class with "Entity" and "Field" attributes defined.</typeparam>
+        /// <typeparam name="TEntity">Custom class with "Entity" and "Columns" attributes defined.</typeparam>
         /// <param name="requestMessage">Message configuration to HTTP request.</param>
         /// <returns>Collection of TEntity.</returns>
 		public async Task<ICollection<TEntity>> ToListAsync<TEntity>(HttpRequestMessage requestMessage) where TEntity : class, new()

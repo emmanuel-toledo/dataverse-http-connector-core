@@ -17,20 +17,20 @@
             {
                 builder.SetDefaultConnection(Conn.Dataverse.Connection);
                 builder.SetThrowExceptions(true);
-                builder.AddEntitiesFromAssembly(typeof(Employees).Assembly);
+                builder.AddEntitiesFromAssembly(typeof(Employees));
             });
             _provider = _services.BuildServiceProvider();
             _dataverse = _provider.GetService<IDataverseContext>()!;
         }
 
         [TestMethod]
-        public async Task Update_Existing_Employee_Record_In_Dataverse()
+        public async Task Update_Existing_Custom_Entity_Record_In_Dataverse()
         {
             try
             {
                 Employees employee = new()
                 {
-                    Id = new("448888da-700a-ee11-8f6e-0022482dbd7a"),
+                    Id = new("fc5379ab-8530-ee11-bdf3-0022482dbd7a"),
                     Name = "Clark Kent",
                     EmployeeNumber = "EMP-002",
                     CreatedOn = DateTime.Now,

@@ -12,7 +12,7 @@ namespace Dataverse.Domain.Test.Connection
                 {
                     TenantId = Guid.Empty,
                     ClientId = Guid.Empty,
-                    ClientSecret = "your secret",
+                    ClientSecret = "secret",
                     Resource = "https://contoso.crm.dynamics.com",
                     ConnectionName = "CONTOSO-DEVELOP",
                 };

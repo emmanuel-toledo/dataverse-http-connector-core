@@ -17,7 +17,7 @@ namespace Dataverse.Http.Connector.Core.Test
             {
                 builder.SetDefaultConnection(Conn.Dataverse.Connection);
                 builder.SetThrowExceptions(true);
-                builder.AddEntitiesFromAssembly(typeof(Employees).Assembly);
+                builder.AddEntitiesFromAssembly(typeof(Contacts).Assembly);
             });
             _provider = _services.BuildServiceProvider();
             _dataverse = _provider.GetService<IDataverseContext>()!;
@@ -28,17 +28,20 @@ namespace Dataverse.Http.Connector.Core.Test
         {
             try
             {
-                Guid recordId = new("f20b6bf9-3b0a-ee11-8f6e-0022482db4d8");
+                Guid recordId = new("b37e2fee-e939-ed11-9db1-00224829a2ad");
 
-                var employee = await _dataverse.Set<Employees>()
-                    .FilterAnd(conditions => conditions.Equal(x => x.Id, recordId))
+                var contact = await _dataverse.Set<Contacts>()
+                    .FilterAnd(conditions => 
+                    {
+                        conditions.Equal(x => x.Id, recordId);
+                    })
                     .FirstOrDefaultAsync();
 
-                employee.Should().NotBeNull();
+                contact.Should().NotBeNull();
             }
             catch (Exception ex)
             {
-                throw new Exception($"The record must exists inside dataverse's entity with name '{nameof(Employees)}'.", ex);
+                throw new Exception($"The record must exists inside dataverse's entity with name '{nameof(Contacts)}'.", ex);
             }
         }
     }

@@ -36,6 +36,7 @@
         LastMonth,
         LastWeek,
         LastYear,
+        // DateTimes that don't require value.
         // Next date time.
         Next7Days,
         NextFiscalPeriod,
@@ -43,6 +44,7 @@
         NextMonth,
         NextWeek,
         NextYear,
+        // DateTimes that don't require value.
         // Current date time.
         ThisFiscalPeriod,
         ThisFiscalYear,

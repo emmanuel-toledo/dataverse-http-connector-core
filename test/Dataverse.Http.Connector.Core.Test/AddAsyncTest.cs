@@ -24,14 +24,14 @@
         }
 
         [TestMethod]
-        public async Task Create_New_Employee_Record_In_Dataverse()
+        public async Task Create_New_Custom_Entity_Record_In_Dataverse()
         {
             try
             {
                 Employees employee = new()
                 {
                     Name = "Petter Parker",
-                    EmployeeNumber = "EMP-001",
+                    EmployeeNumber = "EMP-005",
                     CreatedOn = DateTime.Now,
                     ModifiedOn = DateTime.Now,
                     StatusCode = 1,

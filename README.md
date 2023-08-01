@@ -6,6 +6,14 @@
 
 The package currently works using an ```Application User``` connection because this one has more request capacity. You only need to create a new ```App Registration``` resource in ```Microsoft Azure```, grant it permissions to connect to Dynamics and then register the ```Application User``` in ```Admin Power Platform``` portal.
 
+## New features
+
+| Feature   | Description     | Examples                       |
+| :-------- | :------- | :-------------------------------- |
+| `Renamed field for column`      | Any reference to ```Field``` was modified to ```Column```. | ```FieldAttribute``` => ```ColumnAttribute``` <br> <br> ```FieldType``` => ```ColumnType``` |
+| `New attributes`      | Now you can configure columns definitions using new classes. | ```Text``` <br>```Number``` <br>```DecimalNumber``` <br>```Lookup``` <br>```DateTimeOf``` <br>```OptionSet``` <br>```BoolOptionSet``` <br>```UniqueIdentifier``` <br> |
+| `Read only attributes`      | If you want to retrieve a column value but you don't want this be set in a create or update operations, you can set as ```readonly```. | ```SchemaName, LogicalName, ReadOnly``` <br> ```[Text("FullName", "fullname", true)]``` |
+
 ## Getting Started
 
 Let's see an example about how you can implement this library in an ```ASP.NET Core``` application.
@@ -52,36 +60,36 @@ You also will need to create your custom classes that will be used to connect to
 ```
 using Dataverse.Http.Connector.Core.Domains.Annotations;
 
-namespace Dataverse.Web.Api.Models
+namespace Dataverse.Web.API.Models
 {
     [Entity("crmit_employee", "crmit_employees")]
     public class Employees
     {
-        [Field("crmit_EmployeeId", "crmit_employeeid", FieldTypes.UniqueIdentifier)]
+        [UniqueIdentifier("crmit_EmployeeId", "crmit_employeeid")]
         public Guid Id { get; set; }
 
-        [Field("crmit_Name", "crmit_name", FieldTypes.Text)]
+        [Text("crmit_Name", "crmit_name")]
         public string? Name { get; set; }
 
-        [Field("crmit_EmployeeNumber", "crmit_employeenumber", FieldTypes.Text)]
+        [Text("crmit_EmployeeNumber", "crmit_employeenumber")]
         public string? EmployeeNumber { get; set; }
 
-        [Field("CreatedOn", "createdon", FieldTypes.DateTime)]
+        [DateTimeOf("CreatedOn", "createdon")]
         public DateTime CreatedOn { get; set; }
 
-        [Field("ModifiedOn", "modifiedon", FieldTypes.DateTime)]
+        [DateTimeOf("ModifiedOn", "modifiedon")]
         public DateTime ModifiedOn { get; set; }
 
-        [Field("statuscode", "statuscode", FieldTypes.OptionSet)]
+        [OptionSet("statuscode", "statuscode")]
         public int StatusCode { get; set; }
 
-        [Field("statecode", "statecode", FieldTypes.OptionSet)]
+        [OptionSet("statecode", "statecode")]
         public int StateCode { get; set; }
 
-        [Field("crmit_IsDeleted", "crmit_isdeleted", FieldTypes.BoolOptionSet)]
+        [BoolOptionSet("crmit_IsDeleted", "crmit_isdeleted")]
         public bool IsDeleted { get; set; }
 
-        [Field("OwnerId", "ownerid", FieldTypes.Lookup, "systemusers")]
+        [Lookup("OwnerId", "ownerid", "systemusers")]
         public Guid OwnerId { get; set; }
     }
 }
@@ -89,12 +97,15 @@ namespace Dataverse.Web.Api.Models
 
 As you can see in the previous example, you define your class and use ```Entity``` class to set ```Entity logical name``` and ```Entity collection logical name``` attributes.
 
-To configure each property is pretty simple, you only need to use the class ```Field``` and set three or four values depending the field type in ```Dataverse```. The values for this attribute are:
-
-- Property schema name.
-- Property logical name.
-- Property field type.
-- Property linked entity collection logical name.
+To configure entity properties you can use one of the following annotations classes.
+- Text
+- Number
+- DecimalNumber
+- Lookup
+- DateTimeOf
+- OptionSet
+- BoolOptionSet
+- UniqueIdentifier
 
 ### Configure Dataverse service
 
@@ -121,11 +132,11 @@ In your controller you need to use ```IDataverseContext``` service.
 
 ```
 using Microsoft.AspNetCore.Mvc;
-using Dataverse.Web.Api.Models;
+using Dataverse.Web.API.Models;
 using Dataverse.Http.Connector.Core.Persistence;
 using Dataverse.Http.Connector.Core.Extensions.Utilities;
 
-namespace Dataverse.Web.Api.Controllers
+namespace Dataverse.Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -153,7 +164,13 @@ namespace Dataverse.Web.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
         {
-            var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+            var employee = await _dataverse.Set<Employees>()
+                .FilterAnd(conditions => 
+                {
+                    conditions.Equal(x => x.Id, id);
+                })
+                .FirstOrDefaultAsync();
+
             if (employee is null)
                 return NotFound();
             return Ok(employee);
@@ -163,8 +180,10 @@ namespace Dataverse.Web.Api.Controllers
         public async Task<IActionResult> CreateEmployee([FromBody] Employees model)
         {
             await _dataverse.Set<Employees>().AddAsync(model);
+
             if (model.Id == Guid.Empty)
                 return BadRequest();
+
             return Ok(model);
         }
 
@@ -172,6 +191,7 @@ namespace Dataverse.Web.Api.Controllers
         public async Task<IActionResult> UpdateEmployee([FromRoute] Guid id, [FromBody] Employees model)
         {
             var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+
             if (employee is null)
                 return NotFound();
 
@@ -185,8 +205,10 @@ namespace Dataverse.Web.Api.Controllers
         public async Task<IActionResult> DeleteEmployee([FromRoute] Guid id)
         {
             var employee = await _dataverse.Set<Employees>().FilterAnd(conditions => conditions.Equal(x => x.Id, id)).FirstOrDefaultAsync();
+
             if (employee is null)
                 return NotFound();
+
             await _dataverse.Set<Employees>().DeleteAsync(employee);
             return Ok();
         }
@@ -248,4 +270,3 @@ If you like this library, don't forget that you can support it if you want. This
 ## Authors
 
 - [@emmanueltoledo](https://github.com/emmanuel-toledo)
-

@@ -1,4 +1,6 @@
-﻿namespace Dataverse.Http.Connector.Core.Test
+﻿using System.Runtime.InteropServices;
+
+namespace Dataverse.Http.Connector.Core.Test
 {
     [TestClass]
     public class ToPagedListAsyncTest
@@ -17,7 +19,7 @@
             {
                 builder.SetDefaultConnection(Conn.Dataverse.Connection);
                 builder.SetThrowExceptions(true);
-                builder.AddEntitiesFromAssembly(typeof(Employees).Assembly);
+                builder.AddEntitiesFromAssembly(typeof(Employees));
             });
             _provider = _services.BuildServiceProvider();
             _dataverse = _provider.GetService<IDataverseContext>()!;
@@ -28,13 +30,20 @@
         {
             try
             {
-                var pagedResponse = await _dataverse.Set<Employees>().ToPagedListAsync(1, 5);
+                var pagedResponse = await _dataverse.Set<Employees>()
+                    .FilterAnd(conditions =>
+                    {
+                        conditions.Equal(x => x.IsDeleted, false);
+                        conditions.ThisYear(x => x.CreatedOn);
+                        conditions.NotEqual(x => x.OwnerId, Guid.NewGuid());
+                    })
+                    .ToPagedListAsync(1, 2);
 
                 pagedResponse.Should().NotBeNull();
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error ocurred during the query to the dataverse's entity with name '{nameof(Employees)}'.", ex);
+                throw new Exception($"An error ocurred during the query to the dataverse's entity with name '{nameof(Contacts)}'.", ex);
             }
         }
     }
