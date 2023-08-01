@@ -60,7 +60,7 @@ You also will need to create your custom classes that will be used to connect to
 ```
 using Dataverse.Http.Connector.Core.Domains.Annotations;
 
-namespace Dataverse.Web.Api.Models
+namespace Dataverse.Web.API.Models
 {
     [Entity("crmit_employee", "crmit_employees")]
     public class Employees
@@ -132,11 +132,11 @@ In your controller you need to use ```IDataverseContext``` service.
 
 ```
 using Microsoft.AspNetCore.Mvc;
-using Dataverse.Web.Api.Models;
+using Dataverse.Web.API.Models;
 using Dataverse.Http.Connector.Core.Persistence;
 using Dataverse.Http.Connector.Core.Extensions.Utilities;
 
-namespace Dataverse.Web.Api.Controllers
+namespace Dataverse.Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
