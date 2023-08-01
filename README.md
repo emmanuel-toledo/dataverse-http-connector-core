@@ -8,12 +8,11 @@ The package currently works using an ```Application User``` connection because t
 
 ## New features
 
-| Feature | Description | Examples |
-| --- | --- |
-| Renamed field for column | Any reference to ```Field``` was modified to ```Column``` | ```FieldAttribute``` => ```ColumnAttribute``` <br> <br> ```FieldType``` => ```ColumnType```
-| New attributes | Now you can configure columns definitions using new classes. | ```Text``` <br>```Number``` <br>```DecimalNumber``` <br>```Lookup``` <br>```DateTimeOf``` <br>```OptionSet``` <br>```BoolOptionSet``` <br>```UniqueIdentifier``` <br>
-| Read only attributes | If you want to retrieve a column value but you don't want this be set in a create or update operations, you can set as ```readonly``` | ```SchemaName, LogicalName, ReadOnly``` <br> ```[Text("FullName", "fullname", true)]```
-
+| Feature   | Description     | Examples                       |
+| :-------- | :------- | :-------------------------------- |
+| `Renamed field for column`      | Any reference to ```Field``` was modified to ```Column```. | ```FieldAttribute``` => ```ColumnAttribute``` <br> <br> ```FieldType``` => ```ColumnType``` |
+| `New attributes`      | Now you can configure columns definitions using new classes. | ```Text``` <br>```Number``` <br>```DecimalNumber``` <br>```Lookup``` <br>```DateTimeOf``` <br>```OptionSet``` <br>```BoolOptionSet``` <br>```UniqueIdentifier``` <br> |
+| `Read only attributes`      | If you want to retrieve a column value but you don't want this be set in a create or update operations, you can set as ```readonly```. | ```SchemaName, LogicalName, ReadOnly``` <br> ```[Text("FullName", "fullname", true)]``` |
 
 ## Getting Started
 
